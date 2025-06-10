@@ -1,0 +1,34 @@
+@use '../styles/utils' as utils;
+
+.root {
+  font-family: var(--font-text);
+  padding: 80px;
+}
+
+.service {
+  text-transform: uppercase;
+  font-size: 64px;
+  margin-bottom: 60px;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: utils.responsive-size(70);
+  height: auto;
+  display: block;
+  margin: 0 auto 40px auto;
+}
+
+.content {
+  text-align: center;
+  font-size: 12px;
+
+  div {
+    margin-bottom: 15px;
+  }
+}

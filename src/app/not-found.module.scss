@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  width: 100%;
+  min-height: 80vh;
+  font-family: var(--font-text);
+}
+
+.container {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 32px;
+  text-align: center;
+  color: #000000;
+}
+
+.image {
+  filter: invert(1);
+  margin-bottom: 20px;
+}

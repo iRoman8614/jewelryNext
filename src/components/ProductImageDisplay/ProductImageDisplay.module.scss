@@ -1,0 +1,22 @@
+// src/components/ProductImageDisplay/styles.module.scss
+.imageDisplayContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.productImage {
+  background-color: #aaaaaa;
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    z-index: 10;
+  }
+}

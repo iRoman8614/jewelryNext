@@ -1,0 +1,131 @@
+.root {
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px 120px;
+  border: 1px solid black;
+  background: white;
+}
+
+.logo {
+  width: 40px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.itemList {
+  margin: 70px 0 0 0;
+  border-top: 1px solid black;
+  padding: 70px 0 0 0;
+}
+
+.formContainer {
+  font-family: 'Anticva';
+  color: black;
+  padding: 40px 0;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 24px;
+  text-transform: uppercase;
+  padding-left: 50px;
+}
+
+.input,
+.textarea {
+  min-height: 80px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  box-sizing: border-box;
+  font-size: 16px;
+  border-radius: 0;
+  &:focus {
+    outline: none;
+    border-color: #888;
+  }
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.radioGroup {
+  margin-top: 10px;
+}
+
+.radioOption {
+  padding-left: 50px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+
+  label {
+    font-size: 15px;
+    color: #555;
+  }
+}
+
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+.totalSection {
+  font-family: 'Anticva';
+  width: 100%;
+  display: flex;
+  gap: 80px;
+  justify-content: right;
+  align-items: center;
+  margin-top: 60px;
+  padding: 60px 0;
+  border-top: 1px solid black;
+  font-size: 18px;
+  text-transform: uppercase;
+
+  span {
+    color: #333;
+  }
+}
+
+.submitButton {
+  max-width: 400px;
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin: 10px auto;
+
+  &:hover {
+    background-color: #333;
+  }
+}
+
+.buttonContainer {
+  width: fit-content;
+  margin: 0 0 0 auto;
+}

@@ -31,19 +31,12 @@ export default function NavBar({ theme }) {
                 <div className={styles.linkList}>
                     Доступные
                     <div className={styles.linkHiden}>
-                        {/*
-                          1. Используем Object.entries для итерации по объекту `collections`.
-                          Для каждой записи получаем ключ (`categoryKey`) и значение (`collectionsArray`).
-                        */}
                         {Object.entries(collections).map(([categoryKey, collectionsArray]) => (
                             <div key={categoryKey} className={styles.subMenuItem}>
-                                {/* 2. Создаем ссылку на категорию, используя ключ */}
                                 <Link className={styles.link} href={`/category/${categoryKey}`}>
-                                    {/* 3. Отображаем русское название из нашего словаря */}
                                     {categoryDisplayNames[categoryKey]}
                                 </Link>
                                 <div className={styles.collectionsList}>
-                                    {/* 4. Здесь `collectionsArray` — это уже массив, по которому можно делать .map() */}
                                     {collectionsArray.map((collection) => (
                                         <Link key={collection.path} className={styles.link} href={collection.path}>
                                             {collection.name}
@@ -54,8 +47,6 @@ export default function NavBar({ theme }) {
                         ))}
                     </div>
                 </div>
-
-                {/* Остальной код остается без изменений */}
                 <div className={styles.categoriesMobile}>
                     <Link className={styles.link} href="/category">доступные</Link>
                 </div>
@@ -65,7 +56,8 @@ export default function NavBar({ theme }) {
             </div>
             <div className={styles.buttonsetAdditional}>
                 <Link className={styles.link} href="/cart">корзина</Link>
-                <Link className={styles.link} href="/services">сервис</Link>
+                <Link className={styles.link} href="/policy">сервис</Link>
+                <div className={styles.link}>рус/англ</div>
             </div>
             <div className={styles.buttonsetAdditionalMobile}>
                 <Link className={styles.link} href="/cart">

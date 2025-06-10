@@ -1,0 +1,52 @@
+@use '../styles/utils' as utils;
+
+.root {
+  margin-top: 105px;
+  font-family: var(--font-text);
+  text-transform: uppercase;
+  padding-left: 150px;
+  padding-bottom: 100px;
+}
+
+.title {
+  font-size: 64px;
+  margin-bottom: 60px;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.leftPanel {
+  width: 45%;
+}
+
+.cartBottom {
+  display: flex;
+  font-size: 32px;
+  justify-content: center;
+  gap: 200px;
+}
+
+.button {
+  color: white;
+  background-color: black;
+  margin-left: 60%;
+  font-size: 20px;
+  padding: 12px 30px;
+  width: fit-content;
+  margin-top: 40px;
+  cursor: pointer;
+}
+
+.formContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
