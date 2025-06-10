@@ -1,0 +1,18 @@
+@use './styles/utils' as utils;
+
+.root {
+  font-family:var(--font-text);
+  background-color: black;
+  color: white;
+  position: relative;
+}
+
+.lightnings {
+  position: absolute;
+  bottom: 3%;
+  display: block;
+  margin: 60px auto;
+  width: utils.responsive-size(1900);
+  left: 50%;
+  transform: translateX(-50%);
+}

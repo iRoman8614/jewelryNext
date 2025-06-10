@@ -1,0 +1,55 @@
+@use '../../app/styles/utils' as utils;
+
+.footerContent {
+  display: flex;
+
+}
+
+.image, .image2 {
+  width: utils.responsive-size(1375);
+}
+
+.image2 {
+  filter: grayscale(1);
+}
+
+.footerText {
+  padding: utils.responsive-size(80) utils.responsive-size(265);
+  width: fit-content;
+  font-size: utils.responsive-size(40);
+  margin: 0 auto;
+  font-family: var(--font-text);
+}
+
+.footerLine {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px utils.responsive-size(130);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: utils.responsive-size(128);
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(40);
+
+  div {
+    cursor: pointer;
+  }
+}
+
+.msk {
+  align-self: center;
+  text-align: right;
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(40);
+}
+
+.logo {
+  background-color: black;
+  width: utils.responsive-size(196);
+  height: utils.responsive-size(196);
+  cursor: pointer;
+  filter: invert(1);
+}

@@ -1,0 +1,74 @@
+// --- Конфигурация ---
+// Определяем ширину макета и целевые размеры экрана как переменные
+$canvas-width: 3292px;
+$min-viewport: 320px;
+$max-viewport: 1980px;
+
+// --- Вспомогательная функция: Масштабирование размера с холста ---
+// Рассчитывает, каким должен быть размер в пикселях на целевой ширине экрана,
+// пропорционально размеру на холсте.
+@function scale-from-canvas($size-on-canvas, $target-viewport) {
+  // Рассчитываем пропорцию и умножаем на размер с холста
+  // ($target-viewport / $canvas-width) - это коэффициент масштабирования
+  @return $size-on-canvas * ($target-viewport / $canvas-width);
+}
+
+// --- Основная функция: Генерация clamp() ---
+// Принимает размер элемента, указанный в макете (на $canvas-width)
+// и возвращает строку clamp() для плавного масштабирования между
+// $min-viewport и $max-viewport.
+@function responsive-size($size-on-canvas) {
+  // 1. Рассчитываем минимальный и максимальный РАЗМЕРЫ В ПИКСЕЛЯХ
+  //    для наших целевых минимальной и максимальной ширин экрана.
+  $min-size-px: scale-from-canvas($size-on-canvas, $min-viewport);
+  $max-size-px: scale-from-canvas($size-on-canvas, $max-viewport);
+
+  // 2. Рассчитываем "предпочтительное" значение для clamp()
+  //    Это значение должно плавно изменяться между min-size-px и max-size-px
+  //    по мере изменения ширины экрана от min-viewport до max-viewport.
+  //    Используем формулу линейной интерполяции: y = mx + c
+  //    Где y - размер шрифта, x - ширина экрана (100vw)
+  //    m (slope) = (разница размеров) / (разница ширин экрана)
+  //    c (y-intercept) = min_размер - m * min_ширина_экрана
+
+  // Убираем единицы для расчетов (Sass требует этого для некоторых операций)
+  $min-size-unitless: $min-size-px / ($min-size-px * 0 + 1);
+  $max-size-unitless: $max-size-px / ($max-size-px * 0 + 1);
+  $min-vp-unitless: $min-viewport / ($min-viewport * 0 + 1);
+  $max-vp-unitless: $max-viewport / ($max-viewport * 0 + 1);
+
+  // Разница в размерах и ширинах экрана
+  $size-diff: $max-size-unitless - $min-size-unitless;
+  $vp-diff: $max-vp-unitless - $min-vp-unitless;
+
+  // Наклон (m): изменение размера на единицу изменения ширины экрана
+  $slope: $size-diff / $vp-diff;
+
+  // Компонент VW: умножаем наклон на 100, чтобы получить изменение на 100vw
+  $vw-component: $slope * 100;
+
+  // Пересечение с осью Y (c): базовый размер в px, когда ширина экрана равна 0
+  // (теоретическое значение для формулы)
+  $intercept-px: $min-size-unitless - $slope * $min-vp-unitless;
+
+  // Формируем строку для предпочтительного значения: calc(база_px + наклон_vw)
+  // Округляем значения для более чистого CSS (опционально, но рекомендуется)
+  // Встроенной функции round нет, можно использовать floor/ceil или так
+  $preferred-value: calc(#{round($intercept-px * 100) / 100}px + #{round($vw-component * 1000) / 1000}vw);
+
+  // 3. Возвращаем готовую строку clamp()
+  // Округляем min/max для чистоты
+  @return clamp(#{round($min-size-px * 100) / 100}px, #{$preferred-value}, #{round($max-size-px * 100) / 100}px);
+}
+
+// Вспомогательная функция round (если не используете Sass modules с math.round)
+// Простая реализация округления до ближайшего целого
+// @function round($number) {
+//   @if $number >= 0 {
+//     @return floor($number + 0.5);
+//   } @else {
+//     @return ceil($number - 0.5);
+//   }
+// }
+// Примечание: Для округления до N знаков после запятой, как в примере выше,
+// используется трюк с умножением/делением на 100/1000.

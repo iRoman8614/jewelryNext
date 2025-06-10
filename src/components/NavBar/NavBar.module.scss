@@ -1,0 +1,156 @@
+@use '../../app/styles/utils' as utils;
+
+.root {
+  background-color: #000000;
+  font-family: var(--font-text);
+  display: flex;
+  position: relative;
+  z-index: 100;
+  overflow: visible !important;
+
+  @media screen and (max-width: 768px) {
+    padding: 5px;
+    background-color: #282828;
+  }
+}
+
+.rootWhite {
+  background-color: #000000;
+  font-family: var(--font-text);
+  filter: invert(1);
+  display: flex;
+  position: relative;
+  z-index: 100;
+  overflow: visible !important;
+
+  @media screen and (max-width: 768px) {
+    padding: 5px;
+  }
+}
+
+.logo {
+  width: utils.responsive-size(50);
+  height: auto;
+  display: block;
+  filter: invert(1);
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.categoriesMobile {
+  display: none;
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+}
+
+.link {
+  display: block;
+  color: white;
+  text-decoration: none;
+  font-size: utils.responsive-size(40);
+  text-transform: uppercase;
+  padding: utils.responsive-size(8) utils.responsive-size(15);
+  white-space: nowrap;
+  &:hover {}
+
+  @media screen and (max-width: 768px) {
+    font-size: 12px;
+  }
+}
+
+.linkList {
+  position: relative;
+  display: block;
+  color: white;
+  text-decoration: none;
+  font-size: utils.responsive-size(40);
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: utils.responsive-size(8) utils.responsive-size(15);
+
+  &:hover {
+    .linkHiden {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.linkHiden {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: none;
+  background-color: #000000;
+  padding: utils.responsive-size(5) 0;
+  min-width: max-content;
+  overflow: visible;
+}
+
+.subMenuItem {
+  position: relative;
+  &:hover {
+    .collectionsList {
+      display: block;
+    }
+  }
+}
+
+.collectionsList {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  // margin-left: responsive-size(2);
+  z-index: 20;
+  display: none;
+  background-color: #000000;
+  padding: utils.responsive-size(5) 0;
+  min-width: utils.responsive-size(250);
+
+  .link {
+    font-size: utils.responsive-size(35);
+  }
+}
+
+
+.buttonset {
+  display: flex;
+  align-items: center;
+  gap: utils.responsive-size(20);
+  padding: utils.responsive-size(15) utils.responsive-size(75) utils.responsive-size(30) utils.responsive-size(75);
+}
+
+.buttonsetAdditional {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: utils.responsive-size(20);
+  padding: utils.responsive-size(15) utils.responsive-size(75) utils.responsive-size(30) utils.responsive-size(75);
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.buttonsetAdditionalMobile {
+  display: none;
+  width: 100%;
+  align-items: center;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+  }
+}
+
+.basket {
+  padding: 1px;
+  height: 14px;
+}

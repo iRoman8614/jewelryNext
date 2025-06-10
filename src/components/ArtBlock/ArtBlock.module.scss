@@ -1,0 +1,90 @@
+@use '../../app/styles/utils' as utils;
+
+.artBlockContainer {
+  position: relative;
+  width: 100vw;
+  height: utils.responsive-size(1800);
+  background-color: black;
+  overflow: hidden;
+}
+
+%blendDifferenceBase {
+  position: absolute;
+  mix-blend-mode: difference;
+}
+
+.textJwlr {
+  @extend %blendDifferenceBase;
+  color: white;
+  font-size: utils.responsive-size(900);
+  font-family: 'Poller';
+  font-weight: 400;
+  letter-spacing: -0.08em;
+  line-height: 0.8;
+  top: 5%;
+  right: 5%;
+  z-index: 10;
+}
+
+.mainLogoWrapper {
+  @extend %blendDifferenceBase;
+  top: 12%;
+  left: 5%;
+  width: utils.responsive-size(600);
+  height: auto;
+  z-index: 15;
+}
+
+.mainLogoSvg {
+  display: block;
+  width: utils.responsive-size(750) !important;
+  height: auto;
+  fill: white;
+}
+
+.photoElement {
+  @extend %blendDifferenceBase;
+  top: 33%;
+  left: 11%;
+  width: 55%;
+  height: 80%;
+  z-index: 5;
+
+  img {
+    display: block;
+    width: utils.responsive-size(1105);
+    height: utils.responsive-size(730);
+    object-fit: cover;
+  }
+}
+
+.smallLogosContainer {
+  position: absolute;
+  bottom: 15%;
+  right: 10%;
+  display: flex;
+  gap: utils.responsive-size(140);
+  z-index: 10;
+  mix-blend-mode: normal;
+}
+
+.smallLogoItem, .smallLogoItem2 {
+  @extend %blendDifferenceBase;
+  position: relative;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: utils.responsive-size(180) !important;
+  height: utils.responsive-size(605) !important;
+}
+
+.smallLogoItem2 {
+  filter: invert(1);
+}
+
+.smallLogoSvg {
+  display: block;
+  width: utils.responsive-size(180) !important;
+  height: utils.responsive-size(605) !important;
+}
