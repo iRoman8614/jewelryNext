@@ -1,0 +1,79 @@
+@use '../../app/styles/utils' as utils;
+
+.root {
+  font-family: var(--font-text);
+  font-weight: normal;
+  text-transform: uppercase;
+  padding: 0 utils.responsive-size(220);
+}
+
+.categorieHeader {
+  max-width: utils.responsive-size(2000);
+}
+
+.categorieTitle {
+  padding: 60px 0 0 0;
+  margin: 0;
+  font-size: utils.responsive-size(128);
+}
+
+.categorieSubitle {
+  padding: utils.responsive-size(60) 0;
+  margin: 0;
+  font-size: utils.responsive-size(40);
+  font-weight: normal;
+}
+
+.categorieDesc {
+  padding: 0;
+  margin: 0;
+  font-size: utils.responsive-size(40);
+  font-weight: normal;
+}
+
+.productsGrid {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 50px;
+}
+
+.bottomPagination {
+  padding: 0 utils.responsive-size(80) utils.responsive-size(80) utils.responsive-size(80);
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    cursor: pointer;
+  }
+}
+
+.logotipe {
+  width: utils.responsive-size(150);
+  display: block;
+  filter: invert(1);
+}
+
+.pagination {
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(96);
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.arrow {
+  width: utils.responsive-size(80);
+  display: block;
+
+}
+
+.back {
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(126);
+}
+
+.link {
+  text-decoration: none;
+}

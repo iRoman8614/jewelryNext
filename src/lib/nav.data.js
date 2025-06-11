@@ -12,8 +12,12 @@ export const collections = {
         { name: 'Коллекция "Ветер"', path: '/category/earrings/veter' },
         { name: 'Коллекция "Звезда"', path: '/category/earrings/zvezda' },
     ],
-    pendants: [
-        { name: 'Коллекция "Тайна"', path: '/category/pendants/taina' },
-        { name: 'Коллекция "Оберег"', path: '/category/pendants/obereg' },
+    necklaces: [
+        { name: 'Коллекция "Тайна"', path: '/category/necklaces/taina' },
+        { name: 'Коллекция "Оберег"', path: '/category/necklaces/obereg' },
     ],
+    pendants: [
+        { name: 'Коллекция "Кинг"', path: '/category/pendants/king' },
+        { name: 'Коллекция "Пламя"', path: '/category/pendants/fire' },
+    ]
 };

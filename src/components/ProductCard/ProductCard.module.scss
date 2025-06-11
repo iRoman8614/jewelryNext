@@ -1,0 +1,55 @@
+@use '../../app/styles/utils' as utils;
+
+.card {
+  font-family: var(--font-text);
+  color: black;
+  display: flex;
+  flex-direction: column;
+}
+
+.card1 {
+  margin-top: -30px;
+  align-self: start;
+  justify-self: right;
+}
+
+.card2 {
+  margin-top: 40px;
+  align-self: end;
+  justify-self: center;
+}
+
+.card3 {
+  align-self: start;
+  justify-self: left;
+  margin-left: 20px;
+}
+
+.title {
+  font-size: utils.responsive-size(64);
+  margin-top: 1rem;
+}
+
+.desc {
+  font-size: utils.responsive-size(32);
+  line-height: 1.4;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.image1 {
+  width: utils.responsive-size(470);
+  height: utils.responsive-size(470);
+}
+
+.image2 {
+  width: utils.responsive-size(405);
+  height: utils.responsive-size(405);
+}
+
+.image3 {
+  width: utils.responsive-size(353);
+  height: utils.responsive-size(353);
+}

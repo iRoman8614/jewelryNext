@@ -9,7 +9,8 @@ const categoryDisplayNames = {
     rings: 'кольца',
     bracelets: 'браслеты',
     earrings: 'серьги',
-    pendants: 'подвески'
+    pendants: 'подвески',
+    necklaces: 'ожерелья'
 };
 
 export default function NavBar({ theme }) {

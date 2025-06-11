@@ -1,0 +1,58 @@
+.sliderContainer {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.slideWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.prevArrow {
+  left: 15px;
+}
+
+.nextArrow {
+  right: 15px;
+}
+
+.dotsContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.dot {
+  width: 30px;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.activeDot {
+  background-color: white;
+}

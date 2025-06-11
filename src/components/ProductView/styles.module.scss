@@ -1,0 +1,285 @@
+$content-width-vw: 80vw;
+$content-max-width: 1200px;
+$slide-width: 420px;
+$button-width: 44px;
+$button-offset: 30px;
+
+$content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width})) / 2);
+
+
+.root {
+  font-family: var(--font-text);
+  background-color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.productDetailPage {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 0;
+  min-height: 70vh;
+}
+
+.swiperLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding-left: $content-left-edge;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.productSwiper {
+  width: 100%;
+  max-height: 100%;
+  overflow: visible !important;
+  :global(.swiper-wrapper) {
+    overflow: visible;
+    align-items: flex-start;
+  }
+}
+
+.productSlide {
+  width: $slide-width;
+  height: auto;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  aspect-ratio: 3 / 4;
+  max-height: 60vh;
+
+  .slideImageWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    background-color: #eee;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+  }
+}
+
+.productViewContainer {
+  width: $content-width-vw;
+  max-width: $content-max-width;
+  min-height: 70vh;
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  margin-top: -80px;
+  position: relative;
+  z-index: 15;
+  pointer-events: auto;
+}
+
+.creature {
+  font-size: 28px;
+  color: #000;
+  font-weight: normal;
+}
+
+.productName {
+  font-size: 56px;
+  color: #000;
+  text-align: right;
+  font-weight: 400;
+}
+
+.productInfoOverlay {
+  position: absolute;
+  top: 40px;
+  left: $slide-width;
+  width: calc(90% - #{$slide-width});
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 120px 40px 40px 40px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.productInfoContent { display: flex; flex-direction: column; gap: 20px; }
+.productSpecs { display: flex; flex-direction: column; gap: 15px; color: #000; }
+.specItem { display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px; line-height: 1.4; }
+.specLabel { font-weight: bold; margin-right: 10px; white-space: nowrap; }
+.specValue { text-align: right; }
+.materialItem {}
+.priceItem { margin-top: 10px; }
+.priceItem .specLabel { font-size: 18px; align-self: center; }
+.priceItem .priceValue { font-size: 24px; font-weight: bold; }
+
+.cartControl {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 40px;
+}
+
+.addToCartButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Anticva', serif;
+  font-size: 16px;
+  color: #000;
+  padding: 10px 0;
+  pointer-events: auto;
+
+  .addToCartIcon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #000;
+    border-radius: 50%;
+    margin-right: 15px;
+    position: relative;
+    &::before, &::after { content: ''; position: absolute; top: 50%; left: 50%; width: 60%; height: 1.5px; background-color: #000; transform-origin: center; }
+    &::before { transform: translate(-50%, -50%) rotate(90deg); }
+    &::after { transform: translate(-50%, -50%) rotate(0deg); }
+  }
+  &:hover { opacity: 0.8; }
+}
+
+.quantityControl {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #000;
+  border-radius: 20px;
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.quantityButton {
+  background-color: transparent;
+  border: none;
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px 15px;
+  cursor: pointer;
+  line-height: 1;
+  transition: background-color 0.2s ease;
+
+  &:hover { background-color: rgba(0, 0, 0, 0.05); }
+  &:active { background-color: rgba(0, 0, 0, 0.1); }
+}
+
+.quantityDisplay {
+  padding: 5px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  min-width: 2em;
+  text-align: center;
+  border-left: 1.5px solid #000;
+  border-right: 1.5px solid #000;
+}
+
+.backButton {
+  font-family: 'Anticva', serif;
+  font-size: 24px;
+  font-weight: normal;
+  color: #000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: auto;
+  align-self: flex-end;
+}
+.backButton:hover { opacity: 0.7; }
+
+
+.customSwiperButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: $button-width;
+  height: $button-width;
+  cursor: pointer;
+  background-color: rgba(100, 100, 100, 0.6);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+
+  &::after { content: ''; display: block; border-style: solid; border-width: 2px 2px 0 0; width: 10px; height: 10px; border-color: white; }
+  &:hover { background-color: rgba(50, 50, 50, 0.8); }
+}
+
+.customSwiperButtonPrev {
+  left: calc(#{$content-left-edge} - #{$button-width} - #{$button-offset});
+  &::after { transform: rotate(-135deg); margin-left: 2px; }
+}
+
+.customSwiperButtonNext {
+  right: calc(#{$content-left-edge} - #{$button-width} - #{$button-offset});
+  &::after { transform: rotate(45deg); margin-right: 2px; }
+}
+
+// --- Медиа-запросы (оставлены как в "идеальном" варианте, адаптируйте при необходимости) ---
+@media (max-width: 992px) {
+  .productInfoOverlay {
+    left: 350px; // Пример
+    width: calc(100% - 350px); // Пример
+    padding: 60px 20px 20px 30px;
+  }
+  .customSwiperButtonPrev { left: calc(((100vw - min(90vw, #{$content-max-width})) / 2) - #{$button-width} - 20px); } // Пример
+  .customSwiperButtonNext { right: calc(((100vw - min(90vw, #{$content-max-width})) / 2) - #{$button-width} - 20px); } // Пример
+}
+
+@media (max-width: 768px) {
+  // ... Мобильные стили из варианта, который вам нравился ...
+  // Возможно, потребуется скорректировать стили .cartControl, .quantityControl
+  // для корректного отображения на мобильных
+  .productDetailPage { display: block; padding: 20px 0; }
+  .swiperLayer { position: relative; width: 100%; height: auto; z-index: 1; padding-left: 0; margin-top: 70px; }
+  .productSlide { width: 80%; max-height: 50vh; }
+  .productViewContainer { position: relative; width: 100%; min-height: auto; z-index: 5; pointer-events: auto; padding: 0 15px; box-sizing: border-box; }
+  .header { position: absolute; top: 20px; left: 15px; right: 15px; width: auto; z-index: 15; padding: 0; margin-bottom: 0; flex-direction: column; align-items: center; text-align: center; gap: 5px; .productName { text-align: center;} }
+  .productInfoOverlay { position: relative; width: 100%; height: auto; left: 0; z-index: 5; padding: 20px; margin-top: 15px; background-color: #fff; justify-content: flex-start; }
+  .customSwiperButton { top: calc(70px + 30vh); z-index: 20; } // Примерный расчет
+  .customSwiperButtonPrev { left: 5vw; }
+  .customSwiperButtonNext { right: 5vw; }
+  .cartControl { justify-content: center; } // Центрируем на мобильных
+  .addToCartButton { align-self: center; }
+  .quantityControl { align-self: center; }
+  .backButton { align-self: center; }
+}
