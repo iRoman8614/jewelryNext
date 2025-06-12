@@ -8,6 +8,7 @@ import styles from './ParallaxLayout.module.scss';
 export default function ParallaxLayout({
                                            elementsData,
                                            minHeight = '150vh',
+                                           minHeightMobile = '230vh',
                                            backgroundColor = '#000',
                                            containerClassName = '',
                                        }) {
@@ -15,15 +16,20 @@ export default function ParallaxLayout({
         return null;
     }
 
+    const containerStyle = {
+        '--min-height-desktop': minHeight,
+        '--min-height-mobile': minHeightMobile,
+        backgroundColor: backgroundColor,
+    };
+
     return (
         <div
             className={clsx(styles.container, containerClassName)}
-            style={{ minHeight, backgroundColor }}
+            style={containerStyle}
         >
-            {elementsData.map((element) =>{
+            {elementsData.map((element) => {
                 const isImage = element.type === 'image' && element.src;
-
-                return(
+                return (
                     <Parallax
                         key={element.id}
                         speed={element.speed || 0}
@@ -50,9 +56,9 @@ export default function ParallaxLayout({
                         )}
                         {element.type === 'text' && element.content && (
                             <>
-                                {element.title && (
+                                {element.title &&
                                     <div className={styles.title}>{element.title}</div>
-                                )}
+                                }
                                 <div className={styles.textContent}>
                                     {typeof element.content === 'string'
                                         ? <p dangerouslySetInnerHTML={{ __html: element.content.replace(/\n/g, '<br />') }} />
@@ -63,8 +69,7 @@ export default function ParallaxLayout({
                         )}
                     </Parallax>
                 )
-            }
-            )}
+            })}
         </div>
     );
 };

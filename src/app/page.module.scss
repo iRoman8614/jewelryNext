@@ -7,12 +7,47 @@
   position: relative;
 }
 
+.custom {
+  padding: utils.responsive-size(300);
+  position: relative;
+  height: utils.responsive-size(4000);
+}
+
 .lightnings {
-  position: absolute;
-  bottom: 3%;
   display: block;
   margin: 60px auto;
-  width: utils.responsive-size(1900);
+  width: 90vw;
+  height: 70%;
+  position: absolute;
+  bottom: 2%;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 1;
+}
+
+.imageContent {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.title {
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(127);
+  line-height: 1.5;
+  padding-left: 15%;
+  position: relative;
+}
+
+.textContent {
+  color: white;
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(77);
+  line-height: 1.5;
+  padding: 5px;
+  pointer-events: none;
+  p {
+    margin: 0;
+  }
 }

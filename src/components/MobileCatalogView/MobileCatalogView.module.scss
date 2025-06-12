@@ -39,13 +39,15 @@
   grid-template-rows: repeat(2, 1fr);
   justify-content: center;
   align-items: center;
+}
 
-  div {
-    scale: 0.95;
-    width: 120px;
-    height: 160px;
-    border: 1px solid black;
-  }
+.pictItem {
+  scale: 0.95;
+  width: 120px;
+  height: 160px;
+  object-fit: contain;
+  border: 1px solid black;
+  object-fit: cover;
 }
 
 .categoryItems {
@@ -59,7 +61,7 @@
 
 .productItem {
   width: 100%;
-  height: 250px;
+  height: fit-content;
   border: 1px solid black;
 }
 
@@ -89,14 +91,18 @@
 }
 
 .productInfo {
-  height: 50px;
-  padding: 5px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  height: 75px;
+  padding: 5px 10px;
 }
 
 .productName {
+  text-align: center;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 16px;
+  margin: 20px 0 10px 0;
 }
 
 .productPrice {

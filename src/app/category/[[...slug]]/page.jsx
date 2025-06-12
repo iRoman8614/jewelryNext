@@ -5,7 +5,6 @@ import { getCatalogData } from '@/lib/catalog.data.js';
 import { collections } from '@/lib/nav.data.js';
 import DesktopCatalogView from '@/components/DesktopCatalogView/DesktopCatalogView';
 import MobileCatalogView from '@/components/MobileCatalogView/MobileCatalogView';
-import NavBar from "@/components/NavBar/NavBar";
 
 export async function generateStaticParams() {
     const paths = [];
@@ -57,7 +56,6 @@ export default async function CatalogPage({ params }) {
 
     return (
         <>
-            <NavBar theme={'black'} />
             <div className={styles.desktopOnly}>
                 <DesktopCatalogView data={pageData} />
             </div>

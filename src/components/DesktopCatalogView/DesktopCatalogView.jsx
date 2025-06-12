@@ -6,12 +6,14 @@ import styles from './DesktopCatalogView.module.scss';
 import { cardTypeSequence } from '@/lib/catalog.data.js';
 import BackButton from '@/components/BackButton/BackButton';
 import ProductCard from '@/components/ProductCard/ProductCard';
+import NavBar from "@/components/NavBar/NavBar";
 
 export default function DesktopCatalogView({ data }) {
     const { title, subtitle, description, products } = data;
 
     return (
         <>
+            <NavBar theme={'black'} />
             <main className={styles.root}>
                 <div className={styles.categorieHeader}>
                     <div className={styles.categorieTitle}>{title}</div>

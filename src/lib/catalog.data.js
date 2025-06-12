@@ -74,8 +74,17 @@ const allProducts = [
 export const cardTypeSequence = [3, 2, 1, 2, 2, 3, 3, 2, 1, 1, 3, 1];
 export const mobileSliderImages = [
     { url: '/images/mobRing.png', alt: 'Слайд 1' },
-    { url: '/images/parallax3.png', alt: 'Слайд 2' },
+    { url: '/images/parallax5.png', alt: 'Слайд 2' },
     { url: '/images/parallax4.png', alt: 'Слайд 3' },
+];
+
+export const mobileCatalogRandom = [
+    { url: '/images/item7.png', alt: 'Слайд 1' },
+    { url: '/images/item8.png', alt: 'Слайд 2' },
+    { url: '/images/item3.png', alt: 'Слайд 3' },
+    { url: '/images/item4.png', alt: 'Слайд 1' },
+    { url: '/images/item5.png', alt: 'Слайд 2' },
+    { url: '/images/item6.png', alt: 'Слайд 3' },
 ];
 
 export async function getCatalogData(categorySlug, collectionSlug) {
