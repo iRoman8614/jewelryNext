@@ -66,6 +66,25 @@
   gap: utils.responsive-size(140);
   z-index: 10;
   mix-blend-mode: normal;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.smallLogosContainerMobile {
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    display: flex;
+    gap: utils.responsive-size(140);
+    z-index: 10;
+    mix-blend-mode: normal;
+  }
 }
 
 .smallLogoItem, .smallLogoItem2 {

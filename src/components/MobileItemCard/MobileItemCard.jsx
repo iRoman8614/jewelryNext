@@ -26,9 +26,9 @@ export const MobileItemCard = ({id, click}) => {
     const product = getProductById(id);
     console.log('product', product)
 
-    // if (!product) {
-    //     notFound();
-    // }
+    if (!product) {
+        notFound();
+    }
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -75,11 +75,15 @@ export const MobileItemCard = ({id, click}) => {
                             key={currentIndex}
                             src={product.images[currentIndex]}
                             alt={''}
-                            width={290}
+                            width={288}
                             height={370}
                             priority
                             style={{ objectFit: 'cover' }}
                         />
+                    </div>
+                    <div className={styles.productImageBlock}>
+                        <Image src={'/images/basket.svg'} className={styles.busket} alt="add to cart" width={20} height={20} />
+                        <Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />
                     </div>
                     <div className={styles.productSpecs}>
                         <div className={styles.specItem}>

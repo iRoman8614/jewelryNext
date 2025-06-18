@@ -33,7 +33,7 @@ export default function ArtBlock() {
             <div className={styles.smallLogosContainer}>
                 <Parallax
                     className={styles.smallLogoItem}
-                    speed={10}
+                    speed={3}
                 ><Image
                     src="/images/logo.png"
                     alt="Small logo"
@@ -43,7 +43,7 @@ export default function ArtBlock() {
                 /></Parallax>
                 <Parallax
                     className={styles.smallLogoItem2}
-                    speed={-10}
+                    speed={-3}
                 >
                     <Image
                         src="/images/logo.png"
@@ -55,7 +55,7 @@ export default function ArtBlock() {
                 </Parallax>
                 <Parallax
                     className={styles.smallLogoItem}
-                    speed={10}
+                    speed={3}
                 >
                     <Image
                         src="/images/logo.png"
@@ -92,6 +92,35 @@ export default function ArtBlock() {
                 {/*        className={styles.smallLogoSvg}*/}
                 {/*    />*/}
                 {/*</div>*/}
+            </div>
+            <div className={styles.smallLogosContainerMobile}>
+                <div className={styles.smallLogoItem}>
+                    <Image
+                        src="/images/logo.png"
+                        alt="Small logo"
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        className={styles.smallLogoSvg}
+                    />
+                </div>
+                <div className={styles.smallLogoItem2}>
+                    <Image
+                        src="/images/logo.png"
+                        alt="Small logo inverted"
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        className={styles.smallLogoSvg}
+                    />
+                </div>
+                <div className={styles.smallLogoItem}>
+                    <Image
+                        src="/images/logo.png"
+                        alt="Small logo"
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        className={styles.smallLogoSvg}
+                    />
+                </div>
             </div>
         </div>
     );

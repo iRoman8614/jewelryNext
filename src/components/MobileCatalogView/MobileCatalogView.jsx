@@ -84,11 +84,11 @@ export default function MobileCatalogView({ data }) {
                                     <Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />
                                 </div>
                                 <div className={styles.productInfo}>
-                                    <div>size</div>
+                                    <div>{lang === 'ru' ? 'размер' : 'size'}</div>
                                     <div className={styles.productPrice}>{item.size}</div>
-                                    <div>weight</div>
+                                    <div>{lang === 'ru' ? 'вес' : 'weight'}</div>
                                     <div className={styles.productPrice}>{item.weight}</div>
-                                    <div>price</div>
+                                    <div>{lang === 'ru' ? 'цена' : 'price'}</div>
                                     <div className={styles.productPrice}>{item.price}</div>
                                 </div>
                             </div>
