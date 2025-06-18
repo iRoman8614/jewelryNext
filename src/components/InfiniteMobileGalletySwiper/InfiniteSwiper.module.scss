@@ -33,9 +33,9 @@
 }
 
 .navArrow {
+  filter: invert(1);
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 40%;
   z-index: 10;
   width: 44px;
   height: 44px;
@@ -43,30 +43,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  &::after {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 10px;
-    border-top: 2px solid black;
-    border-right: 2px solid black;
-  }
 }
 
 .prevArrow {
-  left: 5%;
-  &::after {
-    transform: rotate(-135deg);
-    margin-left: 2px;
-  }
+  left: 3%;
+  rotate: 180deg;
 }
 
 .nextArrow {
-  right: 5%;
-  &::after {
-    transform: rotate(45deg);
-    margin-right: 2px;
-  }
+  right: 3%;
 }
 
 .loader {

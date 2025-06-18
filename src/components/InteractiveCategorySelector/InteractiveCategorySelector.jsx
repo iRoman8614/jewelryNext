@@ -1,5 +1,3 @@
-// src/components/InteractiveCategorySelector/InteractiveCategorySelector.jsx
-
 "use client";
 
 import { useState } from 'react';
@@ -7,8 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './InteractiveCategorySelector.module.scss';
 
-// Данные и конфиг импортируются из отдельного файла - это отлично!
 import { categoryData, SNAKE_CONFIG, snakeImages } from '@/lib/interactive-selector.data.js';
+import { categoryPageData } from "@/lib/catalog.data"
+import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
+import {collections} from "@/lib/nav.data";
 
 const SnakeRow = ({
                       categories,
@@ -21,31 +21,16 @@ const SnakeRow = ({
                       onCategoryLeave,
                       direction = 'normal',
                   }) => {
-
-    // --- НАЧАЛО ИСПРАВЛЕНИЙ: ЗАПОЛНЯЕМ ЛОГИКУ ---
-
     const getPositionState = (visualIndex) => {
-        // Сценарий 1: Нет наведения мыши, используем начальный паттерн
         if (hoveredCategoryIndex === null) {
-            // Защита, если паттерн короче, чем количество элементов
             const safePattern = [...initialPattern, ...Array(numberOfElements - initialPattern.length).fill(2)];
             return safePattern[visualIndex % safePattern.length];
         }
-
-        // Сценарий 2: Есть наведение, создаем "волну"
         const baseWaveLength = baseWavePattern.length;
-        // Находим, где в нашем паттерне находится "пик" волны (состояние 3)
         const targetStateIndexInWave = baseWavePattern.findIndex(state => state === 3);
-
-        // Если пика нет, возвращаем нейтральное состояние
         if (targetStateIndexInWave === -1) return 2;
-
-        // Вычисляем смещение, чтобы пик волны совпал с элементом, на который навели мышь
         const offset = (hoveredCategoryIndex - targetStateIndexInWave + baseWaveLength) % baseWaveLength;
-
-        // Рассчитываем позицию текущего элемента в "смещенной" волне
         const effectiveIndexInWave = (visualIndex - offset + baseWaveLength) % baseWaveLength;
-
         return baseWavePattern[effectiveIndexInWave];
     };
 
@@ -59,8 +44,6 @@ const SnakeRow = ({
             case 2: default: return 0; // Нейтраль
         }
     };
-
-    // --- КОНЕЦ ИСПРАВЛЕНИЙ ---
 
     return (
         <div className={styles.snakeRowContainer}>
@@ -86,7 +69,6 @@ const SnakeRow = ({
                             className={styles.foregroundImage}
                             width={250}
                             height={250}
-                            // Для интерактивных элементов лучше отключать перетаскивание
                             draggable="false"
                         />
                         <Image
@@ -105,9 +87,8 @@ const SnakeRow = ({
     );
 };
 
-// Главный компонент остается без изменений
 export default function InteractiveCategorySelector() {
-    // ... (весь ваш код здесь правильный)
+    const { lang } = useLanguage();
     const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
 
     const handleCategoryEnter = (index) => {
@@ -132,17 +113,20 @@ export default function InteractiveCategorySelector() {
                 direction="normal"
             />
             <div className={styles.buttonRow}>
-                {categoryData.map((category, index) => (
+                {Object.entries(collections).map(([categoryKey], index) => (
                     <Link
-                        key={category.id}
-                        href={category.slug}
+                        key={categoryKey.id}
+                        href={`/category/${categoryKey}`}
                         className={styles.categoryButton}
                         onMouseEnter={() => handleCategoryEnter(index)}
                         onMouseLeave={handleCategoryLeave}
                     >
-                        {category.name}
+                        {categoryPageData[categoryKey]?.title?.[lang] || categoryKey}
                     </Link>
                 ))}
+            </div>
+            <div className={styles.mobileButtonRow}>
+                <Link className={styles.categoryButton} href={'/catalog'}>{lang === "ru" ? "Каталог" : 'Catalog'}</Link>
             </div>
             <SnakeRow
                 categories={categoryData}

@@ -61,7 +61,7 @@ export default function NavBar({ theme }) {
                 <Link className={styles.link} href="/cart">{lang === 'ru' ? 'Корзина' : 'Cart'}</Link>
                 <Link className={styles.link} href="/policy">{lang === 'ru' ? 'Сервис' : 'Service'}</Link>
                 <div className={styles.link} onClick={handleLanguageToggle} style={{ cursor: 'pointer' }}>
-                    {lang === 'ru' ? 'РУС' : 'ENG'}
+                    {lang === 'ru' ? 'ENG' : 'РУС'}
                 </div>
             </div>
             <div className={styles.buttonsetAdditionalMobile}>

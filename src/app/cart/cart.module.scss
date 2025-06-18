@@ -7,7 +7,7 @@
   padding-left: 150px;
   padding-bottom: 100px;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 768px) {
     display: none;
   }
 }
@@ -58,7 +58,7 @@
 .rootMobile {
   display: none;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 768px) {
     display: block;
   }
 }

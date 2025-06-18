@@ -8,11 +8,13 @@ import ProductImageDisplay from "@/components/ProductImageDisplay/ProductImageDi
 import ConfirmForm from "@/components/ConfirmForm/ConfirmForm";
 import { MOCK_CART_ITEMS } from "@/lib/cart.data.js";
 import NavBar from "@/components/NavBar/NavBar";
+import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
 
 const IMG_WIDTH = 140;
 const IMG_HEIGHT = 140;
 
 export default function CartPage() {
+    const { lang } = useLanguage();
     const [cartItems, setCartItems] = useState([]);
     const [imagePositions, setImagePositions] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -79,7 +81,7 @@ export default function CartPage() {
         <>
             <NavBar theme={'black'} />
             <section className={styles.root}>
-                <div className={styles.title}>Корзина</div>
+                <div className={styles.title}>{lang === 'ru' ? 'Корзина' : 'Cart'}</div>
                 <div className={styles.content}>
                     <div className={styles.leftPanel} ref={imagePanelRef}>
                         {imagePositions.length > 0 ? (
@@ -98,15 +100,15 @@ export default function CartPage() {
                                 />
                             ))
                         ) : (
-                            <p className={styles.emptyCartMessage}>Ваша корзина пуста.</p>
+                            <p className={styles.emptyCartMessage}>{lang === 'ru' ? 'Ваша корзина пуста' : 'Cart is empty'}.</p>
                         )}
                     </div>
                 </div>
                 <div className={styles.cartBottom}>
-                    <div>итого</div>
+                    <div>{lang === 'ru' ? 'итого' : 'Sum'}</div>
                     <div>sum</div>
                 </div>
-                <div className={styles.button} onClick={() => handleFormShow(true)}>Купить</div>
+                <div className={styles.button} onClick={() => handleFormShow(true)}>{lang === 'ru' ? 'Купить' : 'Buy'}</div>
 
                 {showForm &&
                     <div className={styles.formContainer}>

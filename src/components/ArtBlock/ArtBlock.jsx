@@ -1,5 +1,9 @@
+'use client'
+
 import Image from 'next/image';
 import styles from './ArtBlock.module.scss';
+import { Parallax } from 'react-scroll-parallax';
+import clsx from "clsx";
 
 export default function ArtBlock() {
     return (
@@ -27,16 +31,20 @@ export default function ArtBlock() {
                 />
             </div>
             <div className={styles.smallLogosContainer}>
-                <div className={styles.smallLogoItem}>
-                    <Image
-                        src="/images/logo.png"
-                        alt="Small logo"
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        className={styles.smallLogoSvg}
-                    />
-                </div>
-                <div className={styles.smallLogoItem2}>
+                <Parallax
+                    className={styles.smallLogoItem}
+                    speed={10}
+                ><Image
+                    src="/images/logo.png"
+                    alt="Small logo"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    className={styles.smallLogoSvg}
+                /></Parallax>
+                <Parallax
+                    className={styles.smallLogoItem2}
+                    speed={-10}
+                >
                     <Image
                         src="/images/logo.png"
                         alt="Small logo inverted"
@@ -44,8 +52,11 @@ export default function ArtBlock() {
                         style={{ objectFit: 'contain' }}
                         className={styles.smallLogoSvg}
                     />
-                </div>
-                <div className={styles.smallLogoItem}>
+                </Parallax>
+                <Parallax
+                    className={styles.smallLogoItem}
+                    speed={10}
+                >
                     <Image
                         src="/images/logo.png"
                         alt="Small logo"
@@ -53,7 +64,34 @@ export default function ArtBlock() {
                         style={{ objectFit: 'contain' }}
                         className={styles.smallLogoSvg}
                     />
-                </div>
+                </Parallax>
+                {/*<div className={styles.smallLogoItem}>*/}
+                {/*    <Image*/}
+                {/*        src="/images/logo.png"*/}
+                {/*        alt="Small logo"*/}
+                {/*        fill*/}
+                {/*        style={{ objectFit: 'contain' }}*/}
+                {/*        className={styles.smallLogoSvg}*/}
+                {/*    />*/}
+                {/*/!*</div>*!/*/}
+                {/*<div className={styles.smallLogoItem2}>*/}
+                {/*    <Image*/}
+                {/*        src="/images/logo.png"*/}
+                {/*        alt="Small logo inverted"*/}
+                {/*        fill*/}
+                {/*        style={{ objectFit: 'contain' }}*/}
+                {/*        className={styles.smallLogoSvg}*/}
+                {/*    />*/}
+                {/*</div>*/}
+                {/*<div className={styles.smallLogoItem}>*/}
+                {/*    <Image*/}
+                {/*        src="/images/logo.png"*/}
+                {/*        alt="Small logo"*/}
+                {/*        fill*/}
+                {/*        style={{ objectFit: 'contain' }}*/}
+                {/*        className={styles.smallLogoSvg}*/}
+                {/*    />*/}
+                {/*</div>*/}
             </div>
         </div>
     );

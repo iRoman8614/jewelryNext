@@ -8,43 +8,156 @@ $button-offset: 30px;
 
 $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width})) / 2);
 
-
-.root {
-  font-family: var(--font-text);
-  background-color: #fff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-}
-
 .productDetailPage {
-  flex-grow: 1;
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 60px 0;
   min-height: 70vh;
 }
 
+.header {
+  width: 100%;
+  align-items: baseline;
+  position: relative;
+  padding-left: utils.auto-clamp(30, 250);
+  padding-right: utils.auto-clamp(60, 400);
+}
+
+.productName {
+  width: 100%;
+  text-align: right;
+  font-size: 56px;
+  color: #000;
+  font-weight: 400;
+  margin-top: -40px;
+}
+
+.creature {
+  font-size: 28px;
+  color: #000;
+  font-weight: normal;
+}
+
+.productViewContainer {
+  display: flex;
+  width: 100%;
+  z-index: 5;
+  pointer-events: none;
+  justify-content: center;
+}
+
+.productInfoOverlay {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 120px 40px 40px 40px;
+  box-sizing: border-box;
+  pointer-events: auto;
+  width: fit-content;
+}
+
+.addToCartButton {
+  margin-top: auto;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-text);
+  font-size: 16px;
+  color: #000;
+  padding: 10px 0;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1000;
+
+  &:hover { opacity: 0.8; }
+}
+
+.removeFromCartIcon {
+  rotate: 45deg;
+}
+
+.productSpecs {
+  padding-left: 50px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px 150px;
+  color: #000;
+  max-height: 630px;
+  width: utils.auto-clamp(380, 750);
+}
+
+.specItemSizeLabel {
+  text-align: right;
+  padding-right: 15px;
+}
+
+.specItemSizeValue {
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.specItemWightLabel {
+  text-align: right;
+  font-size: 20px;
+}
+
+.specItemWightValue {
+  font-size: 20px;
+}
+
+.specItemMaterialLabel {
+  text-align: right;
+  padding-right: 25px;
+  font-size: 20px;
+}
+
+.specItemMaterialValue {
+  padding-left: 20px;
+  font-size: 20px;
+}
+
+.specItemPriceLabel {
+
+  justify-content: right;
+  word-break: break-all;
+  font-size: 32px;
+
+  div {
+    width: 55px;
+    text-align: right;
+    margin-left: auto;
+    margin-right: 40px;
+  }
+}
+
+.specItemPriceValue {
+  text-align: center;
+  font-size: 32px;
+  padding-top: 20px;
+}
+
 .swiperLayer {
+  padding-left: utils.auto-clamp(30, 250);
   position: absolute;
-  top: 30px;
+  top: 150px;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: fit-content;
   z-index: 1;
   display: flex;
   align-items: center;
-  padding-left: $content-left-edge;
   box-sizing: border-box;
   overflow: visible;
 }
 
 .productSwiper {
-  margin-top: 30px;
-  width: 110vw;
+  width: 100vw;
   max-height: 100%;
   overflow: visible !important;
   :global(.swiper-wrapper) {
@@ -78,170 +191,12 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   }
 }
 
-.productViewContainer {
-  width: $content-width-vw;
-  max-width: $content-max-width;
-  min-height: 70vh;
-  position: relative;
-  z-index: 5;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 0 20px;
-  margin-bottom: 20px;
-  margin-top: -60px;
-  position: relative;
-  z-index: 15;
-  pointer-events: auto;
-}
-
-.creature {
-  font-size: 28px;
-  color: #000;
-  font-weight: normal;
-}
-
-.productName {
-  font-size: 56px;
-  color: #000;
-  text-align: right;
-  font-weight: 400;
-}
-
-.productInfoOverlay {
-  position: absolute;
-  top: 40px;
-  left: $slide-width;
-  width: calc(80% - #{$slide-width});
-  height: 100%;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 120px 40px 40px 40px;
-  box-sizing: border-box;
-  pointer-events: auto;
-}
-
-.productInfoContent { display: flex; flex-direction: column; gap: 20px; }
-
-.productSpecs {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  color: #000;
-}
-.specItem, .specItemSize, .specItemWight, .specItemMaterial {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  font-size: utils.auto-clamp(14, 24);
-  line-height: 1.4;
-}
-
-.specItemSize {
-  margin-left: 70px;
-  width: utils.auto-clamp(100, 300);
-}
-
-.specItemWight {
-  margin-left: 100px;
-  width: utils.auto-clamp(80, 250);
-}
-
-.specItemMaterial {
-  width: utils.auto-clamp(150, 500);
-}
-
-.specLabel { font-weight: bold; margin-right: 10px; white-space: nowrap; }
-.specValue { text-align: right; }
-.materialItem {}
-.priceItem {
-  margin-top: 10px;
-}
-.priceLable {
-  width: 35px;
-  word-break: break-word;
-}
-.priceItem .specLabel { font-size: 18px; align-self: center; }
-.priceItem .priceValue { font-size: 24px; font-weight: bold; }
-
 .cartControl {
   margin-top: 30px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   min-height: 40px;
-}
-
-.addToCartButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: flex-start;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font-text);
-  font-size: 16px;
-  color: #000;
-  padding: 10px 0;
-  pointer-events: auto;
-
-  .addToCartIcon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 1.5px solid #000;
-    border-radius: 50%;
-    margin-right: 15px;
-    position: relative;
-    &::before, &::after { content: ''; position: absolute; top: 50%; left: 50%; width: 60%; height: 1.5px; background-color: #000; transform-origin: center; }
-    &::before { transform: translate(-50%, -50%) rotate(90deg); }
-    &::after { transform: translate(-50%, -50%) rotate(0deg); }
-  }
-  &:hover { opacity: 0.8; }
-}
-
-.quantityControl {
-  display: flex;
-  align-items: center;
-  border: 1.5px solid #000;
-  border-radius: 20px;
-  overflow: hidden;
-  align-self: flex-start;
-}
-
-.quantityButton {
-  background-color: transparent;
-  border: none;
-  color: #000;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 5px 15px;
-  cursor: pointer;
-  line-height: 1;
-  transition: background-color 0.2s ease;
-
-  &:hover { background-color: rgba(0, 0, 0, 0.05); }
-  &:active { background-color: rgba(0, 0, 0, 0.1); }
-}
-
-.quantityDisplay {
-  padding: 5px 10px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #000;
-  min-width: 2em;
-  text-align: center;
-  border-left: 1.5px solid #000;
-  border-right: 1.5px solid #000;
 }
 
 .backButton {
@@ -253,16 +208,15 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   border: none;
   cursor: pointer;
   padding: 10px;
-  margin-top: auto;
   align-self: flex-end;
+  width: fit-content;
+  margin: auto utils.auto-clamp(30, 120) utils.auto-clamp(30, 120) auto;
 }
-.backButton:hover { opacity: 0.7; }
-
 
 .customSwiperButton {
+  filter: invert(1);
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 40%;
   z-index: 20;
   width: $button-width;
   height: $button-width;
@@ -272,23 +226,13 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   justify-content: center;
   align-items: center;
   pointer-events: auto;
-
-  &::after {
-    content: '';
-    display: block;
-    border-style: solid;
-    border-width: 2px 2px 0 0;
-    width: 30px; height: 30px;
-    border-color: black; }
 }
 
 .customSwiperButtonPrev {
-  left: calc(#{$content-left-edge} - #{$button-width} - #{$button-offset});
-  &::after { transform: rotate(-135deg); margin-left: 2px; }
+  rotate: 180deg;
+  left: utils.auto-clamp(10, 150);
 }
 
 .customSwiperButtonNext {
-  right: 15%
-;
-  &::after { transform: rotate(45deg); margin-right: 2px; }
+  right: utils.auto-clamp(60, 380);
 }

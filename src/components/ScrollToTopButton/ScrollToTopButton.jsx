@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import styles from './ScrollToTopButton.module.scss';
+import Image from "next/image";
 
 export default function ScrollToTopButton() {
     const [isVisible, setIsVisible] = useState(false);
@@ -32,7 +33,7 @@ export default function ScrollToTopButton() {
         <div className={styles.scrollToTop}>
             {isVisible && (
                 <button onClick={scrollToTop} className={styles.button}>
-                    {'>'}
+                    <Image src={'/images/arrow.svg'} alt={''} width={20} height={40} />
                 </button>
             )}
         </div>

@@ -3,13 +3,14 @@
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import styles from './styles.module.scss';
+import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
 
 export default function InfiniteImageSwiper({
                                                 images = [],
-                                                numVisibleInitial = 10,
+                                                numVisibleInitial = 8,
                                                 imageWidth = 80,
                                                 imageHeight = 80,
-                                                gap = 20
+                                                gap = 15
                                             }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const actualNumVisible = images.length > 0 ? Math.min(numVisibleInitial, images.length) : 0;
@@ -41,6 +42,8 @@ export default function InfiniteImageSwiper({
 
     const canSwipe = images.length > actualNumVisible && actualNumVisible > 0;
 
+    const { lang } = useLanguage();
+
     return (
         <div className={styles.swiperContainer}>
             <div className={styles.controlsAndImages}>
@@ -50,7 +53,7 @@ export default function InfiniteImageSwiper({
                     disabled={!canSwipe}
                     aria-label="Previous images"
                 >
-                    ‹
+                    <Image src={'/images/arrow.svg'} alt={''} width={20} height={40} />
                 </button>
                 <div
                     className={styles.imagesWrapper}
@@ -77,10 +80,10 @@ export default function InfiniteImageSwiper({
                     disabled={!canSwipe}
                     aria-label="Next images"
                 >
-                    ›
+                    <Image src={'/images/arrow.svg'} alt={''} width={20} height={40} />
                 </button>
             </div>
-            <div className={styles.soldLabel}>ПРОДАНО</div>
+            <div className={styles.soldLabel}>{lang === 'ru' ? 'ПРОДАНО' : 'SOLD'}</div>
         </div>
     );
 };

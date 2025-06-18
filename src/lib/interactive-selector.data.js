@@ -1,6 +1,4 @@
-// src/lib/interactive-selector.data.js
 
-// Данные для кнопок-категорий
 export const categoryData = [
     { id: 'rings', name: 'Rings', slug: '/category/rings' },
     { id: 'bracelets', name: 'Bracelets', slug: '/category/bracelets' },
@@ -8,7 +6,6 @@ export const categoryData = [
     { id: 'pendants', name: 'Pendants', slug: '/category/pendants' },
 ];
 
-// Константы для анимации
 export const SNAKE_CONFIG = {
     NUMBER_OF_ELEMENTS: 6,
     INITIAL_POSITION_PATTERN: [2, 1, 2, 3, 2, 1],

@@ -6,7 +6,6 @@ import { Navigation, A11y } from 'swiper/modules';
 import Image from 'next/image';
 import styles from './InfiniteSwiper.module.scss';
 
-// Импортируем стили Swiper
 import 'swiper/css';
 import 'swiper/css/navigation';
 
@@ -50,8 +49,12 @@ export default function ProductSwiper({ images = [] }) {
                     </SwiperSlide>
                 ))}
             </Swiper>
-            <div className={`${styles.navArrow} ${styles.prevArrow}`} aria-label="Previous slide"></div>
-            <div className={`${styles.navArrow} ${styles.nextArrow}`} aria-label="Next slide"></div>
+            <div className={`${styles.navArrow} ${styles.prevArrow}`} aria-label="Previous slide">
+                <Image src={'images/arrow.svg'} alt={''} width={20} height={40} />
+            </div>
+            <div className={`${styles.navArrow} ${styles.nextArrow}`} aria-label="Next slide">
+                <Image src={'images/arrow.svg'} alt={''} width={20} height={40} />
+            </div>
         </div>
     );
 }

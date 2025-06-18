@@ -1,13 +1,11 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import styles from './Footer.module.scss';
 
-// Импортируем наши данные
 import { footerData } from '@/lib/home-page.data.js';
 
 export default function Footer() {
     return (
-        <footer>
+        <footer id={"contacts"}>
             <div>
                 <div
                     className={styles.footerText}

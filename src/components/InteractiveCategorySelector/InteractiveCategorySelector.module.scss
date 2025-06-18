@@ -13,14 +13,29 @@
 .buttonRow {
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 40px;
   margin: 30px 0;
   width: 100%;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.mobileButtonRow {
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    width: 100%;
+  }
 }
 
 .categoryButton {
   font-family: var(--font-text);;
-  font-size: utils.responsive-size(127);
+  font-size: utils.responsive-size(107);
   color: #fff;
   background: none;
   border: none;

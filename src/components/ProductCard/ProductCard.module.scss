@@ -8,18 +8,21 @@
 }
 
 .card1 {
+  width: utils.responsive-size(470);
   margin-top: -30px;
   align-self: start;
   justify-self: right;
 }
 
 .card2 {
+  width: utils.responsive-size(405);
   margin-top: 40px;
   align-self: end;
   justify-self: center;
 }
 
 .card3 {
+  width: utils.responsive-size(353);
   align-self: start;
   justify-self: left;
   margin-left: 20px;
