@@ -6,6 +6,10 @@
   text-transform: uppercase;
   padding-left: 150px;
   padding-bottom: 100px;
+
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
 }
 
 .title {
@@ -49,4 +53,12 @@
   display: flex;
   justify-content: center;
   padding: 60px 0;
+}
+
+.rootMobile {
+  display: none;
+
+  @media screen and (max-width: 500px) {
+    display: block;
+  }
 }

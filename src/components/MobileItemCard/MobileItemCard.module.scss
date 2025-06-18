@@ -1,0 +1,80 @@
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100000;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.row {
+  display: flex;
+}
+
+.container {
+  width: 290px;
+  border: 1px solid black;
+  background-color: white;
+  margin: 50px auto auto auto;
+}
+
+.slideWrapper {
+  width: 290px;
+  height: 370px;
+  border-bottom: 1px solid black;
+}
+
+.productSpecs {
+  padding: 20px;
+  font-size: 12px;
+}
+
+.specItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+.materialItem {
+  display: block;
+  margin-right: 20px;
+}
+
+.arrow {
+  position: absolute;
+  top: 40%;
+  background: none;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.prevArrow {
+  left: 0;
+  rotate: 180deg;
+}
+
+.nextArrow {
+  right: 0;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 75px;
+  background-color: #282828;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000000;
+}
+
+.hideArrow {
+  rotate: 90deg;
+  margin: auto;
+}

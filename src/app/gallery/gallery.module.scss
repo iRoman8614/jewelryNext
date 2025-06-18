@@ -1,20 +1,89 @@
+@use '../styles/utils' as utils;
+
 .root {
   font-family: var(--font-text);
   text-transform: uppercase;
   background-color: #fff;
   color: #000;
   padding-bottom: 80px;
+  margin-bottom: 30px;
 }
 
 .title {
-  padding-top: 120px;
-  padding-left: 150px;
-  font-size: 64px;
-  margin-bottom: 60px;
+  padding-top: utils.auto-clamp(20, 120);
+  padding-left: utils.auto-clamp(20, 150);
+  font-size: utils.auto-clamp(24, 64);
+  margin-bottom: utils.auto-clamp(20, 60);
+  
+  @media screen and (max-width: 600px) {
+    padding-bottom: 20px;
+    padding-left: 0;
+    margin: 20px 30px;
+    border-bottom: 1px solid black;
+  }
+}
+
+.imageLine {
+  display: block;
+
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+}
+
+.mobileSwiperLine {
+  display: none;
+
+  @media screen and (max-width: 600px) {
+    display: block;
+  }
+}
+
+.titleSold {
+  font-size: utils.auto-clamp(24, 64);
+  padding-top: 20px;
+  padding-left: 0;
+  margin: 20px 30px;
+  text-align: right;
+  border-top: 1px solid black;
 }
 
 .swiper {
   margin: 80px 150px 0;
   border-top: 1px solid black;
   padding: 40px 0;
+
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+}
+
+.mobileSold {
+  display: none;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.cell {
+  width: 150px;
+  height: 150px;
+  margin: 10px auto;
+}
+
+.mobileGalleryFooter {
+  border-bottom: 1px solid black;
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.logotype {
+  filter: invert(1);
+  margin: 20px auto 40px auto;
 }

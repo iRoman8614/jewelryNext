@@ -1,6 +1,8 @@
+@use '../../app/styles/utils' as utils;
+
 $content-width-vw: 80vw;
 $content-max-width: 1200px;
-$slide-width: 420px;
+$slide-width: 330px;
 $button-width: 44px;
 $button-offset: 30px;
 
@@ -28,7 +30,7 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 
 .swiperLayer {
   position: absolute;
-  top: 0;
+  top: 30px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -41,7 +43,8 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 }
 
 .productSwiper {
-  width: 100%;
+  margin-top: 30px;
+  width: 110vw;
   max-height: 100%;
   overflow: visible !important;
   :global(.swiper-wrapper) {
@@ -51,16 +54,14 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 }
 
 .productSlide {
-  width: $slide-width;
+  width: utils.auto-clamp(100, 355);
   height: auto;
   flex-shrink: 0;
   box-sizing: border-box;
-  aspect-ratio: 3 / 4;
-  max-height: 60vh;
 
   .slideImageWrapper {
-    width: 100%;
-    height: 100%;
+    width: utils.auto-clamp(100, 355);
+    height: fit-content;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -69,8 +70,8 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 
     img {
       display: block;
-      width: 100%;
-      height: 100%;
+      width: utils.auto-clamp(100, 355);
+      height: fit-content;
       object-fit: cover;
       object-position: center center;
     }
@@ -94,7 +95,7 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   align-items: baseline;
   padding: 0 20px;
   margin-bottom: 20px;
-  margin-top: -80px;
+  margin-top: -60px;
   position: relative;
   z-index: 15;
   pointer-events: auto;
@@ -117,7 +118,7 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   position: absolute;
   top: 40px;
   left: $slide-width;
-  width: calc(90% - #{$slide-width});
+  width: calc(80% - #{$slide-width});
   height: 100%;
   z-index: 10;
   display: flex;
@@ -129,12 +130,45 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 }
 
 .productInfoContent { display: flex; flex-direction: column; gap: 20px; }
-.productSpecs { display: flex; flex-direction: column; gap: 15px; color: #000; }
-.specItem { display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px; line-height: 1.4; }
+
+.productSpecs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: #000;
+}
+.specItem, .specItemSize, .specItemWight, .specItemMaterial {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: utils.auto-clamp(14, 24);
+  line-height: 1.4;
+}
+
+.specItemSize {
+  margin-left: 70px;
+  width: utils.auto-clamp(100, 300);
+}
+
+.specItemWight {
+  margin-left: 100px;
+  width: utils.auto-clamp(80, 250);
+}
+
+.specItemMaterial {
+  width: utils.auto-clamp(150, 500);
+}
+
 .specLabel { font-weight: bold; margin-right: 10px; white-space: nowrap; }
 .specValue { text-align: right; }
 .materialItem {}
-.priceItem { margin-top: 10px; }
+.priceItem {
+  margin-top: 10px;
+}
+.priceLable {
+  width: 35px;
+  word-break: break-word;
+}
 .priceItem .specLabel { font-size: 18px; align-self: center; }
 .priceItem .priceValue { font-size: 24px; font-weight: bold; }
 
@@ -154,7 +188,7 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   background: none;
   border: none;
   cursor: pointer;
-  font-family: 'Anticva', serif;
+  font-family: var(--font-text);
   font-size: 16px;
   color: #000;
   padding: 10px 0;
@@ -211,8 +245,8 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 }
 
 .backButton {
-  font-family: 'Anticva', serif;
-  font-size: 24px;
+  font-family: var(--font-text);
+  font-size: utils.auto-clamp(24, 32);
   font-weight: normal;
   color: #000;
   background: none;
@@ -233,15 +267,19 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   width: $button-width;
   height: $button-width;
   cursor: pointer;
-  background-color: rgba(100, 100, 100, 0.6);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   pointer-events: auto;
 
-  &::after { content: ''; display: block; border-style: solid; border-width: 2px 2px 0 0; width: 10px; height: 10px; border-color: white; }
-  &:hover { background-color: rgba(50, 50, 50, 0.8); }
+  &::after {
+    content: '';
+    display: block;
+    border-style: solid;
+    border-width: 2px 2px 0 0;
+    width: 30px; height: 30px;
+    border-color: black; }
 }
 
 .customSwiperButtonPrev {
@@ -250,36 +288,7 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 }
 
 .customSwiperButtonNext {
-  right: calc(#{$content-left-edge} - #{$button-width} - #{$button-offset});
+  right: 15%
+;
   &::after { transform: rotate(45deg); margin-right: 2px; }
-}
-
-// --- Медиа-запросы (оставлены как в "идеальном" варианте, адаптируйте при необходимости) ---
-@media (max-width: 992px) {
-  .productInfoOverlay {
-    left: 350px; // Пример
-    width: calc(100% - 350px); // Пример
-    padding: 60px 20px 20px 30px;
-  }
-  .customSwiperButtonPrev { left: calc(((100vw - min(90vw, #{$content-max-width})) / 2) - #{$button-width} - 20px); } // Пример
-  .customSwiperButtonNext { right: calc(((100vw - min(90vw, #{$content-max-width})) / 2) - #{$button-width} - 20px); } // Пример
-}
-
-@media (max-width: 768px) {
-  // ... Мобильные стили из варианта, который вам нравился ...
-  // Возможно, потребуется скорректировать стили .cartControl, .quantityControl
-  // для корректного отображения на мобильных
-  .productDetailPage { display: block; padding: 20px 0; }
-  .swiperLayer { position: relative; width: 100%; height: auto; z-index: 1; padding-left: 0; margin-top: 70px; }
-  .productSlide { width: 80%; max-height: 50vh; }
-  .productViewContainer { position: relative; width: 100%; min-height: auto; z-index: 5; pointer-events: auto; padding: 0 15px; box-sizing: border-box; }
-  .header { position: absolute; top: 20px; left: 15px; right: 15px; width: auto; z-index: 15; padding: 0; margin-bottom: 0; flex-direction: column; align-items: center; text-align: center; gap: 5px; .productName { text-align: center;} }
-  .productInfoOverlay { position: relative; width: 100%; height: auto; left: 0; z-index: 5; padding: 20px; margin-top: 15px; background-color: #fff; justify-content: flex-start; }
-  .customSwiperButton { top: calc(70px + 30vh); z-index: 20; } // Примерный расчет
-  .customSwiperButtonPrev { left: 5vw; }
-  .customSwiperButtonNext { right: 5vw; }
-  .cartControl { justify-content: center; } // Центрируем на мобильных
-  .addToCartButton { align-self: center; }
-  .quantityControl { align-self: center; }
-  .backButton { align-self: center; }
 }

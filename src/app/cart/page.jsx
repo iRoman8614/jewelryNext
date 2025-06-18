@@ -117,6 +117,12 @@ export default function CartPage() {
                     </div>
                 }
             </section>
+            <section className={styles.rootMobile}>
+                <ConfirmForm
+                    cartItems={cartItems}
+                    action={() => handleFormShow(false)}
+                />
+            </section>
         </>
     );
 }

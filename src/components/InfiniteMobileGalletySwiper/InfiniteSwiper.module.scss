@@ -1,0 +1,73 @@
+.swiperContainer {
+  position: relative;
+  width: 100%;
+  padding: 2rem 0;
+  overflow: hidden;
+}
+
+.productSwiper {
+  overflow: visible !important;
+}
+
+.productSlide {
+  width: 60vw;
+  transform: scale(0.8);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+
+  &.swiper-slide-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.slideContent {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-color: #1a1a1a;
+  overflow: hidden;
+  transition: border-color 0.4s ease;
+}
+
+.slideActive {
+  border-color: #fff;
+}
+
+.navArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+  }
+}
+
+.prevArrow {
+  left: 5%;
+  &::after {
+    transform: rotate(-135deg);
+    margin-left: 2px;
+  }
+}
+
+.nextArrow {
+  right: 5%;
+  &::after {
+    transform: rotate(45deg);
+    margin-right: 2px;
+  }
+}
+
+.loader {
+}

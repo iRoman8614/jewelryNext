@@ -6,10 +6,16 @@ import styles from './DesktopCatalogView.module.scss';
 import { cardTypeSequence } from '@/lib/catalog.data.js';
 import BackButton from '@/components/BackButton/BackButton';
 import ProductCard from '@/components/ProductCard/ProductCard';
+import { useLanguage } from '@/components/LanguageProvider/LanguageProvider';
 import NavBar from "@/components/NavBar/NavBar";
 
 export default function DesktopCatalogView({ data }) {
-    const { title, subtitle, description, products } = data;
+    const { lang } = useLanguage();
+    const { products = [], categoryInfo, collectionInfo } = data;
+
+    const title = collectionInfo?.name?.[lang] || categoryInfo?.title?.[lang] || (lang === 'en' ? 'Catalog' : 'Каталог');
+    const subtitle = collectionInfo ? categoryInfo?.title?.[lang] : categoryInfo?.subtitle?.[lang];
+    const description = collectionInfo ? '' : categoryInfo?.description?.[lang];
 
     return (
         <>
@@ -23,10 +29,9 @@ export default function DesktopCatalogView({ data }) {
                 <div className={styles.productsGrid}>
                     {products.map((product, index) => {
                         const cardType = cardTypeSequence[index % cardTypeSequence.length];
-                        const itemId = product.name ? product.name.toLowerCase().replace(/\s+/g, '-') : index;
-
+                        const itemId = product.id || index;
                         return (
-                            <Link key={index} className={styles.link} href={`/item/${itemId}`}>
+                            <Link key={itemId} className={styles.link} href={`/item/${itemId}`}>
                                 <ProductCard item={product} variant={cardType} />
                             </Link>
                         );

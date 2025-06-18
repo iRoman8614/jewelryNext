@@ -6,12 +6,22 @@
   font-family: var(--font-text);
   align-items: center;
   margin-bottom: 20px;
+
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
+    gap: 20px;
+  }
 }
 
 .img {
   width: 100px;
   height: 100px;
   background-color: #aaaaaa;
+
+  @media screen and (max-width: 600px) {
+    width: 45px;
+    height: 45px;
+  }
 }
 
 .sumConteiner {

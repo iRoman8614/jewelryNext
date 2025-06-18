@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
         return { title: 'Товар не найден' };
     }
     return {
-        title: `${product.name} – ${product.type || 'Изделие'}`,
+        title: `${product.name.en} – ${product.type.en || 'Изделие'}`,
         description: `Информация о товаре: ${product.name}`,
     };
 }

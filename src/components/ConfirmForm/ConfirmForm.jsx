@@ -49,7 +49,6 @@ export default function ConfirmForm({ action, cartItems = [] }) {
                 width={40}
                 height={40}
             />
-
             <div className={styles.itemList}>
                 {cartItems.length > 0 ? (
                     cartItems.map(item => <FormListItem key={item.id} item={item} />)
@@ -66,7 +65,6 @@ export default function ConfirmForm({ action, cartItems = [] }) {
                 <span>{totalAmount}</span>
             </div>
 
-            {/* --- НАЧАЛО ПОЛНОГО КОДА ФОРМЫ --- */}
             <div className={styles.formContainer}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.formGroup}>

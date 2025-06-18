@@ -20,6 +20,7 @@ export default function FormListItem({ item, onRemove }) {
                 <Image
                     src={displayItem.imageUrl}
                     alt={displayItem.name}
+                    className={styles.img}
                     width={100}
                     height={100}
                     style={{ objectFit: 'cover' }}

@@ -2,18 +2,22 @@
 
 .root {
   font-family: var(--font-text);
-  padding: 80px;
+  padding: utils.auto-clamp(20, 80);
 }
 
 .service {
   text-transform: uppercase;
-  font-size: 64px;
+  font-size: utils.auto-clamp(28, 64);
   margin-bottom: 60px;
+
+  @media screen and (max-width: 600px) {
+    text-align: center;
+  }
 }
 
 .title {
   text-align: center;
-  font-size: 24px;
+  font-size: utils.auto-clamp(14, 24);
   margin-bottom: 30px;
 }
 
@@ -22,6 +26,10 @@
   height: auto;
   display: block;
   margin: 0 auto 40px auto;
+
+  @media screen and (max-width: 600px) {
+    width: 20px;
+  }
 }
 
 .content {

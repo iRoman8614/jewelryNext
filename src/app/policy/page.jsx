@@ -16,7 +16,7 @@ export default function PolicyPage() {
             <div className={styles.root}>
                 <div className={styles.service}>сервис</div>
                 <div className={styles.title}>
-                    ПРАВИЛА ВОЗВРАТА ТОВАРОВ И ПЛАТЕЖЕЙ,ПРИНИМАЕМЫЕ СПОСОБЫ ОПЛАТЫ,УСЛОВИЯ ПРЕДОСТАВЛЕНИЯ УСЛУГ
+                    ПРАВИЛА ВОЗВРАТА ТОВАРОВ И ПЛАТЕЖЕЙ, ПРИНИМАЕМЫЕ СПОСОБЫ ОПЛАТЫ,УСЛОВИЯ ПРЕДОСТАВЛЕНИЯ УСЛУГ
                 </div>
                 <div>
                     <Image

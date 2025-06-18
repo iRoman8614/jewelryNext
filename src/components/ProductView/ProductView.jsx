@@ -10,8 +10,12 @@ import Link from 'next/link';
 import 'swiper/css';
 import 'swiper/css/a11y';
 import styles from './styles.module.scss';
+import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
+import {useRouter} from "next/navigation";
 
 export default function ProductView({ product }) {
+    const { lang } = useLanguage();
+    const router = useRouter();
     const swiperRef = useRef(null);
     const [itemQuantity, setItemQuantity] = useState(0);
     const cookieName = `item_${product.id}`;
@@ -52,6 +56,10 @@ export default function ProductView({ product }) {
         setItemQuantity(newQuantity);
     };
 
+    const handleBackClick = () => {
+        router.back();
+    };
+
     return (
         <div className={styles.productDetailPage}>
             <div className={`${styles.customSwiperButton} ${styles.customSwiperButtonPrev}`} onClick={handlePrev}></div>
@@ -59,7 +67,7 @@ export default function ProductView({ product }) {
                 <Swiper
                     ref={swiperRef}
                     modules={[A11y]}
-                    slidesPerView={'auto'}
+                    slidesPerView={2}
                     spaceBetween={630}
                     loop={true}
                     centeredSlides={false}
@@ -68,7 +76,7 @@ export default function ProductView({ product }) {
                     {product.images.map((image, index) => (
                         <SwiperSlide key={index} className={styles.productSlide}>
                             <div className={styles.slideImageWrapper}>
-                                <Image src={image} alt={`${product.name} - изображение ${index + 1}`} fill style={{ objectFit: 'cover' }} sizes="420px" />
+                                <Image src={image} alt={`${product.name} - изображение ${index + 1}`} width={355} height={530} style={{ objectFit: 'contain' }} />
                             </div>
                         </SwiperSlide>
                     ))}
@@ -76,33 +84,36 @@ export default function ProductView({ product }) {
             </div>
             <div className={styles.productViewContainer}>
                 <div className={styles.header}>
-                    <h2 className={styles.creature}>СУЩНОСТЬ</h2>
-                    <h1 className={styles.productName}>{product.name}</h1>
+                    <h2 className={styles.creature}>{product.collection?.[lang]}</h2>
+                    <h1 className={styles.productName}>{product.name?.[lang]}</h1>
                 </div>
                 <div className={styles.productInfoOverlay}>
                     <div className={styles.productInfoContent}>
                         <div className={styles.productSpecs}>
-                            <div className={styles.specItem}><span>{product.details.size.label}</span><span>{product.details.size.value}</span></div>
-                            <div className={styles.specItem}><span>{product.details.weight.label}</span><span>{product.details.weight.value}</span></div>
-                            <div className={`${styles.specItem} ${styles.materialItem}`}><span>{product.details.material.label}</span><span>{formatMultilineText(product.details.material.value)}</span></div>
-                            <div className={`${styles.specItem} ${styles.priceItem}`}><span>{product.details.price.label}</span><span className={styles.priceValue}>{product.details.price.value}</span></div>
-                        </div>
-                        <div className={styles.cartControl}>
-                            {itemQuantity === 0 ? (
-                                <button className={styles.addToCartButton} onClick={handleAddToCart}>
-                                    <span className={styles.addToCartIcon}></span>
-                                    ДОБАВИТЬ
-                                </button>
-                            ) : (
-                                <div className={styles.quantityControl}>
-                                    <button className={`${styles.quantityButton} ${styles.quantityButtonMinus}`} onClick={handleDecreaseQuantity}>-</button>
-                                    <span className={styles.quantityDisplay}>{itemQuantity}</span>
-                                    <button className={`${styles.quantityButton} ${styles.quantityButtonPlus}`} onClick={handleIncreaseQuantity}>+</button>
+                            <div className={styles.specItemSize}><span>{product.details.size.label?.[lang]}</span><span>{product.details.size.value}</span></div>
+                            <div className={styles.specItemWight}><span>{product.details.weight.label?.[lang]}</span><span>{product.details.weight.value}</span></div>
+                            <div className={`${styles.specItemMaterial} ${styles.materialItem}`}><span>{product.details.material.label?.[lang]}</span><span>{formatMultilineText(product.details.material.value?.[lang])}</span></div>
+                            <div className={`${styles.specItem} ${styles.priceItem}`}>
+                                <span className={styles.priceLable}>{product.details.price.label?.[lang]}</span>
+                                <span className={styles.priceValue}>{product.details.price.value}</span>
+                                <div className={styles.cartControl}>
+                                    {itemQuantity === 0 ? (
+                                        <button className={styles.addToCartButton} onClick={handleAddToCart}>
+                                            <span className={styles.addToCartIcon}></span>
+                                            {lang === 'ru' ? "ДОБАВИТЬ" : "ADD"}
+                                        </button>
+                                    ) : (
+                                        <div className={styles.quantityControl}>
+                                            <button className={`${styles.quantityButton} ${styles.quantityButtonMinus}`} onClick={handleDecreaseQuantity}>-</button>
+                                            <span className={styles.quantityDisplay}>{itemQuantity}</span>
+                                            <button className={`${styles.quantityButton} ${styles.quantityButtonPlus}`} onClick={handleIncreaseQuantity}>+</button>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
                     </div>
-                    <Link href="/gallery" className={styles.backButton}>НАЗАД</Link>
+                    <div onClick={handleBackClick} className={styles.backButton}>{lang === 'ru' ? "НАЗАД" : "BACK"}</div>
                 </div>
             </div>
             <div className={`${styles.customSwiperButton} ${styles.customSwiperButtonNext}`} onClick={handleNext}></div>
