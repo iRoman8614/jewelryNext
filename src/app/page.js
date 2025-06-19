@@ -65,7 +65,7 @@ export default function HomePage() {
                         alt="Decorative lightnings"
                         className={styles.lightnings}
                         width={1200}
-                        height={800}
+                        height={500}
                     />
                 </section>
             </main>
