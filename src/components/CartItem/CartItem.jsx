@@ -24,11 +24,11 @@ export default function CartItem({ item, onRemove }) {
                 tabIndex={0}
             >
                 <Image
-                    src={isHovered ? '/images/hoverCross.svg' : '/images/cross.svg'}
+                    src={isHovered ? '/images/hoverCross.svg' : '/images/hoverCross.svg'}
                     alt="Удалить товар"
                     className={styles.crossIcon}
-                    width={16}
-                    height={16}
+                    width={30}
+                    height={30}
                 />
             </div>
         </div>

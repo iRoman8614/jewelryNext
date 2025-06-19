@@ -63,9 +63,7 @@ export default function MobileCatalogView({ data }) {
 
             <div className={styles.newItems}>
                 {localizedRandomItems.map((item, index) => (
-                    <div key={index}>
-                        <Image className={styles.pictItem} src={item.url} alt={item.alt} width={185} height={300} />
-                    </div>
+                    <Image key={index} className={styles.pictItem} src={item.url} alt={item.alt} width={185} height={300} />
                 ))}
             </div>
 
@@ -88,7 +86,7 @@ export default function MobileCatalogView({ data }) {
                                     <div className={styles.productPrice}>{item.size}</div>
                                     <div>{lang === 'ru' ? 'вес' : 'weight'}</div>
                                     <div className={styles.productPrice}>{item.weight}</div>
-                                    <div>{lang === 'ru' ? 'цена' : 'price'}</div>
+                                    <div>{lang === 'ru' ? 'цена' : 'cost'}</div>
                                     <div className={styles.productPrice}>{item.price}</div>
                                 </div>
                             </div>

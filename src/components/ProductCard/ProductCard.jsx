@@ -40,7 +40,7 @@ export default function ProductCard({ item, variant = 1 }) {
                 height={height}
             />
             {displayName && <div className={styles.title}>{displayName}</div>}
-            {item.price && <div className={styles.desc}>{lang === "ru" ? 'цена' : 'price'} {item.price}</div>}
+            {item.price && <div className={styles.desc}>{lang === "ru" ? 'цена' : 'cost'} {item.price}</div>}
             {item.size && <div className={styles.desc}>{lang === "ru" ? 'размер' : 'size'} {item.size}</div>}
             {displayMaterial && <div className={styles.desc}>{lang === "ru" ? 'материал' : 'material'} {displayMaterial}</div>}
         </div>

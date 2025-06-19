@@ -8,11 +8,22 @@
   background-color: rgba(0, 0, 0, 0.6);
 }
 
+.clicker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+}
+
 .row {
   display: flex;
 }
 
 .container {
+  position: relative;
+  z-index: 100001;
   width: 290px;
   border: 1px solid black;
   background-color: white;
@@ -20,7 +31,7 @@
 }
 
 .slideWrapper {
-  width: 290px;
+  width: 288px;
   height: 370px;
   border-bottom: 1px solid black;
 }
@@ -49,8 +60,8 @@
   padding: 10px 15px;
   font-size: 24px;
   cursor: pointer;
-  z-index: 10;
   transition: background-color 0.3s ease;
+  z-index: 100001;
 }
 
 .prevArrow {

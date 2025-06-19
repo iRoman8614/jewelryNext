@@ -1,7 +1,7 @@
 @use '../styles/utils' as utils;
 
 .root {
-  margin-top: 105px;
+  margin-top: utils.auto-clamp(20, 105);
   font-family: var(--font-text);
   text-transform: uppercase;
   padding-left: 150px;
@@ -13,14 +13,13 @@
 }
 
 .title {
-  font-size: 64px;
-  margin-bottom: 60px;
+  font-size: utils.auto-clamp(40, 64);
+  margin-bottom: utils.auto-clamp(20, 60);
 }
 
 .content {
   display: flex;
   width: 100%;
-  margin-bottom: 30px;
 }
 
 .leftPanel {

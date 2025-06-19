@@ -10,8 +10,8 @@ import { MOCK_CART_ITEMS } from "@/lib/cart.data.js";
 import NavBar from "@/components/NavBar/NavBar";
 import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
 
-const IMG_WIDTH = 140;
-const IMG_HEIGHT = 140;
+const IMG_WIDTH = 100;
+const IMG_HEIGHT = 100;
 
 export default function CartPage() {
     const { lang } = useLanguage();
@@ -39,7 +39,7 @@ export default function CartPage() {
         }
 
         const newPositions = [];
-        let currentY = 10;
+        let currentY = 0;
 
         cartItems.forEach((item, index) => {
             const maxLeft = panelWidth > IMG_WIDTH ? panelWidth - IMG_WIDTH - 10 : 0;
@@ -57,7 +57,7 @@ export default function CartPage() {
 
             if (index < cartItems.length - 1) {
                 const MIN_VERTICAL_STEP = 90;
-                const MAX_VERTICAL_STEP = IMG_HEIGHT - 10;
+                const MAX_VERTICAL_STEP = IMG_HEIGHT - 70;
                 let stepForNextImage = MIN_VERTICAL_STEP + Math.random() * (MAX_VERTICAL_STEP - MIN_VERTICAL_STEP);
                 currentY += stepForNextImage;
             }

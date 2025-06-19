@@ -19,18 +19,15 @@ export default function NavBar({ theme }) {
     return (
         <nav className={clsx(styles.root, theme === 'white' && styles.rootWhite)}>
             <div className={styles.buttonset}>
-                <Link className={styles.link} href="/">
-                    <Image
-                        className={styles.logo}
-                        src="/images/logo.png"
-                        alt={lang === 'ru' ? 'Логотип' : 'Logo'}
-                        width={50}
-                        height={50}
-                        priority
-                    />
-                </Link>
+                <Image
+                    className={styles.logo}
+                    src="/images/logo.png"
+                    alt={lang === 'ru' ? 'Логотип' : 'Logo'}
+                    width={50}
+                    height={50}
+                    priority
+                />
                 <Link className={styles.link} href="/">{lang === 'ru' ? 'Путь' : 'The Path'}</Link>
-
                 <div className={styles.linkList}>
                     {lang === 'ru' ? 'Доступные' : 'Available'}
                     <div className={styles.linkHiden}>

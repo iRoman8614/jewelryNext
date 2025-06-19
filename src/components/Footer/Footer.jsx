@@ -23,6 +23,7 @@ export default function Footer() {
                     />
                     <div>{footerData.contacts.email}</div>
                     <div>{footerData.contacts.social}</div>
+                    <div>{footerData.contacts.tg}</div>
                     <div>{footerData.contacts.phone}</div>
                 </div>
                 <div className={styles.msk}>moscow<br/>powered by scamdevs 2025</div>

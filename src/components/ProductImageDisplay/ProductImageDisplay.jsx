@@ -26,8 +26,8 @@ export default function ProductImageDisplay({ imagePositions = [] }) {
                         src={pos.imageUrl}
                         alt={`Изображение товара ${pos.id}`}
                         className={styles.productImage}
-                        width={150}
-                        height={150}
+                        width={100}
+                        height={100}
                         style={{
                             top: pos.top,
                             left: pos.left,

@@ -35,6 +35,10 @@
   line-height: 1.5;
   padding-left: 15%;
   position: relative;
+  @media screen and (max-width: 768px) {
+    scale: 1.4;
+    margin-left: 15px;
+  }
 }
 
 .textContent {
@@ -47,5 +51,9 @@
   pointer-events: none;
   p {
     margin: 0;
+  }
+  @media screen and (max-width: 768px) {
+    scale: 1.4;
+    margin-left: 15px;
   }
 }

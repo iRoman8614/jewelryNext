@@ -67,7 +67,7 @@ export const MobileItemCard = ({id, click}) => {
 
     return(
         <div className={styles.root}>
-            <div className={styles.row}>
+            <div className={styles.clicker} onClick={click} />
                 <PrevArrow onClick={goToPrevious} />
                 <div className={styles.container}>
                     <div className={styles.slideWrapper}>
@@ -105,8 +105,7 @@ export const MobileItemCard = ({id, click}) => {
                     </div>
                 </div>
                 <NextArrow onClick={goToNext} />
-            </div>
-            <div className={styles.footer} onClick={click}>
+            <div className={styles.footer}>
                 <Image className={styles.hideArrow} src={arrow} alt={''} width={20} height={40} />
             </div>
         </div>

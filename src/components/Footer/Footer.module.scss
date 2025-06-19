@@ -24,7 +24,7 @@
 .footerLine {
   display: flex;
   justify-content: space-between;
-  padding: 40px utils.responsive-size(130);
+  padding: utils.auto-clamp(15, 40) utils.responsive-size(130);
 }
 
 .links {

@@ -40,7 +40,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -50,6 +50,7 @@
   height: 160px;
   border: 1px solid black;
   object-fit: cover;
+  margin: auto;
 }
 
 .categoryItems {
