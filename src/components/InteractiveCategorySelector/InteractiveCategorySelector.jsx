@@ -4,11 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './InteractiveCategorySelector.module.scss';
-
-import { categoryData, SNAKE_CONFIG, snakeImages } from '@/lib/interactive-selector.data.js';
-import { categoryPageData } from "@/lib/catalog.data"
 import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
-import {collections} from "@/lib/nav.data";
+
+
+export const SNAKE_CONFIG = {
+    NUMBER_OF_ELEMENTS: 6,
+    INITIAL_POSITION_PATTERN: [2, 1, 2, 3, 2, 1],
+    POSITION_SHIFT_PX: 20,
+    BASE_WAVE_PATTERN: [1, 2, 3, 2],
+};
 
 const SnakeRow = ({
                       categories,
@@ -87,7 +91,7 @@ const SnakeRow = ({
     );
 };
 
-export default function InteractiveCategorySelector() {
+export default function InteractiveCategorySelector({categories, snakeImages}) {
     const { lang } = useLanguage();
     const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState(null);
 
@@ -102,7 +106,7 @@ export default function InteractiveCategorySelector() {
     return (
         <div className={styles.categorySelectorContainer}>
             <SnakeRow
-                categories={categoryData}
+                categories={categories}
                 images={snakeImages.slice(0, 6)}
                 numberOfElements={SNAKE_CONFIG.NUMBER_OF_ELEMENTS}
                 initialPattern={SNAKE_CONFIG.INITIAL_POSITION_PATTERN}
@@ -113,15 +117,26 @@ export default function InteractiveCategorySelector() {
                 direction="normal"
             />
             <div className={styles.buttonRow}>
-                {Object.entries(collections).map(([categoryKey], index) => (
+                {/*{Object.entries(collections).map(([categoryKey], index) => (*/}
+                {/*    <Link*/}
+                {/*        key={categoryKey.id}*/}
+                {/*        href={`/category/${categoryKey}`}*/}
+                {/*        className={styles.categoryButton}*/}
+                {/*        onMouseEnter={() => handleCategoryEnter(index)}*/}
+                {/*        onMouseLeave={handleCategoryLeave}*/}
+                {/*    >*/}
+                {/*        {categoryPageData[categoryKey]?.title?.[lang] || categoryKey}*/}
+                {/*    </Link>*/}
+                {/*))}*/}
+                {categories.map((category, index) => (
                     <Link
-                        key={categoryKey.id}
-                        href={`/category/${categoryKey}`}
+                        key={category.slug}
+                        href={`/category/${category.slug}`}
                         className={styles.categoryButton}
                         onMouseEnter={() => handleCategoryEnter(index)}
                         onMouseLeave={handleCategoryLeave}
                     >
-                        {categoryPageData[categoryKey]?.title?.[lang] || categoryKey}
+                        {category.title?.[lang] || category.slug}
                     </Link>
                 ))}
             </div>
@@ -129,7 +144,7 @@ export default function InteractiveCategorySelector() {
                 <Link className={styles.categoryButton} href={'/catalog'}>{lang === "ru" ? "Каталог" : 'Catalog'}</Link>
             </div>
             <SnakeRow
-                categories={categoryData}
+                categories={categories}
                 images={snakeImages.slice(6, 12)}
                 numberOfElements={SNAKE_CONFIG.NUMBER_OF_ELEMENTS}
                 initialPattern={SNAKE_CONFIG.INITIAL_POSITION_PATTERN}

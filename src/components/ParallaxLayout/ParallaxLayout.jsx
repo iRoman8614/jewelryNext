@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Parallax } from 'react-scroll-parallax';
 import clsx from 'clsx';
 import styles from './ParallaxLayout.module.scss';
+import { useLanguage } from '@/components/LanguageProvider/LanguageProvider';
 
 export default function ParallaxLayout({
                                            elementsData,
@@ -12,6 +13,8 @@ export default function ParallaxLayout({
                                            backgroundColor = '#000',
                                            containerClassName = '',
                                        }) {
+    const { lang } = useLanguage();
+
     if (!elementsData || !Array.isArray(elementsData) || elementsData.length === 0) {
         return null;
     }
@@ -29,6 +32,9 @@ export default function ParallaxLayout({
         >
             {elementsData.map((element) => {
                 const isImage = element.type === 'image' && element.src;
+                const titleText = element.title?.[lang];
+                const contentText = element.content?.[lang];
+
                 return (
                     <Parallax
                         key={element.id}
@@ -43,7 +49,7 @@ export default function ParallaxLayout({
                             zIndex: element.zIndex || 1,
                         }}
                     >
-                        {element.type === 'image' && element.src && (
+                        {isImage && (
                             <Image
                                 src={element.src}
                                 alt={element.alt || `Parallax Element ${element.id}`}
@@ -54,16 +60,13 @@ export default function ParallaxLayout({
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                         )}
-                        {element.type === 'text' && element.content && (
+                        {element.type === 'text' && contentText && (
                             <>
-                                {element.title &&
-                                    <div className={styles.title}>{element.title}</div>
+                                {titleText &&
+                                    <div className={styles.title}>{titleText}</div>
                                 }
                                 <div className={styles.textContent}>
-                                    {typeof element.content === 'string'
-                                        ? <p dangerouslySetInnerHTML={{ __html: element.content.replace(/\n/g, '<br />') }} />
-                                        : element.content
-                                    }
+                                    <p dangerouslySetInnerHTML={{ __html: contentText }} />
                                 </div>
                             </>
                         )}

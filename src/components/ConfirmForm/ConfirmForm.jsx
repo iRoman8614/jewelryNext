@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useForm } from 'react-hook-form';
 import styles from './ConfirmForm.module.scss';
-
-import { deliveryOptions, paymentOptions } from "@/lib/form.data.js";
 import FormListItem from "@/components/FormListItem/FormListItem";
 
-export default function ConfirmForm({ action, cartItems = [] }) {
+export default function ConfirmForm({ checkoutOptions, action, cartItems = [] }) {
     const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onBlur" });
     const [isHovered, setIsHovered] = useState(false);
+
+    const deliveryOptions = checkoutOptions?.deliveryOptions?.[lang] || [];
+    const paymentOptions = checkoutOptions?.paymentMethods?.[lang] || [];
 
     const onSubmit = (data) => {
         const fullOrder = {

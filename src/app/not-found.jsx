@@ -1,12 +1,15 @@
 import Image from 'next/image';
 import styles from './not-found.module.scss';
 import NavBar from "@/components/NavBar/NavBar";
+import { getNavigation } from '@/lib/api';
 const logoSrc = '/images/logotipe.png';
 
-export default function NotFoundPage() {
+export default async function NotFoundPage() {
+    const navigationData = await getNavigation();
+
     return (
         <>
-            <NavBar theme={'black'}/>
+            <NavBar theme={'black'} navigation={navigationData} />
             <div className={styles.root}>
                 <div className={styles.container}>
                     <div>

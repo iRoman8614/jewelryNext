@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from './policy.module.scss';
 import NavBar from "@/components/NavBar/NavBar";
+import { getNavigation } from '@/lib/api';
 
 const logoSrc = '/images/logo.png';
 
@@ -9,10 +10,11 @@ export const metadata = {
     description: 'Правила возврата товаров, условия предоставления услуг, способы оплаты и политика конфиденциальности ювелирного магазина 27jwlr.',
 };
 
-export default function PolicyPage() {
+export default async function PolicyPage() {
+    const navigationData = await getNavigation();
     return (
         <>
-            <NavBar theme={'black'} />
+            <NavBar theme={'black'} navigation={navigationData} />
             <div className={styles.root}>
                 <div className={styles.service}>сервис</div>
                 <div className={styles.title}>

@@ -1,27 +1,56 @@
 import styles from './gallery.module.scss';
 import InfiniteImageSwiper from "@/components/InfiniteImageSwiper/InfiniteImageSwiper";
 import InfiniteImageFeed from "@/components/InfiniteImageFeed/InfiniteImageFeed";
-import { productImages, swiperImages } from "@/lib/gallery.data.js";
 import NavBar from "@/components/NavBar/NavBar";
 import Image from "next/image";
 import InfiniteSwiper from "@/components/InfiniteMobileGalletySwiper/InfiniteSwiper";
 import {PageTitle} from "@/app/gallery/title";
 import {SoldTitle} from "@/app/gallery/soldTitle";
+import { getNavigation, getReelGalleryImages } from '@/lib/api';
+
+export const swiperImages = [
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/parallax5.png',
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/ring.png',
+    '/images/meteora.png',
+    '/images/meteora.png',
+    '/images/meteora.png',
+    '/images/meteora.png',
+    '/images/meteora.png',
+];
 
 export const metadata = {
     title: 'Галерея – 27jwlr',
     description: 'Галерея работ и проданных изделий.',
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+    const [navigationData, reelGalleryData] = await Promise.all([
+        getNavigation(),
+        getReelGalleryImages()
+    ]);
+
     return(
         <>
-            <NavBar theme={'black'} />
+            <NavBar theme={'black'} navigation={navigationData} />
             <section className={styles.root}>
                 <PageTitle />
                 <div className={styles.imageLine}>
                     <InfiniteImageFeed
-                        images={productImages}
+                        images={reelGalleryData}
                         speed={40}
                         imageWidth={400}
                         imageHeight={400}
@@ -30,7 +59,7 @@ export default function GalleryPage() {
                     />
                 </div>
                 <div className={styles.mobileSwiperLine}>
-                    <InfiniteSwiper images={productImages} />
+                    <InfiniteSwiper images={reelGalleryData} />
                 </div>
                 <div className={styles.swiper}>
                     <InfiniteImageSwiper images={swiperImages} />

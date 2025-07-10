@@ -76,24 +76,30 @@ export default function ProductView({ product }) {
                 <div className={styles.productViewContainer}>
                     <div className={styles.productInfoOverlay}>
                         <div className={styles.productSpecs}>
-                            <div className={styles.specItemSizeLabel}>
-                                {product.details.size.label?.[lang]}
-                            </div>
-                            <div className={styles.specItemSizeValue}>
-                                {product.details.size.value}
-                            </div>
-                            <div className={styles.specItemWightLabel}>
-                                {product.details.weight.label?.[lang]}
-                            </div>
-                            <div className={styles.specItemWightValue}>
-                                {product.details.weight.value}
-                            </div>
-                            <div className={styles.specItemMaterialLabel}>
-                                {product.details.material.label?.[lang]}
-                            </div>
-                            <div className={styles.specItemMaterialValue}>
-                                {formatMultilineText(product.details.material.value?.[lang])}
-                            </div>
+                            {product.details.size.value !== '' && <>
+                                <div className={styles.specItemSizeLabel}>
+                                    {product.details.size.label?.[lang]}
+                                </div>
+                                <div className={styles.specItemSizeValue}>
+                                    {product.details.size.value}
+                                </div>
+                            </>}
+                            {product.details.weight.value !== '' && <>
+                                <div className={styles.specItemWightLabel}>
+                                    {product.details.weight.label?.[lang]}
+                                </div>
+                                <div className={styles.specItemWightValue}>
+                                    {product.details.weight.value}
+                                </div>
+                            </>}
+                            {product.details.material.value?.[lang] !== '' && <>
+                                <div className={styles.specItemMaterialLabel}>
+                                    {product.details.material.label?.[lang]}
+                                </div>
+                                <div className={styles.specItemMaterialValue}>
+                                    {formatMultilineText(product.details.material.value?.[lang])}
+                                </div>
+                            </>}
                             <div className={styles.specItemPriceLabel}>
                                 <div>{product.details.price.label?.[lang]}</div>
                             </div>

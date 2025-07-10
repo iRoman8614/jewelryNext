@@ -3,12 +3,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { collections } from '@/lib/nav.data';
-import { categoryPageData } from '@/lib/catalog.data';
 import styles from './NavBar.module.scss';
 import { useLanguage } from '@/components/LanguageProvider/LanguageProvider';
 
-export default function NavBar({ theme }) {
+export default function NavBar({ theme, navigation }) {
     const { lang, setLang } = useLanguage();
 
     const handleLanguageToggle = () => {
@@ -31,18 +29,18 @@ export default function NavBar({ theme }) {
                 <div className={styles.linkList}>
                     {lang === 'ru' ? 'Доступные' : 'Available'}
                     <div className={styles.linkHiden}>
-                        {Object.entries(collections).map(([categoryKey, collectionsArray]) => (
-                            <div key={categoryKey} className={styles.subMenuItem}>
-                                <Link className={styles.linkCollection} href={`/category/${categoryKey}`}>
-                                    {categoryPageData[categoryKey]?.title?.[lang] || categoryKey}
+                        {navigation.map((item) => (
+                            <div key={item.slug} className={styles.subMenuItem}>
+                                <Link className={styles.linkCollection} href={`/category/${item.slug}`}>
+                                    {item.title?.[lang] || item.slug}
                                 </Link>
-                                <div className={styles.collectionsList}>
-                                    {collectionsArray.map((collection) => (
+                                {item.collections.length > 0 && <div className={styles.collectionsList}>
+                                    {item.collections?.map((collection) => (
                                         <Link key={collection.path} className={styles.linkCollection} href={collection.path}>
                                             {collection.name[lang]}
                                         </Link>
                                     ))}
-                                </div>
+                                </div>}
                             </div>
                         ))}
                     </div>
