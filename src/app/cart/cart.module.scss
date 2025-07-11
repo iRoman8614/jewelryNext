@@ -5,6 +5,7 @@
   font-family: var(--font-text);
   text-transform: uppercase;
   padding-left: 150px;
+  padding-right: 150px;
   padding-bottom: 100px;
 
   @media screen and (max-width: 768px) {
@@ -23,7 +24,14 @@
 }
 
 .leftPanel {
+  flex-shrink: 0;
   width: 45%;
+  min-height: 200px;
+}
+
+.rightPanel {
+  flex-shrink: 0;
+  width: 55%;
 }
 
 .cartBottom {

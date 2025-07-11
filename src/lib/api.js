@@ -5,7 +5,7 @@ export const getNavigation = cache(async () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const apiUrl = `${baseUrl}/api/navigation`;
     try {
-        const res = await fetch(apiUrl, { cache: 'force-cache' }); // СТАТИКА
+        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
         if (!res.ok) throw new Error(`Failed to fetch. Status: ${res.status}`);
         return await res.json();
     } catch (error) {
@@ -168,3 +168,34 @@ export const getProducts = async (params = {}) => {
         return { products: [], totalProducts: 0, totalPages: 1, currentPage: 1 };
     }
 };
+
+
+// Архивные/проданные товары
+export const getArchivedProducts = cache(async () => {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/archive`;
+    try {
+        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+        if (!res.ok) throw new Error(`Не удалось загрузить архив: ${res.statusText}`);
+
+        const data = await res.json();
+
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        if (data.products && Array.isArray(data.products)) {
+            return data.products
+                .map(product => {
+                    if (product.id && product.previewImage) {
+                        return {
+                            id: product.id,
+                            image: `${baseUrl}${product.previewImage}`
+                        };
+                    }
+                    return null;
+                })
+        }
+
+        return [];
+    } catch (error) {
+        console.error("Ошибка API (getArchivedProducts):", error);
+        return [];
+    }
+});

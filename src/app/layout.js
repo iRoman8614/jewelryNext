@@ -1,6 +1,5 @@
 import './globals.scss';
 import { Providers } from '@/components/Providers';
-import { LanguageProvider } from '@/components/LanguageProvider/LanguageProvider';
 import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton";
 
 export const metadata = {
@@ -12,11 +11,9 @@ export default function RootLayout({ children }) {
     return (
         <html lang="ru">
             <body>
-                <LanguageProvider>
-                    <Providers>
-                        {children}
-                    </Providers>
-                </LanguageProvider>
+                <Providers>
+                    {children}
+                </Providers>
                 <ScrollToTopButton />
             </body>
         </html>

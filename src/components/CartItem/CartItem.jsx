@@ -3,8 +3,10 @@
 import React, { useMemo, useState } from 'react';
 import Image from 'next/image';
 import styles from './CartItem.module.scss';
+import { useLanguage } from "@/components/LanguageProvider/LanguageProvider";
 
 export default function CartItem({ item, onRemove }) {
+    const { lang } = useLanguage();
     const [isHovered, setIsHovered] = useState(false);
 
     const randomPaddingLeft = useMemo(() => {
@@ -13,8 +15,8 @@ export default function CartItem({ item, onRemove }) {
 
     return (
         <div className={styles.root} style={{ paddingLeft: `${randomPaddingLeft}px` }}>
-            <div className={styles.itemType}>{item.type}</div>
-            <div className={styles.itemName}>{item.name}</div>
+            <div className={styles.itemType}>{item.type[lang]}</div>
+            <div className={styles.itemName}>{item.name[lang]}</div>
             <div
                 className={styles.buttonContainer}
                 onMouseEnter={() => setIsHovered(true)}

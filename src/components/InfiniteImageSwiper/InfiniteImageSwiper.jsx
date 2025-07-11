@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import styles from './styles.module.scss';
 import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
+import Link from "next/link";
 
 export default function InfiniteImageSwiper({
                                                 images = [],
@@ -33,7 +34,8 @@ export default function InfiniteImageSwiper({
         for (let i = 0; i < actualNumVisible; i++) {
             const imageIdx = (currentIndex + i) % images.length;
             result.push({
-                src: images[imageIdx],
+                id: images[imageIdx].id,
+                src: images[imageIdx].image,
                 key: `swiper-img-slot-${i}-idx-${imageIdx}`
             });
         }
@@ -61,7 +63,7 @@ export default function InfiniteImageSwiper({
                 >
                     <div className={styles.imagesList} style={{ gap: `${gap}px` }}>
                         {displayedImages.map((imgData) => (
-                            <div key={imgData.key} className={styles.imageItemWrapper} style={{ width: `${imageWidth}px`, height: `${imageHeight}px` }}>
+                            <Link href={`/item/${imgData.id}`} key={imgData.key} className={styles.imageItemWrapper} style={{ width: `${imageWidth}px`, height: `${imageHeight}px` }}>
                                 <Image
                                     src={imgData.src}
                                     alt=""
@@ -70,7 +72,7 @@ export default function InfiniteImageSwiper({
                                     sizes={`${imageWidth}px`}
                                     style={{ objectFit: 'cover' }}
                                 />
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

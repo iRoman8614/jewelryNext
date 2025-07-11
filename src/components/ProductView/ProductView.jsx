@@ -1,29 +1,26 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import React, { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y } from 'swiper/modules';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { useCart } from '@/components/CartProvider/CartProvider';
+import { useLanguage } from "@/components/LanguageProvider/LanguageProvider";
 
 import 'swiper/css';
 import 'swiper/css/a11y';
 import styles from './styles.module.scss';
-import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
-import {useRouter} from "next/navigation";
 
 export default function ProductView({ product }) {
     const { lang } = useLanguage();
     const router = useRouter();
     const swiperRef = useRef(null);
-    const [itemQuantity, setItemQuantity] = useState(0);
-    const cookieName = `item_${product.id}`;
 
-    useEffect(() => {
-        const quantityFromCookie = parseInt(Cookies.get(cookieName) || '0', 10);
-        setItemQuantity(quantityFromCookie);
-    }, [cookieName]);
+    const { cartItems, addToCart, removeFromCart } = useCart();
+
+    const itemInCart = cartItems.find(item => item.productId === product.id);
+    const isInCart = !!itemInCart;
 
     const formatMultilineText = (text) => {
         if (!text) return null;
@@ -32,39 +29,9 @@ export default function ProductView({ product }) {
 
     const handlePrev = () => swiperRef.current?.swiper?.slidePrev();
     const handleNext = () => swiperRef.current?.swiper?.slideNext();
-
-    const handleAddToCart = () => {
-        const newQuantity = 1;
-        Cookies.set(cookieName, newQuantity.toString(), { expires: 7 });
-        setItemQuantity(newQuantity);
-    };
-
-    const handleRemoveFromCart = () => {
-        const newQuantity = 0;
-        Cookies.set(cookieName, newQuantity.toString(), { expires: 7 });
-        setItemQuantity(newQuantity);
-    };
-
-    const handleIncreaseQuantity = () => {
-        const newQuantity = itemQuantity + 1;
-        Cookies.set(cookieName, newQuantity.toString(), { expires: 7 });
-        setItemQuantity(newQuantity);
-    };
-
-    const handleDecreaseQuantity = () => {
-        if (itemQuantity <= 0) return;
-        const newQuantity = itemQuantity - 1;
-        if (newQuantity === 0) {
-            Cookies.remove(cookieName);
-        } else {
-            Cookies.set(cookieName, newQuantity.toString(), { expires: 7 });
-        }
-        setItemQuantity(newQuantity);
-    };
-
-    const handleBackClick = () => {
-        router.back();
-    };
+    const handleBackClick = () => router.back();
+    const handleAddToCartClick = () => addToCart(product.id);
+    const handleRemoveFromCartClick = () => removeFromCart(product.id);
 
     return (
         <>
@@ -108,9 +75,9 @@ export default function ProductView({ product }) {
                             </div>
                         </div>
                     </div>
-                    <div className={styles.cartControl}>
-                        {itemQuantity === 0 ? (
-                            <button className={styles.addToCartButton} onClick={handleAddToCart}>
+                    {product.isVisible && <div className={styles.cartControl}>
+                        {!isInCart ? (
+                            <button className={styles.addToCartButton} onClick={handleAddToCartClick}>
                                 <Image
                                     className={styles.addToCartIcon}
                                     src={'/images/addBtn.svg'}
@@ -121,7 +88,7 @@ export default function ProductView({ product }) {
                                 {lang === 'ru' ? "ДОБАВИТЬ" : "ADD"}
                             </button>
                         ) : (
-                            <button className={styles.addToCartButton} onClick={handleRemoveFromCart}>
+                            <button className={styles.addToCartButton} onClick={handleRemoveFromCartClick}>
                                 <Image
                                     className={styles.removeFromCartIcon}
                                     src={'/images/addBtn.svg'}
@@ -132,9 +99,8 @@ export default function ProductView({ product }) {
                                 {lang === 'ru' ? "в корзине" : "in cart"}
                             </button>
                         )}
-                    </div>
+                    </div>}
                 </div>
-
 
                 <div className={`${styles.customSwiperButton} ${styles.customSwiperButtonPrev}`} onClick={handlePrev}>
                     <Image src={'/images/arrow.svg'} alt={''} width={20} height={40} />
@@ -152,7 +118,7 @@ export default function ProductView({ product }) {
                         {product.images.map((image, index) => (
                             <SwiperSlide key={index} className={styles.productSlide}>
                                 <div className={styles.slideImageWrapper}>
-                                    <Image src={image} alt={`${product.name} - изображение ${index + 1}`} width={355} height={530} style={{ objectFit: 'contain' }} />
+                                    <Image src={image} alt={`${product.name} - изображение ${index + 1}`} width={355} height={530} style={{ objectFit: 'cover' }} />
                                 </div>
                             </SwiperSlide>
                         ))}

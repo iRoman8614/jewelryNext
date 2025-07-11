@@ -6,31 +6,7 @@ import Image from "next/image";
 import InfiniteSwiper from "@/components/InfiniteMobileGalletySwiper/InfiniteSwiper";
 import {PageTitle} from "@/app/gallery/title";
 import {SoldTitle} from "@/app/gallery/soldTitle";
-import { getNavigation, getReelGalleryImages } from '@/lib/api';
-
-export const swiperImages = [
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/parallax5.png',
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/ring.png',
-    '/images/meteora.png',
-    '/images/meteora.png',
-    '/images/meteora.png',
-    '/images/meteora.png',
-    '/images/meteora.png',
-];
+import { getNavigation, getReelGalleryImages, getArchivedProducts } from '@/lib/api';
 
 export const metadata = {
     title: 'Галерея – 27jwlr',
@@ -38,9 +14,10 @@ export const metadata = {
 };
 
 export default async function GalleryPage() {
-    const [navigationData, reelGalleryData] = await Promise.all([
+    const [navigationData, reelGalleryData, archivedImages] = await Promise.all([
         getNavigation(),
-        getReelGalleryImages()
+        getReelGalleryImages(),
+        getArchivedProducts()
     ]);
 
     return(
@@ -61,12 +38,12 @@ export default async function GalleryPage() {
                 <div className={styles.mobileSwiperLine}>
                     <InfiniteSwiper images={reelGalleryData} />
                 </div>
-                <div className={styles.swiper}>
-                    <InfiniteImageSwiper images={swiperImages} />
-                </div>
+                {archivedImages.length > 0 && <div className={styles.swiper}>
+                    <InfiniteImageSwiper images={archivedImages}/>
+                </div>}
                 <SoldTitle />
                 <div className={styles.mobileSold}>
-                    {swiperImages.map((item, index) => {
+                    {archivedImages.map((item, index) => {
                         return(
                             <div className={styles.cell}>
                                 <Image key={index} src={item} alt={''} width={150} height={150} />
