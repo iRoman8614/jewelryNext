@@ -5,7 +5,7 @@ export const getNavigation = cache(async () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const apiUrl = `${baseUrl}/api/navigation`;
     try {
-        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error(`Failed to fetch. Status: ${res.status}`);
         return await res.json();
     } catch (error) {
@@ -18,7 +18,7 @@ export const getNavigation = cache(async () => {
 export const getCheckoutOptions = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/checkout/all-options`;
     try {
-        const res = await fetch(apiUrl, { cache: 'force-cache' }); // СТАТИКА
+        const res = await fetch(apiUrl, { next: { revalidate: 60 }  });
         if (!res.ok) throw new Error(`Failed to fetch checkout options: ${res.statusText}`);
         return await res.json();
     } catch (error) {
@@ -31,7 +31,7 @@ export const getCheckoutOptions = cache(async () => {
 export const getIconLinks = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/icon-links`;
     try {
-        const res = await fetch(apiUrl, { cache: 'force-cache' });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error(`Не удалось загрузить иконки: ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -46,7 +46,7 @@ export const getIconLinks = cache(async () => {
 export const getReelGalleryImages = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/reel-gallery`;
     try {
-        const res = await fetch(apiUrl, { cache: 'force-cache' });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 }  });
         if (!res.ok) throw new Error(`Не удалось загрузить изображения для галереи: ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -61,7 +61,7 @@ export const getReelGalleryImages = cache(async () => {
 export const getFeaturedProducts = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/featured`;
     try {
-        const res = await fetch(apiUrl, { cache: 'force-cache' });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 }  });
         if (!res.ok) throw new Error(`Не удалось загрузить избранные продукты: ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -77,7 +77,7 @@ export const getFeaturedProducts = cache(async () => {
 export const getSnakeGallery = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/snake-gallery`;
     try {
-        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error(`Не удалось загрузить галерею для змейки: ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -92,7 +92,7 @@ export const getSnakeGallery = cache(async () => {
 export const getMobileSliderImages = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/mobile-slider`;
     try {
-        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 }  });
         if (!res.ok) throw new Error(`Не удалось загрузить изображения для слайдера: ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -107,7 +107,7 @@ export const getMobileSliderImages = cache(async () => {
 export const getHomepageContent = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/homepage`;
     try {
-        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 }  });
         if (!res.ok) throw new Error(`Не удалось загрузить контент для главной страницы: ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -128,7 +128,7 @@ export const getProductById = async (id) => {
     if (!id) return null;
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${id}`;
     try {
-        const res = await fetch(apiUrl, { next: { revalidate: 3600 } });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 }  });
         if (!res.ok) {
             if (res.status === 404) return null;
             throw new Error(`Не удалось загрузить продукт: ${res.statusText}`);
@@ -144,8 +144,6 @@ export const getProductById = async (id) => {
         return null;
     }
 };
-
-
 
 // все продукты с поддержкой параметров
 export const getProducts = async (params = {}) => {
@@ -174,7 +172,7 @@ export const getProducts = async (params = {}) => {
 export const getArchivedProducts = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/archive`;
     try {
-        const res = await fetch(apiUrl, { next: { revalidate: 86400 } });
+        const res = await fetch(apiUrl, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error(`Не удалось загрузить архив: ${res.statusText}`);
 
         const data = await res.json();

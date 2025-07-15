@@ -12,6 +12,29 @@ import NavBar from "@/components/NavBar/NavBar";
 
 export const cardTypeSequence = [3, 2, 1, 2, 2, 3, 3, 2, 1, 1, 3, 1];
 
+function getDataFromPath(navigation, pathname) {
+    const pathSegments = pathname.split('/').filter(Boolean);
+    const categorySlug = pathSegments[1];
+    const collectionSlug = pathSegments[2];
+    if (!categorySlug) {
+        return { category: null, collection: null };
+    }
+    const foundCategory = navigation.find(item => item.slug === categorySlug);
+    if (!foundCategory) {
+        return { category: null, collection: null };
+    }
+    let foundCollection = null;
+    if (collectionSlug && Array.isArray(foundCategory.collections)) {
+        foundCollection = foundCategory.collections.find(
+            collection => collection.slug === collectionSlug
+        ) || null;
+    }
+    return {
+        category: foundCategory,
+        collection: foundCollection
+    };
+}
+
 export default function DesktopCatalogView({ data, navigation }) {
     const { lang } = useLanguage();
     const { products = [], categoryInfo, collectionInfo, pagination } = data;
@@ -20,9 +43,7 @@ export default function DesktopCatalogView({ data, navigation }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [sortOption, setSortOption] = useState(searchParams.get('sort') || 'default');
-    const title = collectionInfo?.title?.[lang] || categoryInfo?.title?.[lang] || (lang === 'en' ? 'Catalog' : 'Каталог');
     const subtitle = collectionInfo ? categoryInfo?.title?.[lang] : categoryInfo?.subtitle?.[lang];
-    const descriptionHtml = collectionInfo ? '' : categoryInfo?.description?.[lang];
     const handlePageChange = (direction) => {
         const currentPage = Number(pagination.currentPage);
         let newPage;
@@ -58,17 +79,20 @@ export default function DesktopCatalogView({ data, navigation }) {
         router.push(`${pathname}${query}`);
     };
 
+    const collectionData = getDataFromPath(navigation, pathname);
+    console.log('collectionData', collectionData);
+
     return (
         <>
             <NavBar theme={'black'} navigation={navigation} />
             <main className={styles.root}>
                 <div className={styles.categorieHeader}>
-                    <div className={styles.categorieTitle}>{title}</div>
-                    {subtitle && <h3 className={styles.categorieSubitle}>{subtitle}</h3>}
-                    {descriptionHtml && (
+                    <div className={styles.categorieTitle}>{pathname.split('/').length === 4 ? collectionData.collection?.name?.[lang] : collectionData.category?.title?.[lang]}</div>
+                    <h3 className={styles.categorieSubitle}>{pathname.split('/').length === 4 ? collectionData.collection?.description?.[lang] : collectionData.category?.subtitle?.[lang]}</h3>
+                    {pathname.split('/').length === 3 && (
                         <div
                             className={styles.categorieDesc}
-                            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                            dangerouslySetInnerHTML={{ __html: collectionData.category?.description?.[lang] }}
                         />
                     )}
                 </div>
@@ -94,7 +118,7 @@ export default function DesktopCatalogView({ data, navigation }) {
             </main>
             <footer className={styles.bottomPagination}>
                 <div>
-                    <Image className={styles.logotipe} src={'/images/logotipe.png'} alt="Logotype" width={150} height={50} />
+                    <Image className={styles.logotipe} src={'/images/logotipe.png'} alt="Logotype" width={100} height={40} />
                 </div>
                 {pagination.totalPages > 1 && <div className={styles.pagination}>
                     <div

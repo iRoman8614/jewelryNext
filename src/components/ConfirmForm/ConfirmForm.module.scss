@@ -1,8 +1,10 @@
+@use '../../app/styles/utils' as utils;
+
 .root {
   max-width: 980px;
   width: 100%;
   margin: 0 auto;
-  padding: 60px 120px;
+  padding: 60px utils.auto-clamp(30, 150);
   border: 1px solid black;
   background: white;
   
@@ -29,7 +31,7 @@
 
   @media screen and (max-width: 600px) {
     margin: 40px 0;
-    padding: 40px 20px;
+    padding: 20px 0px;
   }
 }
 

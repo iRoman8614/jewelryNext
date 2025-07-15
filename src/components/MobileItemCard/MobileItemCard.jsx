@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLanguage } from "@/components/LanguageProvider/LanguageProvider";
 import styles from './MobileItemCard.module.scss';
 import { getProductById } from "@/lib/api";
+import {useCart} from "@/components/CartProvider/CartProvider";
 
 const arrow = '/images/arrow.svg';
 
@@ -22,6 +23,13 @@ const NextArrow = ({ onClick }) => (
 
 export const MobileItemCard = ({ id, click }) => {
     const { lang } = useLanguage();
+    const { cartItems, addToCart, removeFromCart } = useCart();
+
+    const itemInCart = cartItems.find(item => item.productId === Number(id));
+    const isInCart = !!itemInCart;
+
+    const handleAddToCartClick = () => addToCart(Number(id));
+    const handleRemoveFromCartClick = () => removeFromCart(Number(id));
 
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -121,8 +129,12 @@ export const MobileItemCard = ({ id, click }) => {
                     />
                 </div>
                 <div className={styles.productImageBlock}>
-                    <Image src={'/images/basket.svg'} className={styles.busket} alt="add to cart" width={20} height={20} />
-                    <Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />
+                    {!isInCart ? (
+                        <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
+                    ):(
+                        <Image src={'/images/BusketAdded.svg'} onClick={handleRemoveFromCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
+                    )}
+                    {/*<Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />*/}
                 </div>
                 <div className={styles.productSpecs}>
                     <div className={styles.specItem}>

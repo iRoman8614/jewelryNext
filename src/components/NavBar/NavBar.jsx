@@ -36,7 +36,7 @@ export default function NavBar({ theme, navigation }) {
                                 </Link>
                                 {item.collections.length > 0 && <div className={styles.collectionsList}>
                                     {item.collections?.map((collection) => (
-                                        <Link key={collection.path} className={styles.linkCollection} href={collection.path}>
+                                        <Link key={collection.path} className={styles.linkCollection} href={`/category/${item.slug}/${collection.slug}`}>
                                             {collection.name[lang]}
                                         </Link>
                                     ))}

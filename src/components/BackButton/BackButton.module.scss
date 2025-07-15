@@ -1,7 +1,8 @@
 @use '../../app/styles/utils' as utils;
+
 .back {
   font-family: 'Jaini';
-  font-size: utils.responsive-size(126);
+  font-size: utils.responsive-size(96);
   background: none;
   border: none;
   cursor: pointer;

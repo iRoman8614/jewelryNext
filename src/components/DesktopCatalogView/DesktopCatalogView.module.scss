@@ -50,7 +50,8 @@
 }
 
 .logotipe {
-  width: utils.responsive-size(150);
+  width: utils.responsive-size(120);
+  height: utils.responsive-size(120);
   display: block;
   filter: invert(1);
 }

@@ -20,6 +20,8 @@ export default async function GalleryPage() {
         getArchivedProducts()
     ]);
 
+    console.log('archivedImages', archivedImages)
+
     return(
         <>
             <NavBar theme={'black'} navigation={navigationData} />
@@ -46,7 +48,7 @@ export default async function GalleryPage() {
                     {archivedImages.map((item, index) => {
                         return(
                             <div className={styles.cell}>
-                                <Image key={index} src={item} alt={''} width={150} height={150} />
+                                <Image key={index} src={item.image} alt={''} width={150} height={150} />
                             </div>
                         )
                     })}
