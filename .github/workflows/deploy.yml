@@ -1,0 +1,43 @@
+name: Deploy Frontend to VDS
+
+on:
+  push:
+    branches:
+      - main # Запускать при пуше в ветку main (или master, проверьте свою основную ветку)
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Скачиваем код из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Настраиваем Node.js нужной версии
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Укажите вашу версию Node.js
+
+      # 3. Устанавливаем зависимости
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Собираем production-билд
+      - name: Build project
+        # Убедитесь, что эта команда создает папку 'build' или 'dist'
+        run: npm run build
+
+      # 5. Копируем собранные файлы на сервер
+      - name: Deploy to VDS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VDS_HOST }}
+          username: ${{ secrets.VDS_USER }}
+          key: ${{ secrets.VDS_SSH_KEY }}
+          # Укажите правильную папку, которую создает ваш 'npm run build'
+          # Если это React/CRA, то папка 'build'. Если Vite - 'dist'.
+          source: "./build/*"
+          target: "/root/my_project/frontend_build"
+          strip_components: 1
