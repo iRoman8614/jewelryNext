@@ -1,5 +1,9 @@
 @use '../../app/styles/utils' as utils;
 
+.root {
+  padding-top: 50px;
+}
+
 .footerContent {
   display: flex;
 
@@ -14,7 +18,7 @@
 }
 
 .footerText {
-  padding: utils.responsive-size(80) utils.responsive-size(265);
+  padding: utils.responsive-size(120) utils.responsive-size(265);
   width: fit-content;
   font-size: utils.responsive-size(40);
   margin: 0 auto;

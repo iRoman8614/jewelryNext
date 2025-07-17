@@ -5,7 +5,7 @@ import { footerData } from '@/lib/home-page.data.js';
 
 export default function Footer() {
     return (
-        <footer id={"contacts"}>
+        <footer className={styles.root} id={"contacts"}>
             <div>
                 <div
                     className={styles.footerText}

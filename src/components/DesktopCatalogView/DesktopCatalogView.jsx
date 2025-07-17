@@ -9,6 +9,7 @@ import BackButton from '@/components/BackButton/BackButton';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useLanguage } from '@/components/LanguageProvider/LanguageProvider';
 import NavBar from "@/components/NavBar/NavBar";
+import {SortSelect} from "@/components/Selector/Selector";
 
 export const cardTypeSequence = [3, 2, 1, 2, 2, 3, 3, 2, 1, 1, 3, 1];
 
@@ -62,8 +63,7 @@ export default function DesktopCatalogView({ data, navigation }) {
         router.push(`${pathname}${query}`);
     };
 
-    const handleSortChange = (e) => {
-        const newSortValue = e.target.value;
+    const handleSortChange = (newSortValue) => {
         setSortOption(newSortValue);
 
         const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -80,7 +80,6 @@ export default function DesktopCatalogView({ data, navigation }) {
     };
 
     const collectionData = getDataFromPath(navigation, pathname);
-    console.log('collectionData', collectionData);
 
     return (
         <>
@@ -96,14 +95,11 @@ export default function DesktopCatalogView({ data, navigation }) {
                         />
                     )}
                 </div>
-                <div className={styles.sortContainer}>
-                    <select value={sortOption} onChange={handleSortChange} className={styles.sortSelect}>
-                        <option value="default">{lang === 'ru' ? 'По умолчанию' : 'Default'}</option>
-                        <option value="price_asc">{lang === 'ru' ? 'Цена: по возрастанию' : 'Price: Low to High'}</option>
-                        <option value="price_desc">{lang === 'ru' ? 'Цена: по убыванию' : 'Price: High to Low'}</option>
-                    </select>
-                </div>
-
+                <SortSelect
+                    lang={lang}
+                    sortOption={sortOption}
+                    handleSortChange={handleSortChange}
+                />
                 <div className={styles.productsGrid}>
                     {products.map((product, index) => {
                         const cardType = cardTypeSequence[index % cardTypeSequence.length];

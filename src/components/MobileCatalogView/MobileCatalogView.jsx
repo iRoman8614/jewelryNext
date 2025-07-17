@@ -10,6 +10,8 @@ import NavBar from "@/components/NavBar/NavBar";
 import { MobileItemCard } from "@/components/MobileItemCard/MobileItemCard";
 import { getProducts } from '@/lib/api';
 import {useCart} from "@/components/CartProvider/CartProvider";
+import {SortSelect} from "@/components/Selector/Selector";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 const ProductItemContent = ({ item, lang }) => {
     const productName = item.name?.[lang] || '';
@@ -61,7 +63,26 @@ export default function MobileCatalogView({ data, navigation, iconLinks, mobileS
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(pagination.currentPage < pagination.totalPages);
     const [itemDetail, setItemDetail] = useState(null);
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const [sortOption, setSortOption] = useState(searchParams.get('sort') || 'default');
 
+    const handleSortChange = (newSortValue) => {
+        setSortOption(newSortValue);
+
+        const current = new URLSearchParams(Array.from(searchParams.entries()));
+
+        if (newSortValue === 'default') {
+            current.delete('sort');
+        } else {
+            current.set('sort', newSortValue);
+        }
+        current.set('page', '1');
+
+        const query = current.toString() ? `?${current.toString()}` : '';
+        router.push(`${pathname}${query}`);
+    };
 
 
     const observer = useRef();
@@ -146,7 +167,11 @@ export default function MobileCatalogView({ data, navigation, iconLinks, mobileS
                     <Image key={index} className={styles.pictItem} src={item.url} alt={item.alt} width={185} height={300} />
                 ))}
             </div>
-
+            <SortSelect
+                lang={lang}
+                sortOption={sortOption}
+                handleSortChange={handleSortChange}
+            />
             <div className={styles.categoryItems}>
                 {displayedProducts.map((item, index) => {
                     const itemId = item.id || index;
