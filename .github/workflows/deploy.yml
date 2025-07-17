@@ -1,45 +1,58 @@
+# Имя вашего workflow, которое будет отображаться на GitHub
 name: Deploy Frontend to VDS
 
+# Триггер для запуска: при пуше в ветку 'main'
 on:
   push:
     branches:
-      - main # Запускать при пуше в ветку main (или master, проверьте свою основную ветку)
+      - main
 
+# Определение заданий (jobs), которые будут выполняться
 jobs:
   build-and-deploy:
+    # Запускать на последней версии Ubuntu
     runs-on: ubuntu-latest
 
+    # Шаги, которые будут выполнены последовательно
     steps:
-      # 1. Скачиваем код из репозитория
+      # Шаг 1: Скачиваем ваш код из репозитория
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Настраиваем Node.js нужной версии
+      # Шаг 2: Устанавливаем и настраиваем Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18' # Укажите вашу версию Node.js
 
-      # 3. Устанавливаем зависимости
+      # Шаг 3: Устанавливаем зависимости проекта
       - name: Install dependencies
         run: npm install
 
-      # 4. Собираем production-билд
-      - name: Build project
+      # Шаг 4: Собираем и экспортируем статический сайт
+      - name: Build and Export Static Site
+        # Передаем переменную окружения для API в процесс сборки
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-        # Убедитесь, что эта команда создает папку 'build' или 'dist'
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+        # Запускаем команду сборки и экспорта
         run: npm run build
 
-      # 5. Копируем собранные файлы на сервер
+      # Шаг 5: Копируем собранные файлы на ваш сервер
       - name: Deploy to VDS
         uses: appleboy/scp-action@master
         with:
+          # Данные для подключения берутся из секретов GitHub
           host: ${{ secrets.VDS_HOST }}
           username: ${{ secrets.VDS_USER }}
           key: ${{ secrets.VDS_SSH_KEY }}
-          # Укажите правильную папку, которую создает ваш 'npm run build'
-          # Если это React/CRA, то папка 'build'. Если Vite - 'dist'.
-          source: "./build/*"
+
+          # Указываем, ЧТО копировать
+          # Всё содержимое папки 'out', которую создает 'next export'
+          source: "./out/*"
+          
+          # Указываем, КУДА копировать на сервере
           target: "/root/my_project/frontend_build"
+          
+          # Убирает родительскую папку 'out' при копировании,
+          # чтобы файлы легли прямо в 'frontend_build'
           strip_components: 1
