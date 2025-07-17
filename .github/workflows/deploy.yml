@@ -26,6 +26,8 @@ jobs:
 
       # 4. Собираем production-билд
       - name: Build project
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         # Убедитесь, что эта команда создает папку 'build' или 'dist'
         run: npm run build
 
