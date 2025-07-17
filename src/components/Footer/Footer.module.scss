@@ -1,9 +1,5 @@
 @use '../../app/styles/utils' as utils;
 
-.root {
-  padding-top: 50px;
-}
-
 .footerContent {
   display: flex;
 
@@ -58,4 +54,42 @@
   height: utils.responsive-size(196);
   cursor: pointer;
   filter: invert(1);
+}
+
+.linkDesc, .linkMob {
+  font-family: var(--font-text);
+  text-decoration: none;
+  color: white;
+  margin: 20px auto;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.linkDesc {
+  display: block;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.linkMob {
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+}
+
+.footerBtn {
+  border: none;
+  border-radius: 10px;
+  background: black;
+  color: white;
+  font-family: var(--font-text);
+  font-size: 24px;
+  padding: 12px 20px 10px 20px;
+  margin: 10px auto;
+  width: fit-content;
+  cursor: pointer;
 }

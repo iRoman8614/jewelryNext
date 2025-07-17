@@ -68,6 +68,13 @@ export default function MobileCatalogView({ data, navigation, iconLinks, mobileS
     const searchParams = useSearchParams();
     const [sortOption, setSortOption] = useState(searchParams.get('sort') || 'default');
 
+    useEffect(() => {
+        setDisplayedProducts(data.products || []);
+        setCurrentPage(data.pagination.currentPage);
+        setHasMore(data.pagination.currentPage < data.pagination.totalPages);
+
+    }, [data.products, data.pagination]);
+
     const handleSortChange = (newSortValue) => {
         setSortOption(newSortValue);
 

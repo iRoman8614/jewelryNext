@@ -1,11 +1,21 @@
+'use client'
 import Image from 'next/image';
 import styles from './Footer.module.scss';
 
 import { footerData } from '@/lib/home-page.data.js';
+import Link from "next/link";
+import {useLanguage} from "@/components/LanguageProvider/LanguageProvider";
 
 export default function Footer() {
+    const {lang} = useLanguage()
     return (
         <footer className={styles.root} id={"contacts"}>
+            <Link href="/category/rings" className={styles.linkDesc}>
+                <button className={styles.footerBtn}>{lang === 'ru' ? "КАТАЛОГ" : "CATALOG"}</button>
+            </Link>
+            <Link href="/category" className={styles.linkMob}>
+                <button className={styles.footerBtn}>{lang === 'ru' ? "КАТАЛОГ" : "CATALOG"}</button>
+            </Link>
             <div>
                 <div
                     className={styles.footerText}
