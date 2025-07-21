@@ -1,6 +1,5 @@
 import { cache } from 'react';
 
-// категории и коллекции
 export const getNavigation = cache(async () => {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const apiUrl = `${baseUrl}/api/navigation`;
@@ -14,7 +13,6 @@ export const getNavigation = cache(async () => {
     }
 });
 
-// методы доставки и оплаты
 export const getCheckoutOptions = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/checkout/all-options`;
     try {
@@ -27,7 +25,6 @@ export const getCheckoutOptions = cache(async () => {
     }
 });
 
-// иконки категорий мобильного каталога
 export const getIconLinks = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/icon-links`;
     try {
@@ -42,7 +39,6 @@ export const getIconLinks = cache(async () => {
     }
 });
 
-// лента/свайпер галереи
 export const getReelGalleryImages = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/reel-gallery`;
     try {
@@ -57,7 +53,6 @@ export const getReelGalleryImages = cache(async () => {
     }
 });
 
-// новые товары
 export const getFeaturedProducts = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/featured`;
     try {
@@ -72,8 +67,6 @@ export const getFeaturedProducts = cache(async () => {
     }
 });
 
-
-// картинки для змеек на главной страницы
 export const getSnakeGallery = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/snake-gallery`;
     try {
@@ -88,7 +81,6 @@ export const getSnakeGallery = cache(async () => {
     }
 });
 
-// контент мобильного свайпера в мобильном каталоге
 export const getMobileSliderImages = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/mobile-slider`;
     try {
@@ -103,7 +95,6 @@ export const getMobileSliderImages = cache(async () => {
     }
 });
 
-// контент главной страницы
 export const getHomepageContent = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/homepage`;
     try {
@@ -123,7 +114,6 @@ export const getHomepageContent = cache(async () => {
     }
 });
 
-// запрос единичного товара
 export const getProductById = async (id) => {
     if (!id) return null;
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${id}`;
@@ -145,17 +135,16 @@ export const getProductById = async (id) => {
     }
 };
 
-// все продукты с поддержкой параметров
 export const getProducts = async (params = {}) => {
     const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`);
     if (params.category) url.searchParams.append('category', params.category);
     if (params.collection) url.searchParams.append('collection', params.collection);
     if (params.sort) url.searchParams.append('sort', params.sort);
     if (params.page) url.searchParams.append('page', params.page);
-    if (params.limit) url.searchParams.append('limit', params.limit);
+    if (params.limit) url.search_params.append('limit', params.limit);
 
     try {
-        const res = await fetch(url.toString(), { cache: 'no-store' });
+        const res = await fetch(url.toString(), { next: { revalidate: 60 } });
         if (!res.ok) throw new Error(`Не удалось загрузить продукты: ${res.status} ${res.statusText}`);
         const data = await res.json();
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
@@ -167,8 +156,6 @@ export const getProducts = async (params = {}) => {
     }
 };
 
-
-// Архивные/проданные товары
 export const getArchivedProducts = cache(async () => {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/archive`;
     try {

@@ -1,0 +1,64 @@
+# Имя вашего workflow, которое будет отображаться на GitHub
+name: Deploy Frontend to VDS
+
+# Триггер для запуска: при пуше в ветку 'main'
+on:
+  push:
+    branches:
+      - main
+
+# Определение заданий (jobs), которые будут выполняться
+jobs:
+  build-and-deploy:
+    # Запускать на последней версии Ubuntu
+    runs-on: ubuntu-latest
+
+    # Шаги, которые будут выполнены последовательно
+    steps:
+      # Шаг 1: Скачиваем ваш код из репозитория
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Шаг 2: Устанавливаем и настраиваем Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Укажите вашу версию Node.js
+
+      # Шаг 3: Устанавливаем зависимости проекта
+      - name: Install dependencies
+        run: npm install
+
+      # Шаг 4: Собираем статический сайт
+      - name: Build static site
+        # Передаем переменную окружения для API в процесс сборки.
+        # Это решает ошибку 'undefined/api/navigation'.
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+        # Запускаем команду сборки. Убедитесь, что в package.json
+        # 'build' соответствует 'next build && next export'.
+        run: npm run build
+
+      # Шаг 5: Проверка, что папка 'out' не пуста (для отладки)
+      - name: Check build output
+        run: ls -la out
+
+      # Шаг 6: Копируем собранные файлы на ваш сервер
+      - name: Deploy to VDS
+        uses: appleboy/scp-action@master
+        with:
+          # Данные для подключения берутся из секретов GitHub
+          host: ${{ secrets.VDS_HOST }}
+          username: ${{ secrets.VDS_USER }}
+          key: ${{ secrets.VDS_SSH_KEY }}
+
+          # Указываем, ЧТО копировать:
+          # Всё содержимое папки 'out'
+          source: "out/*"
+
+          # Указываем, КУДА копировать на сервере
+          target: "/root/my_project/frontend_build"
+
+          # Убирает родительскую папку 'out' при копировании,
+          # чтобы файлы легли прямо в 'frontend_build'
+          strip_components: 1
