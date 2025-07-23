@@ -1,8 +1,24 @@
 @use '../../app/styles/utils' as utils;
 
+.root {
+  padding: 20px;
+  @media screen and (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
+
 .footerContent {
   display: flex;
+}
 
+.footerCatalogDesctop {
+  display: flex;
+  justify-content: center;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 20px;
 }
 
 .image, .image2 {
@@ -14,17 +30,34 @@
 }
 
 .footerText {
-  padding: utils.responsive-size(120) utils.responsive-size(265);
+  padding:  5px 0 0 0;
   width: fit-content;
   font-size: utils.responsive-size(40);
-  margin: 0 auto;
+  margin: 0;
   font-family: var(--font-text);
+
+  @media screen and (max-width: 600px) {
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    font-size: 14px;
+    padding: 10px 50px;
+  }
 }
 
 .footerLine {
   display: flex;
   justify-content: space-between;
-  padding: utils.auto-clamp(15, 40) utils.responsive-size(130);
+  padding: 0 utils.responsive-size(130);
+
+  @media screen and (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 20px;
+    padding-top: 30px;
+  }
 }
 
 .links {
@@ -38,7 +71,19 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    height: fit-content;
   }
+
+  @media screen and (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
+
+.linksText {
+  padding-top: 5px;
+  margin-left: 3px;
 }
 
 .msk {
@@ -46,6 +91,10 @@
   text-align: right;
   font-family: var(--font-text);
   font-size: utils.responsive-size(40);
+
+  @media screen and (max-width: 600px) {
+    font-size: 14px;
+  }
 }
 
 .logo {
@@ -54,19 +103,25 @@
   height: utils.responsive-size(196);
   cursor: pointer;
   filter: invert(1);
+
+  @media screen and (max-width: 600px) {
+    display: none;
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .linkDesc, .linkMob {
   font-family: var(--font-text);
   text-decoration: none;
   color: white;
-  margin: 20px auto;
   width: fit-content;
   cursor: pointer;
 }
 
 .linkDesc {
   display: block;
+  margin: 20px 0;
 
   @media screen and (max-width: 768px) {
     display: none;
@@ -78,6 +133,8 @@
 
   @media screen and (max-width: 768px) {
     display: block;
+    font-size: 14px;
+    margin: 7px auto;
   }
 }
 
@@ -87,9 +144,29 @@
   background: black;
   color: white;
   font-family: var(--font-text);
-  font-size: 24px;
+  font-size: utils.responsive-size(40);
   padding: 12px 20px 10px 20px;
-  margin: 10px auto;
   width: fit-content;
   cursor: pointer;
+
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
+}
+
+.logoMobile {
+  display: none;
+
+  @media screen and (max-width: 600px) {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    filter: invert(1);
+  }
+}
+
+.mobileFooterBottomLine {
+  display: flex;
+  justify-content: space-between;
 }

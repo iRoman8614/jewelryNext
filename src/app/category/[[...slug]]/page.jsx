@@ -95,7 +95,6 @@ export default async function CatalogPage({ params }) {
     };
 
     return (
-        // --- ШАГ 2: Оборачиваем клиентский компонент в Suspense ---
         <Suspense fallback={<CatalogLoader />}>
             <CatalogClientView
                 params={params}

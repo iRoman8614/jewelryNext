@@ -1,0 +1,140 @@
+@use '../../app/styles/utils' as utils;
+
+.root {
+  font-family:var(--font-text);
+  background-color: black;
+  color: white;
+  position: relative;
+  width: 100%;
+}
+
+.custom {
+  padding: utils.responsive-size(300);
+  position: relative;
+  height: utils.responsive-size(4000);
+}
+
+.lightnings {
+  display: block;
+  margin: 60px auto;
+  width: 90vw;
+  height: 70%;
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.imageContent {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.title {
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(127);
+  line-height: 1.5;
+  padding-left: 15%;
+  position: relative;
+  @media screen and (max-width: 768px) {
+    scale: 1.3;
+    margin-left: 15px;
+    margin-top: -15px;
+  }
+}
+
+.textContent {
+  color: white;
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(57);
+  line-height: 1.5;
+  padding: 5px;
+  pointer-events: none;
+  p {
+    margin: 0;
+  }
+  @media screen and (max-width: 768px) {
+    scale: 1.3;
+    margin-left: 15px;
+    margin-top: 15px;
+  }
+}
+
+.footerCatalogDesctop {
+  width: 100%;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 20px;
+}
+
+.linkDesc, .linkMob {
+  font-family: var(--font-text);
+  text-decoration: none;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.linkDesc {
+  display: block;
+  margin: 20px 0;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+
+.linkMob {
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+    font-size: 14px;
+    margin: 7px auto;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.footerBtn {
+  border: none;
+  border-radius: 10px;
+  background: white;
+  color: black;
+  font-family: var(--font-text);
+  font-size: utils.responsive-size(40);
+  padding: 12px 20px 10px 20px;
+  width: fit-content;
+  cursor: pointer;
+
+  @media screen and (max-width: 600px) {
+    font-size: 16px;
+  }
+}
+.footerText {
+  color: white;
+  padding:  5px 0 0 0;
+  width: fit-content;
+  font-size: utils.responsive-size(40);
+  margin: 0;
+  font-family: var(--font-text);
+
+  @media screen and (max-width: 600px) {
+    margin: 0 auto;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    font-size: 14px;
+    padding: 10px 50px;
+  }
+}
