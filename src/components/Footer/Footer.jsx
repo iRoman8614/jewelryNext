@@ -45,6 +45,7 @@ export default function Footer() {
                         </svg>
                         <div className={styles.linksText}>{footerData.contacts.phone}</div>
                     </div>
+                    {lang === 'ru' && <Link href={'/policy'} className={styles.linksText}>Публичная офферта</Link>}
                 </div>
                 <div className={styles.mobileFooterBottomLine}>
                     <Image
@@ -54,7 +55,7 @@ export default function Footer() {
                         width={100}
                         height={40}
                     />
-                    <div className={styles.msk}>moscow<br/>powered by scamdevs 2025</div>
+                    {lang === 'ru' ? <div className={styles.msk}>moscow<br/>powered by<br/>scamdevs 2025</div> : <div className={styles.msk}>moscow<br/>powered by scamdevs 2025</div>}
                 </div>
             </div>
         </footer>

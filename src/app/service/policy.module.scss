@@ -1,0 +1,42 @@
+@use '../styles/utils' as utils;
+
+.root {
+  font-family: var(--font-text);
+  padding: utils.auto-clamp(20, 80);
+}
+
+.service {
+  text-transform: uppercase;
+  font-size: utils.auto-clamp(28, 64);
+  margin-bottom: 60px;
+
+  @media screen and (max-width: 600px) {
+    text-align: center;
+  }
+}
+
+.title {
+  text-align: center;
+  font-size: utils.auto-clamp(14, 24);
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: utils.responsive-size(70);
+  height: auto;
+  display: block;
+  margin: 0 auto 40px auto;
+
+  @media screen and (max-width: 600px) {
+    width: 20px;
+  }
+}
+
+.content {
+  text-align: center;
+  font-size: 12px;
+
+  div {
+    margin-bottom: 15px;
+  }
+}

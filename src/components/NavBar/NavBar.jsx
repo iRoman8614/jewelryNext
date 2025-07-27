@@ -54,7 +54,7 @@ export default function NavBar({ theme, navigation }) {
             </div>
             <div className={styles.buttonsetAdditional}>
                 <Link className={styles.link} href="/cart">{lang === 'ru' ? 'Корзина' : 'Cart'}</Link>
-                <Link className={styles.link} href="/policy">{lang === 'ru' ? 'Сервис' : 'Service'}</Link>
+                <Link className={styles.link} href="/service">{lang === 'ru' ? 'Сервис' : 'Service'}</Link>
                 <div className={styles.link} onClick={handleLanguageToggle} style={{ cursor: 'pointer' }}>
                     {lang === 'ru' ? 'ENG' : 'РУС'}
                 </div>
