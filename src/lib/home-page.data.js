@@ -1,7 +1,7 @@
 // src/lib/home-page.data.js
 
 export const paralaxSet1 = [
-    { id: 0, type: 'text', content: '', top: '2%', left: '5%', width: '60%', zIndex: 10, speed: 1 },
+    { id: 0, type: 'text', content: '', top: '2%', left: '5%', width: '65%', zIndex: 10, speed: 1 },
     { id: 1, type: 'image', src: '', alt: '', top: '9%', left: '65%', width: '27%', zIndex: 1, speed: -10 },
     { id: 2, type: 'image', src: '', alt: '', top: '20%', left: '15%', width: '25%', zIndex: 3, speed: 5 },
     { id: 3, type: 'image', src: '', alt: '', top: '40%', left: '55%', width: '29%', zIndex: 2, speed: -5 },

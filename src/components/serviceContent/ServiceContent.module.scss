@@ -1,0 +1,20 @@
+@use '../../app/styles/utils' as utils;
+
+.content {
+  text-align: center;
+  font-size: 12px;
+
+  div {
+    margin-bottom: 15px;
+  }
+}
+
+.service {
+  text-transform: uppercase;
+  font-size: utils.auto-clamp(28, 64);
+  margin-bottom: 60px;
+
+  @media screen and (max-width: 600px) {
+    text-align: center;
+  }
+}

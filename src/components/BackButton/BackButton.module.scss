@@ -1,7 +1,7 @@
 @use '../../app/styles/utils' as utils;
 
 .back {
-  font-family: 'Jaini';
+  font-family: var(--font-text);
   font-size: utils.responsive-size(64);
   background: none;
   border: none;
