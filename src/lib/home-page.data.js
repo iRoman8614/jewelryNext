@@ -58,7 +58,7 @@ export const footerData = {
     logo: '/images/logotipe.png',
     text: `Мастерская: г. Москва, Звездный бульвар 21с3`,
     contacts: {
-        email: '27jwlr@service.com',
+        email: 'service@27jwlr.store',
         social: '@27jwlr ',
         tg: '@hnp27',
         phone: '+79967779999'

@@ -32,7 +32,7 @@ export const ServiceContent = () => {
             <div>
                 {lang === 'ru' ? 'По всем вопросам и предложениям пишите на нашу почту' : 'For all questions and suggestions, please write to our email address'}
                 <br/>
-                {lang === 'ru' ? 'service@27jwlr.com и мы ответим вам в кратчайшие сроки.' : 'service@27jwlr.com and we will respond as soon as possible.'}
+                {lang === 'ru' ? 'service@27jwlr.store и мы ответим вам в кратчайшие сроки.' : 'service@27jwlr.store and we will respond as soon as possible.'}
             </div>
         </div>
     )
