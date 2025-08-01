@@ -7,6 +7,7 @@ import Footer from "@/components/Footer/Footer";
 import InteractiveCategorySelector from '@/components/InteractiveCategorySelector/InteractiveCategorySelector';
 import { getNavigation, getSnakeGallery, getHomepageContent } from '@/lib/api';
 import Custom from "@/components/custom/Custom";
+import {Loader} from "@/components/loader/Loader";
 
 function mergeLayoutWithContent(layoutData, contentData = []) {
     const apiTexts = contentData.filter(item => item.type === 'text');
@@ -51,6 +52,7 @@ export default async function HomePage() {
 
     return (
         <>
+            <Loader />
             <NavBar theme={'white'} navigation={navigationData} />
             <main className={styles.root}>
                 <ArtBlock />
