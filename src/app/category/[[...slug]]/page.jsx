@@ -1,30 +1,26 @@
-import { Suspense } from 'react'; // <-- ШАГ 1: Импортируем Suspense
-import { getNavigation, getProducts, getIconLinks, getMobileSliderImages, getFeaturedProducts, getCategories } from '@/lib/api';
+// src/app/category/[[...slug]]/page.jsx
+
+import { Suspense } from 'react';
+import { getNavigation, getProducts, getIconLinks, getMobileSliderImages, getFeaturedProducts } from '@/lib/api';
 import CatalogClientView from "@/components/CatalogClientView/CatalogClientView";
 
-// Loader для Suspense
 const CatalogLoader = () => (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
         <h2>Загрузка каталога...</h2>
     </div>
 );
 
+// ... (весь ваш код для generateStaticParams и generateMetadata остается здесь без изменений) ...
 export async function generateStaticParams() {
     try {
         const navigationData = await getNavigation();
-        if (!navigationData || !Array.isArray(navigationData)) {
-            return [];
-        }
+        if (!navigationData || !Array.isArray(navigationData)) return [];
         const paths = [];
         for (const category of navigationData) {
-            if (category.slug) {
-                paths.push({ slug: [category.slug] });
-            }
+            if (category.slug) paths.push({ slug: [category.slug] });
             if (category.collections && category.collections.length > 0) {
                 for (const collection of category.collections) {
-                    if (category.slug && collection.slug) {
-                        paths.push({ slug: [category.slug, collection.slug] });
-                    }
+                    if (category.slug && collection.slug) paths.push({ slug: [category.slug, collection.slug] });
                 }
             }
         }
@@ -53,12 +49,10 @@ export async function generateMetadata({ params }) {
             description: collectionInfo?.description?.ru || categoryInfo?.description?.ru || 'Все изделия нашего каталога.'
         };
     } catch (error) {
-        return {
-            title: 'Каталог – 27jwlr',
-            description: 'Все изделия нашего каталога.'
-        };
+        return { title: 'Каталог – 27jwlr', description: 'Все изделия нашего каталога.' };
     }
 }
+
 
 export default async function CatalogPage({ params }) {
     const { slug } = params;
@@ -70,11 +64,7 @@ export default async function CatalogPage({ params }) {
         getIconLinks(),
         getMobileSliderImages(),
         getFeaturedProducts(),
-        getProducts({
-            category: categorySlug,
-            collection: collectionSlug,
-            page: '1',
-        })
+        getProducts({ category: categorySlug, collection: collectionSlug, page: '1', })
     ]);
 
     const categoryInfo = navigationData?.find(cat => cat.slug === categorySlug);
@@ -85,11 +75,7 @@ export default async function CatalogPage({ params }) {
 
     const initialPageData = {
         products: initialProductsData.products || [],
-        pagination: {
-            totalPages: initialProductsData.totalPages || 1,
-            currentPage: initialProductsData.currentPage || 1,
-            totalProducts: initialProductsData.totalProducts || 0,
-        },
+        pagination: { totalPages: initialProductsData.totalPages || 1, currentPage: initialProductsData.currentPage || 1, totalProducts: initialProductsData.totalProducts || 0, },
         categoryInfo,
         collectionInfo
     };
