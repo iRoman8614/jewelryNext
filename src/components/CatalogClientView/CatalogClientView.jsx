@@ -1,95 +1,96 @@
 // src/app/category/[[...slug]]/page.jsx
 
-import { Suspense } from 'react';
-import { getNavigation, getProducts, getIconLinks, getMobileSliderImages, getFeaturedProducts } from '@/lib/api';
-import CatalogClientView from "@/components/CatalogClientView/CatalogClientView";
+// src/components/CatalogClientView/CatalogClientView.jsx
+"use client";
 
-const CatalogLoader = () => (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-        <h2>Загрузка каталога...</h2>
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { getProducts } from '@/lib/api';
+import DesktopCatalogView from '@/components/DesktopCatalogView/DesktopCatalogView';
+import MobileCatalogView from '@/components/MobileCatalogView/MobileCatalogView';
+import styles from './catalogClientView.module.scss';
+import { useIsClient } from '@/hooks/useIsClient'; // <-- ИМПОРТ НАШЕГО ХУКА
+
+const Loader = () => (
+    <div className={styles.loader_container}>
+        <h2>Загрузка...</h2>
     </div>
 );
 
-// ... (весь ваш код для generateStaticParams и generateMetadata остается здесь без изменений) ...
-export async function generateStaticParams() {
-    try {
-        const navigationData = await getNavigation();
-        if (!navigationData || !Array.isArray(navigationData)) return [];
-        const paths = [];
-        for (const category of navigationData) {
-            if (category.slug) paths.push({ slug: [category.slug] });
-            if (category.collections && category.collections.length > 0) {
-                for (const collection of category.collections) {
-                    if (category.slug && collection.slug) paths.push({ slug: [category.slug, collection.slug] });
-                }
-            }
+export default function CatalogClientView({
+                                              params,
+                                              initialData,
+                                              navigationData,
+                                              iconLinksData,
+                                              mobileSliderData,
+                                              featuredProductsData
+                                          }) {
+    const [pageData, setPageData] = useState(initialData);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // --- ВОТ РЕШЕНИЕ ---
+    const isClient = useIsClient(); // Этот флаг будет false на сервере, и true в браузере
+
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page') || '1';
+    const sort = searchParams.get('sort');
+
+    useEffect(() => {
+        const isFirstLoad = page === '1' && !sort;
+        if (isFirstLoad) {
+            setPageData(initialData);
+            return;
         }
-        return paths;
-    } catch (error) {
-        console.error('Failed to generate static params for categories:', error);
-        return [];
-    }
-}
 
-export async function generateMetadata({ params }) {
-    try {
-        const navigationData = await getNavigation();
-        const categorySlug = params.slug?.[0];
-        const collectionSlug = params.slug?.[1];
+        const fetchData = async () => {
+            setIsLoading(true);
+            const newData = await getProducts({
+                category: params.slug?.[0],
+                collection: params.slug?.[1],
+                page,
+                sort,
+            });
 
-        const categoryInfo = navigationData?.find(cat => cat.slug === categorySlug);
-        let collectionInfo = null;
-        if (categoryInfo && collectionSlug) {
-            collectionInfo = categoryInfo.collections?.find(coll => coll.slug === collectionSlug);
-        }
-        const title = collectionInfo?.name?.ru || categoryInfo?.title?.ru || 'Каталог';
-
-        return {
-            title: `${title} – 27jwlr`,
-            description: collectionInfo?.description?.ru || categoryInfo?.description?.ru || 'Все изделия нашего каталога.'
+            setPageData(prevData => ({
+                ...prevData,
+                products: newData.products || [],
+                pagination: {
+                    totalPages: newData.totalPages || 1,
+                    currentPage: newData.currentPage || 1,
+                    totalProducts: newData.totalProducts || 0,
+                },
+            }));
+            setIsLoading(false);
         };
-    } catch (error) {
-        return { title: 'Каталог – 27jwlr', description: 'Все изделия нашего каталога.' };
-    }
-}
 
+        fetchData();
+    }, [page, sort, params.slug, initialData]);
 
-export default async function CatalogPage({ params }) {
-    const { slug } = params;
-    const categorySlug = slug?.[0];
-    const collectionSlug = slug?.[1];
-
-    const [navigationData, iconLinksData, mobileSliderData, featuredProductsData, initialProductsData] = await Promise.all([
-        getNavigation(),
-        getIconLinks(),
-        getMobileSliderImages(),
-        getFeaturedProducts(),
-        getProducts({ category: categorySlug, collection: collectionSlug, page: '1', })
-    ]);
-
-    const categoryInfo = navigationData?.find(cat => cat.slug === categorySlug);
-    let collectionInfo = null;
-    if (categoryInfo && collectionSlug) {
-        collectionInfo = categoryInfo.collections?.find(coll => coll.slug === collectionSlug);
+    // --- И ВОТ РЕШЕНИЕ ---
+    // Если мы на сервере (isClient === false) ИЛИ идет загрузка - показываем лоадер.
+    // Это гарантирует, что сервер и клиент на первом рендере отдадут одно и то же.
+    if (!isClient || isLoading) {
+        return <Loader />;
     }
 
-    const initialPageData = {
-        products: initialProductsData.products || [],
-        pagination: { totalPages: initialProductsData.totalPages || 1, currentPage: initialProductsData.currentPage || 1, totalProducts: initialProductsData.totalProducts || 0, },
-        categoryInfo,
-        collectionInfo
-    };
-
+    // Этот код выполнится только в браузере, когда гидратация уже успешно прошла.
     return (
-        <Suspense fallback={<CatalogLoader />}>
-            <CatalogClientView
-                params={params}
-                initialData={initialPageData}
-                navigationData={navigationData}
-                iconLinksData={iconLinksData}
-                mobileSliderData={mobileSliderData}
-                featuredProductsData={featuredProductsData}
-            />
-        </Suspense>
+        <>
+            <div className={styles.desktopOnly}>
+                <DesktopCatalogView
+                    data={pageData}
+                    navigation={navigationData}
+                />
+            </div>
+            <div className={styles.mobileOnly}>
+                <MobileCatalogView
+                    data={pageData}
+                    navigation={navigationData}
+                    iconLinks={iconLinksData}
+                    mobileSliderImages={mobileSliderData}
+                    featuredProducts={featuredProductsData}
+                />
+            </div>
+        </>
     );
 }
