@@ -141,7 +141,7 @@ export default function InteractiveCategorySelector({categories, snakeImages}) {
                 ))}
             </div>
             <div className={styles.mobileButtonRow}>
-                <Link className={styles.categoryButton} href={'/catalog'}>{lang === "ru" ? "Каталог" : 'Catalog'}</Link>
+                <Link className={styles.categoryButton} href={'/category'}>{lang === "ru" ? "Каталог" : 'Catalog'}</Link>
             </div>
             <SnakeRow
                 categories={categories}
