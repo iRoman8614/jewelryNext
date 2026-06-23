@@ -5,12 +5,15 @@ import styles from './Custom.module.scss'
 import {useLanguage} from '@/components/LanguageProvider/LanguageProvider';
 import Link from "next/link";
 
-export default function Custom() {
+export default function Custom({ customData }) {
     const { lang} = useLanguage()
+    // Данные приходят из page.js (позиции из home-page.data + контент из админки).
+    // Фолбэк на статический массив — если компонент отрендерен без пропа.
+    const items = (customData && customData.length) ? customData : custom;
     return(
         <div className={styles.root}>
             <section className={styles.custom} id="custom">
-                {custom.map((element) => {
+                {items.map((element) => {
                     const isImage = element.type === 'image' && element.src;
                     return (
                         <div style={{

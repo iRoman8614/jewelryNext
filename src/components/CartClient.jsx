@@ -49,7 +49,7 @@ export default function CartClient({ navigation, checkoutOptions }) {
                 });
 
                 if (!res.ok) {
-                    throw new Error('Не удалось загрузить данные корзины');
+                    throw new Error(lang === 'ru' ? 'Не удалось загрузить данные корзины' : 'Failed to load cart data');
                 }
 
                 const productsFromApi = await res.json();
@@ -134,7 +134,7 @@ export default function CartClient({ navigation, checkoutOptions }) {
         return (
             <>
                 <NavBar theme={'black'} navigation={navigation} />
-                <div className={styles.loadingState}>Загрузка товаров...</div>
+                <div className={styles.loadingState}>{lang === 'ru' ? 'Загрузка товаров...' : 'Loading items...'}</div>
             </>
         );
     }
@@ -143,7 +143,7 @@ export default function CartClient({ navigation, checkoutOptions }) {
         return (
             <>
                 <NavBar theme={'black'} navigation={navigation} />
-                <div className={styles.errorState}>Ошибка: {error}</div>
+                <div className={styles.errorState}>{lang === 'ru' ? 'Ошибка' : 'Error'}: {error}</div>
             </>
         )
     }
@@ -158,7 +158,7 @@ export default function CartClient({ navigation, checkoutOptions }) {
                         {imagePositions.length > 0 ? (
                             <ProductImageDisplay imagePositions={imagePositions} />
                         ) : (
-                            <div className={styles.emptyImagesPlaceholder}>Нет товаров для отображения</div>
+                            <div className={styles.emptyImagesPlaceholder}>{lang === 'ru' ? 'Нет товаров для отображения' : 'No items to display'}</div>
                         )}
                     </div>
                     <div className={styles.rightPanel}>

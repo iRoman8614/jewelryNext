@@ -1,0 +1,49 @@
+# ── jewelryNext/docker-compose.yml ─────────────────────────────────────────
+# Локальная разработка: фронт крутится в СВОЁМ контейнере и общается с УЖЕ
+# ЗАПУЩЕННЫМ бэком (он живёт в своём репозитории/compose вместе с mysql).
+#
+# Как фронт находит бэк:
+#   • Серверный рендеринг (SSR/ISR ВНУТРИ контейнера фронта) ходит к бэку по
+#     ВНУТРЕННЕМУ имени сети -> http://backend:5050. Для этого фронт-контейнер
+#     подключается к той же docker-сети, что и бэк (external network ниже).
+#   • Браузер (на хосте) ходит к бэку через ХОСТОВЫЙ порт -> http://localhost:5050
+#     (бэк публикует 127.0.0.1:5050). Картинки грузятся оттуда же.
+#
+# ВАЖНО: укажи реальное имя сети бэка. Узнать:  docker network ls | grep jewelry
+# Обычно это <имя_папки_бэка>_jewelry-net, напр. jewelryback_jewelry-net.
+# Можно переопределить переменной:  BACKEND_NETWORK=... docker compose up
+
+services:
+  frontend:
+    image: node:18-alpine
+    container_name: jewelry-frontend-dev
+    working_dir: /app
+    # Установка зависимостей + dev-сервер с hot-reload.
+    command: sh -c "npm install && npm run dev"
+    environment:
+      NODE_ENV: development
+      # Браузер -> бэк через хостовый порт.
+      NEXT_PUBLIC_API_BASE_URL: "http://localhost:5050"
+      # Серверный рендеринг внутри контейнера -> бэк по имени сервиса в сети.
+      INTERNAL_API_BASE_URL: "http://backend:5050"
+      # Секрет ревалидации (должен совпадать с REVALIDATE_SECRET бэка, если
+      # включишь авторевалидацию на стороне бэка).
+      REVALIDATE_SECRET: "dev_revalidate_secret"
+    ports:
+      - "3000:3000"
+    volumes:
+      # Исходники монтируем для hot-reload; node_modules держим в томе,
+      # чтобы не конфликтовать с хостовой ОС/архитектурой.
+      - .:/app
+      - frontend_node_modules:/app/node_modules
+    networks:
+      - backend_net
+
+volumes:
+  frontend_node_modules:
+
+networks:
+  # Подключаемся к УЖЕ СОЗДАННОЙ сети бэка (external = не создаём свою).
+  backend_net:
+    external: true
+    name: ${BACKEND_NETWORK:-jewelryback_jewelry-net}

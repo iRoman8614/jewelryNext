@@ -177,6 +177,11 @@ export async function generateMetadata({ params }) {
     }
 }
 
+// ISR: каталог обновляется часто (новые товары, продажи) -> 60с + on-demand.
+// dynamicParams=true: новые категории/коллекции рендерятся по запросу, без 404.
+export const revalidate = 60;
+export const dynamicParams = true;
+
 export default async function CatalogPage({ params }) {
     const { slug } = params;
     const categorySlug = slug?.[0];

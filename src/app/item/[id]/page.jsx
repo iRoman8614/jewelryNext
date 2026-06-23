@@ -89,6 +89,12 @@ export async function generateMetadata({ params }) {
     };
 }
 
+// ISR + SEO: известные товары пре-рендерятся в generateStaticParams,
+// а dynamicParams=true рендерит НОВЫЙ товар по первому запросу (никаких 404),
+// после чего страница кэшируется. revalidate держит данные/сток свежими.
+export const revalidate = 60;
+export const dynamicParams = true;
+
 export default async function ItemPage({ params }) {
     const { id } = params;
 
