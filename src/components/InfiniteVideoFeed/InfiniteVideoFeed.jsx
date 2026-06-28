@@ -40,6 +40,17 @@ export default function InfiniteVideoFeed({
         '--animation-duration': `${speed}s`,
     };
 
+    // Колбэк-ref: ставим muted СВОЙСТВОМ (а не только JSX-атрибутом) и сами
+    // зовём play(). React-атрибут muted не всегда успевает примениться до
+    // autoplay-гейта браузера → видео блокируется и показывает только первый
+    // кадр («превью»). Свойство el.muted = true гарантирует беззвучный autoplay.
+    const primeAutoplay = (el) => {
+        if (!el) return;
+        el.muted = true;
+        const p = el.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+    };
+
     const handleVideoClick = (src) => {
         setSelectedVideo(src);
         setIsPopupOpen(true);
@@ -63,6 +74,7 @@ export default function InfiniteVideoFeed({
                             onClick={() => handleVideoClick(src)}
                         >
                             <video
+                                ref={primeAutoplay}
                                 src={src}
                                 className={styles.imageElement}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -70,7 +82,7 @@ export default function InfiniteVideoFeed({
                                 muted
                                 loop
                                 playsInline
-                                preload="metadata"
+                                preload="auto"
                             />
                         </div>
                     ))}
@@ -84,6 +96,7 @@ export default function InfiniteVideoFeed({
                             ×
                         </button>
                         <video
+                            ref={primeAutoplay}
                             src={selectedVideo}
                             className={styles.popupImage}
                             style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}

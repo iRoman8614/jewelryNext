@@ -50,7 +50,7 @@ export default function NavBar({ theme, navigation }) {
                 </div>
                 <Link className={styles.link} href="/#custom">{lang === 'ru' ? 'Заказ' : 'Custom'}</Link>
                 <Link className={styles.link} href="/gallery">{lang === 'ru' ? 'Галерея' : 'Gallery'}</Link>
-                <Link className={styles.link} href="/#contacts">{lang === 'ru' ? 'Контакты' : 'Contacts'}</Link>
+                <Link className={styles.link} href="/contacts">{lang === 'ru' ? 'Контакты' : 'Contacts'}</Link>
             </div>
             <div className={styles.buttonsetAdditional}>
                 <Link className={styles.link} href="/cart">{lang === 'ru' ? 'Корзина' : 'Cart'}</Link>

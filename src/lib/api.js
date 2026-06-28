@@ -28,6 +28,12 @@ const FETCH_BASE = typeof window === 'undefined'
 // Совместимость со старым кодом, где префикс картинок звался BASE_URL.
 const BASE_URL = ASSET_BASE;
 
+// Логотип точки продаж может быть либо загружен в админку (/uploads/...),
+// либо вставлен внешней ссылкой (напр. avatars.mds.yandex.net/...). Абсолютные
+// URL отдаём как есть, относительные — префиксуем публичным origin.
+const isAbsoluteUrl = (u) => typeof u === 'string' && /^(https?:)?\/\//i.test(u);
+const withAssetBase = (u) => (!u ? '' : isAbsoluteUrl(u) ? u : `${BASE_URL}${u}`);
+
 // Стратегия кэша ISR:
 //  - revalidate: фоновое обновление по таймеру (сек);
 //  - tags: позволяют точечно сбрасывать кэш по событию из админки
@@ -104,6 +110,21 @@ export const getVideoGallery = cache(async () => {
     });
     if (!Array.isArray(data)) return [];
     return data.map(videoUrl => `${BASE_URL}${videoUrl}`);
+});
+
+// Точки продаж для страницы /contacts. Бэк отдаёт массив магазинов-партнёров,
+// где представлены изделия. Логотип может быть загруженным файлом или внешней
+// ссылкой — нормализуем оба случая. Карта хранится как iframe src (или полный
+// <iframe> — фронт сам извлечёт src). Пустой массив → секция не рендерится.
+export const getSalesPoints = cache(async () => {
+    const { data } = await apiFetch('/api/content/sales-points', {
+        tags: [TAGS.content], revalidate: REVALIDATE.content, fallback: [],
+    });
+    if (!Array.isArray(data)) return [];
+    return data.map(p => ({
+        ...p,
+        logoUrl: withAssetBase(p.logoUrl || p.logo || ''),
+    }));
 });
 
 export const getFeaturedProducts = cache(async () => {

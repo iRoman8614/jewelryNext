@@ -1,0 +1,167 @@
+@use '../../app/styles/utils' as utils;
+
+.root {
+  font-family: var(--font-text);
+  background-color: #fff;
+  color: #000;
+  padding: utils.auto-clamp(20, 80);
+  min-height: 70vh;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: utils.auto-clamp(28, 64);
+  margin: 0 0 40px 0;
+  text-align: center;
+
+  @media screen and (max-width: 600px) {
+    margin-bottom: 24px;
+  }
+}
+
+.logo {
+  width: utils.responsive-size(70);
+  height: auto;
+  display: block;
+  margin: 0 auto 32px auto;
+
+  @media screen and (max-width: 600px) {
+    width: 40px;
+  }
+}
+
+.workshop {
+  text-align: center;
+  font-size: utils.auto-clamp(16, 28);
+  margin: 0 auto 36px auto;
+  max-width: 800px;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #000;
+  text-decoration: none;
+  font-size: utils.auto-clamp(14, 22);
+}
+
+.contactLabel {
+  text-transform: lowercase;
+  opacity: 0.55;
+  min-width: 56px;
+  text-align: right;
+}
+
+.contactValue {
+  padding-top: 3px;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.offerta {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 60px auto;
+  color: #000;
+  text-decoration: underline;
+  font-size: utils.auto-clamp(13, 18);
+}
+
+.pointsSection {
+  border-top: 1px solid #000;
+  padding-top: 50px;
+  margin-top: 20px;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  font-size: utils.auto-clamp(22, 48);
+  margin: 0 0 40px 0;
+
+  @media screen and (max-width: 600px) {
+    text-align: center;
+  }
+}
+
+.empty {
+  font-size: utils.auto-clamp(14, 22);
+  opacity: 0.6;
+  text-align: center;
+  padding: 20px 0 40px 0;
+}
+
+.points {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+.card {
+  border: 1px solid #000;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cardLogo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.cardName {
+  text-transform: uppercase;
+  font-size: utils.auto-clamp(16, 26);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cardAddr {
+  margin: 0;
+  font-size: utils.auto-clamp(13, 20);
+  opacity: 0.85;
+}
+
+.cardLink {
+  width: fit-content;
+  color: #000;
+  text-decoration: underline;
+  font-size: utils.auto-clamp(13, 18);
+}
+
+.map {
+  margin-top: 4px;
+
+  iframe {
+    width: 100%;
+    height: 220px;
+    border: 0;
+    display: block;
+  }
+}
