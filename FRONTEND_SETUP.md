@@ -33,7 +33,6 @@ npm install && npm run dev
 ## Файлы
 
 ОБНОВИТЬ:
-  next.config.mjs
   src/lib/api.js
   src/app/page.js
   src/app/gallery/page.jsx

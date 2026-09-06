@@ -55,7 +55,9 @@ export default function CartClient({ navigation, checkoutOptions }) {
                 }
 
                 const productsFromApi = await res.json();
-                const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+                // Абсолютный URL нужен для next/image (см. комментарий в lib/api.js
+                // про 400 от /_next/image на относительных "/uploads/..." путях).
+                const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || window.location.origin;
 
                 const enrichedItems = productsFromApi.map(product => {
                     const itemInCart = itemsFromProvider.find(p => p.productId === product.id);

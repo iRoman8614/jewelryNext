@@ -2,11 +2,20 @@ import { cache } from 'react';
 
 // Два разных базовых адреса — это важно для прод-схемы за nginx:
 //
-//  ASSET_BASE  — префикс для ССЫЛОК НА КАРТИНКИ (/uploads/...). Их грузит
-//                БРАУЗЕР, поэтому адрес всегда публичный. В проде удобно
-//                оставить пустым ('') -> ссылки станут относительными
-//                (/uploads/...) и пойдут на тот же домен через nginx.
-//                Локально: http://localhost:5050.
+//  ASSET_BASE  — префикс для ССЫЛОК НА КАРТИНКИ (/uploads/...).
+//                ВАЖНО (после включения оптимизации next/image, см.
+//                next.config.mjs): относительный путь вида "/uploads/x.png"
+//                next/image трактует как ЛОКАЛЬНЫЙ файл, который должен
+//                физически лежать на диске ФРОНТЕНД-контейнера — а его там
+//                нет, он лежит в volume БЭКЕНДА. Из-за этого
+//                /_next/image?url=%2Fuploads%2F... отвечал 400.
+//                Поэтому картинкам нужен АБСОЛЮТНЫЙ URL:
+//                  - на сервере (SSR/ISR внутри контейнера) — внутренний
+//                    адрес backend-контейнера в докер-сети, в обход
+//                    публичного домена и nginx;
+//                  - в браузере (напр. клиентская пагинация каталога) —
+//                    текущий origin страницы (тот же публичный домен, тот
+//                    же сертификат, никакого CORS).
 //
 //  FETCH_BASE  — куда уходят сами запросы к API. На СЕРВЕРЕ (ISR/SSR внутри
 //                контейнера) лучше ходить во внутренний адрес backend-контейнера
@@ -20,8 +29,13 @@ import { cache } from 'react';
 //   INTERNAL_API_BASE_URL     — внутренний origin бэка для серверных запросов.
 //                               Прод: http://backend:5050. Локально можно не
 //                               задавать — возьмётся публичный.
-const ASSET_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-const FETCH_BASE = typeof window === 'undefined'
+const isServer = typeof window === 'undefined';
+
+const ASSET_BASE = isServer
+    ? (process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || '')
+    : (process.env.NEXT_PUBLIC_API_BASE_URL || window.location.origin);
+
+const FETCH_BASE = isServer
     ? (process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || '')
     : (process.env.NEXT_PUBLIC_API_BASE_URL || '');
 
