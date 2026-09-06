@@ -113,14 +113,9 @@ export default function ProductView({ product }) {
                     <Swiper
                         ref={swiperRef}
                         modules={[A11y, Autoplay]}
-                        slidesPerView={2}
+                        slidesPerView={"auto"}
                         spaceBetween={780}
                         loop={hasMultipleImages}
-                        // При малом числе фото и slidesPerView={2} Swiper-у не хватало
-                        // задублированных слайдов для зацикливания — из-за этого кнопка
-                        // "вправо" на последних фото просто ничего не делала.
-                        // loopAdditionalSlides гарантирует достаточный запас.
-                        loopAdditionalSlides={product.images.length}
                         // Плавный сдвиг картинки под текстом за ~1.2с вместо мгновенной смены.
                         speed={1200}
                         autoplay={hasMultipleImages ? { delay: 5000, disableOnInteraction: false } : false}
