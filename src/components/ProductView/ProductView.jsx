@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Autoplay } from 'swiper/modules';
 import Image from 'next/image';
@@ -36,6 +36,30 @@ export default function ProductView({ product }) {
     // Свайп имеет смысл (и зацикливание, и автопрокрутка) только когда фото
     // больше одного.
     const hasMultipleImages = (product.images?.length || 0) > 1;
+
+    // При slidesPerView="auto" Swiper замеряет реальную CSS-ширину слайдов
+    // один раз при инициализации. Если в этот момент картинка (next/image)
+    // ещё не отрисовалась, замер занижен — из-за этого слайд "доезжал" лишь
+    // на пару десятков пикселей вместо полного слайда. Форсируем пересчёт
+    // после монтирования и повторно после загрузки каждой картинки.
+    useEffect(() => {
+        const swiper = swiperRef.current?.swiper;
+        if (!swiper) return;
+
+        const update = () => swiper.update();
+        update();
+        const timeoutId = setTimeout(update, 300);
+
+        const images = document.querySelectorAll(`.${styles.slideImageWrapper} img`);
+        images.forEach(img => {
+            if (!img.complete) img.addEventListener('load', update);
+        });
+
+        return () => {
+            clearTimeout(timeoutId);
+            images.forEach(img => img.removeEventListener('load', update));
+        };
+    }, [product.images]);
 
     return (
         <>
@@ -116,6 +140,8 @@ export default function ProductView({ product }) {
                         slidesPerView={"auto"}
                         spaceBetween={780}
                         loop={hasMultipleImages}
+                        observer={true}
+                        observeParents={true}
                         // Плавный сдвиг картинки под текстом за ~1.2с вместо мгновенной смены.
                         speed={1200}
                         autoplay={hasMultipleImages ? { delay: 5000, disableOnInteraction: false } : false}

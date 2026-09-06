@@ -219,7 +219,8 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   filter: invert(1);
   position: absolute;
   top: 40%;
-  z-index: 20;
+  z-index: 999;
+  isolation: isolate;
   width: $button-width;
   height: $button-width;
   cursor: pointer;
