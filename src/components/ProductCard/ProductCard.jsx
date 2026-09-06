@@ -20,10 +20,14 @@ export default function ProductCard({ item, variant = 1 }) {
         [styles.image3]: variant === 3,
     });
 
+    // Значения соответствуют реальным размерам карточек из ProductCard.module.scss
+    // (утилита responsive-size на холсте 3292px). Раньше тут стояли старые
+    // (уменьшенные) числа, из-за которых next/image готовил файл меньше, чем
+    // реально требовалось для 2x/ретина-экранов — итог тот же эффект "мыла".
     const imageSizes = {
-        1: { width: 470, height: 470 },
-        2: { width: 405, height: 405 },
-        3: { width: 353, height: 353 },
+        1: { width: 564, height: 564 },
+        2: { width: 486, height: 486 },
+        3: { width: 424, height: 424 },
     };
     const { width, height } = imageSizes[variant];
 
@@ -38,6 +42,8 @@ export default function ProductCard({ item, variant = 1 }) {
                 alt={displayName || 'Ювелирное изделие'}
                 width={width}
                 height={height}
+                sizes="(max-width: 900px) 60vw, 20vw"
+                quality={90}
             />
             {displayName && <div className={styles.title}>{displayName}</div>}
             {item.price && <div className={styles.desc}>{lang === "ru" ? 'цена' : 'cost'} {item.price}</div>}

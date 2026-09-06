@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import styles from '@/app/cart/cart.module.scss';
 
 import CartItem from "@/components/CartItem/CartItem";
@@ -15,6 +16,7 @@ const IMG_HEIGHT = 100;
 
 export default function CartClient({ navigation, checkoutOptions }) {
     const { lang } = useLanguage();
+    const router = useRouter();
     const { cartItems: itemsFromProvider, removeFromCart, updateQuantity } = useCart();
 
     const [detailedCartItems, setDetailedCartItems] = useState([]);
@@ -199,7 +201,7 @@ export default function CartClient({ navigation, checkoutOptions }) {
             <section className={styles.rootMobile}>
                 <ConfirmForm
                     cartItems={detailedCartItems}
-                    action={() => handleFormShow(false)}
+                    action={() => router.back()}
                     checkoutOptions={checkoutOptions}
                 />
             </section>

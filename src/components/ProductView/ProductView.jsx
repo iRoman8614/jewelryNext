@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { A11y } from 'swiper/modules';
+import { A11y, Autoplay } from 'swiper/modules';
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import { useCart } from '@/components/CartProvider/CartProvider';
@@ -32,6 +32,10 @@ export default function ProductView({ product }) {
     const handleBackClick = () => router.back();
     const handleAddToCartClick = () => addToCart(product.id);
     const handleRemoveFromCartClick = () => removeFromCart(product.id);
+
+    // Свайп имеет смысл (и зацикливание, и автопрокрутка) только когда фото
+    // больше одного.
+    const hasMultipleImages = (product.images?.length || 0) > 1;
 
     return (
         <>
@@ -108,10 +112,18 @@ export default function ProductView({ product }) {
                 <div className={styles.swiperLayer}>
                     <Swiper
                         ref={swiperRef}
-                        modules={[A11y]}
+                        modules={[A11y, Autoplay]}
                         slidesPerView={2}
                         spaceBetween={780}
-                        loop={true}
+                        loop={hasMultipleImages}
+                        // При малом числе фото и slidesPerView={2} Swiper-у не хватало
+                        // задублированных слайдов для зацикливания — из-за этого кнопка
+                        // "вправо" на последних фото просто ничего не делала.
+                        // loopAdditionalSlides гарантирует достаточный запас.
+                        loopAdditionalSlides={product.images.length}
+                        // Плавный сдвиг картинки под текстом за ~1.2с вместо мгновенной смены.
+                        speed={1200}
+                        autoplay={hasMultipleImages ? { delay: 5000, disableOnInteraction: false } : false}
                         centeredSlides={false}
                         className={styles.productSwiper}
                     >
