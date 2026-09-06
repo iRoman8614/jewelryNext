@@ -1,65 +1,110 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { A11y, Autoplay } from 'swiper/modules';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import { useCart } from '@/components/CartProvider/CartProvider';
 import { useLanguage } from "@/components/LanguageProvider/LanguageProvider";
-
-import 'swiper/css';
-import 'swiper/css/a11y';
 import styles from './styles.module.scss';
+
+// Длительность анимации свайпа. Раньше был Swiper (библиотека) — из-за
+// slidesPerView="auto" в паре с асинхронной загрузкой картинок next/image он
+// то не долистывал до конца, то стрелка "вправо" не срабатывала вовсе.
+// Заменили на свою простую и полностью предсказуемую реализацию: ряд
+// картинок в flex-контейнере, сдвигаем его через CSS transform с фиксированной
+// длительностью — без сторонних измерений и скрытой логики.
+const SLIDE_DURATION_MS = 2000;
+const AUTOPLAY_DELAY_MS = 5000;
 
 export default function ProductView({ product }) {
     const { lang } = useLanguage();
     const router = useRouter();
-    const swiperRef = useRef(null);
 
     const { cartItems, addToCart, removeFromCart } = useCart();
 
     const itemInCart = cartItems.find(item => item.productId === product.id);
     const isInCart = !!itemInCart;
 
+    const images = product.images || [];
+    const hasMultipleImages = images.length > 1;
+
+    // Для бесшовной бесконечной прокрутки дублируем крайние картинки по краям:
+    // [клон последней, ...все настоящие, клон первой]. Реальная картинка #0
+    // соответствует индексу 1 в этом расширенном списке.
+    const extendedImages = hasMultipleImages
+        ? [images[images.length - 1], ...images, images[0]]
+        : images;
+
+    const [trackIndex, setTrackIndex] = useState(hasMultipleImages ? 1 : 0);
+    const [withTransition, setWithTransition] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [slotWidth, setSlotWidth] = useState(0);
+
+    const trackRef = useRef(null);
+    const firstRealSlideRef = useRef(null);
+
+    // Замеряем реальную ширину слайда + отступ между слайдами (gap в CSS).
+    // useLayoutEffect — чтобы успеть выставить правильную позицию ДО отрисовки
+    // кадра в браузере (без этого на долю секунды мелькнул бы клон последней
+    // картинки вместо первой настоящей).
+    useLayoutEffect(() => {
+        const measure = () => {
+            if (!firstRealSlideRef.current || !trackRef.current) return;
+            const rect = firstRealSlideRef.current.getBoundingClientRect();
+            const gapPx = parseFloat(getComputedStyle(trackRef.current).columnGap || '0') || 780;
+            setSlotWidth(rect.width + gapPx);
+        };
+        measure();
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
+    }, [images.length]);
+
+    const goTo = useCallback((direction) => {
+        if (isAnimating || !hasMultipleImages || slotWidth === 0) return;
+        setIsAnimating(true);
+        setWithTransition(true);
+        setTrackIndex(prev => prev + (direction === 'next' ? 1 : -1));
+    }, [isAnimating, hasMultipleImages, slotWidth]);
+
+    const handlePrev = () => goTo('prev');
+    const handleNext = () => goTo('next');
+
+    // Автопрокрутка каждые 5 секунд.
+    useEffect(() => {
+        if (!hasMultipleImages) return;
+        const id = setInterval(() => goTo('next'), AUTOPLAY_DELAY_MS);
+        return () => clearInterval(id);
+    }, [goTo, hasMultipleImages]);
+
+    // По завершении анимации: если уехали на клон в начале/конце списка —
+    // мгновенно (без transition, незаметно для глаза — картинка та же самая)
+    // перескакиваем на соответствующую настоящую позицию, чтобы можно было
+    // листать бесконечно в любую сторону.
+    const handleTransitionEnd = () => {
+        setIsAnimating(false);
+        if (!hasMultipleImages) return;
+        if (trackIndex === 0) {
+            setWithTransition(false);
+            setTrackIndex(images.length);
+        } else if (trackIndex === extendedImages.length - 1) {
+            setWithTransition(false);
+            setTrackIndex(1);
+        }
+    };
+
+    const handleBackClick = () => router.back();
+    const handleAddToCartClick = () => addToCart(product.id);
+    const handleRemoveFromCartClick = () => removeFromCart(product.id);
+
     const formatMultilineText = (text) => {
         if (!text) return null;
         return text.split('\n').map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>));
     };
 
-    const handlePrev = () => swiperRef.current?.swiper?.slidePrev();
-    const handleNext = () => swiperRef.current?.swiper?.slideNext();
-    const handleBackClick = () => router.back();
-    const handleAddToCartClick = () => addToCart(product.id);
-    const handleRemoveFromCartClick = () => removeFromCart(product.id);
-
-    // Свайп имеет смысл (и зацикливание, и автопрокрутка) только когда фото
-    // больше одного.
-    const hasMultipleImages = (product.images?.length || 0) > 1;
-
-    // При slidesPerView="auto" Swiper замеряет реальную CSS-ширину слайдов
-    // один раз при инициализации. Если в этот момент картинка (next/image)
-    // ещё не отрисовалась, замер занижен — из-за этого слайд "доезжал" лишь
-    // на пару десятков пикселей вместо полного слайда. Форсируем пересчёт
-    // после монтирования и повторно после загрузки каждой картинки.
-    useEffect(() => {
-        const swiper = swiperRef.current?.swiper;
-        if (!swiper) return;
-
-        const update = () => swiper.update();
-        update();
-        const timeoutId = setTimeout(update, 300);
-
-        const images = document.querySelectorAll(`.${styles.slideImageWrapper} img`);
-        images.forEach(img => {
-            if (!img.complete) img.addEventListener('load', update);
-        });
-
-        return () => {
-            clearTimeout(timeoutId);
-            images.forEach(img => img.removeEventListener('load', update));
-        };
-    }, [product.images]);
+    const trackStyle = {
+        transform: `translateX(-${trackIndex * slotWidth}px)`,
+        transition: withTransition ? `transform ${SLIDE_DURATION_MS}ms ease` : 'none',
+    };
 
     return (
         <>
@@ -134,28 +179,31 @@ export default function ProductView({ product }) {
                     <Image src={'/images/arrow.svg'} alt={''} width={20} height={40} />
                 </div>
                 <div className={styles.swiperLayer}>
-                    <Swiper
-                        ref={swiperRef}
-                        modules={[A11y, Autoplay]}
-                        slidesPerView={"auto"}
-                        spaceBetween={780}
-                        loop={hasMultipleImages}
-                        observer={true}
-                        observeParents={true}
-                        // Плавный сдвиг картинки под текстом за ~1.2с вместо мгновенной смены.
-                        speed={1200}
-                        autoplay={hasMultipleImages ? { delay: 5000, disableOnInteraction: false } : false}
-                        centeredSlides={false}
+                    <div
+                        ref={trackRef}
                         className={styles.productSwiper}
+                        style={trackStyle}
+                        onTransitionEnd={handleTransitionEnd}
                     >
-                        {product.images.map((image, index) => (
-                            <SwiperSlide key={index} className={styles.productSlide}>
+                        {extendedImages.map((image, index) => (
+                            <div
+                                key={index}
+                                className={styles.productSlide}
+                                ref={index === 1 ? firstRealSlideRef : undefined}
+                            >
                                 <div className={styles.slideImageWrapper}>
-                                    <Image src={image} alt={`${product.name} - изображение ${index + 1}`} width={355} height={530} style={{ objectFit: 'cover' }} />
+                                    <Image
+                                        src={image}
+                                        alt={`${product.name} - изображение ${index + 1}`}
+                                        width={355}
+                                        height={530}
+                                        style={{ objectFit: 'cover' }}
+                                        priority={index === 1}
+                                    />
                                 </div>
-                            </SwiperSlide>
+                            </div>
                         ))}
-                    </Swiper>
+                    </div>
                 </div>
                 <div className={`${styles.customSwiperButton} ${styles.customSwiperButtonNext}`} onClick={handleNext}>
                     <Image src={'/images/arrow.svg'} alt={''} width={20} height={40} />

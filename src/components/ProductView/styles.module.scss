@@ -162,10 +162,10 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   width: 100vw;
   max-height: 100%;
   overflow: visible !important;
-  :global(.swiper-wrapper) {
-    overflow: visible;
-    align-items: flex-start;
-  }
+  display: flex;
+  align-items: flex-start;
+  gap: 780px;
+  will-change: transform;
 }
 
 .productSlide {
