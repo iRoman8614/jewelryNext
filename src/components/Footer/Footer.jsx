@@ -9,7 +9,6 @@ export default function Footer() {
     const {lang} = useLanguage()
     return (
         <footer className={styles.root} id={"contacts"}>
-            <div className={styles.footerCatalogDesctop}>{lang === 'ru' ? "Мастерская: г. Москва, Звездный бульвар 21с3" : "Workshop: Moscow, Zvezdny Boulevard 21c3"}</div>
             <div className={styles.footerLine}>
                 <div className={styles.links}>
                     <Image
