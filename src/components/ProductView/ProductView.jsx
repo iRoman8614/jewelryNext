@@ -27,9 +27,16 @@ export default function ProductView({ product }) {
 
     const images = product.images || [];
     const hasMultipleImages = images.length > 1;
-    const description = product.description?.[lang]
+    const rawDescription = product.description?.[lang]
         || product[`description_${lang}`]
         || '';
+    // Текст из админки приходит с HTML-тегами (<p>...</p> от WYSIWYG-редактора).
+    // Убираем теги полностью, границы параграфов превращаем в перенос строки.
+    const description = rawDescription
+        .replace(/<\/p>\s*<p>/gi, '\n\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .trim();
 
     // Для бесшовной бесконечной прокрутки дублируем крайние картинки по краям:
     // [клон последней, ...все настоящие, клон первой]. Реальная картинка #0
