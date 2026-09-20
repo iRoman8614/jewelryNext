@@ -231,6 +231,12 @@ const ProductItemContent = ({ item, lang }) => {
     const handleAddToCartClick = () => addToCart(item.id);
     const handleRemoveFromCartClick = () => removeFromCart(item.id);
 
+    // С бэка price приходит строкой вида "260000.00" — округляем и убираем
+    // копейки для показа в каталоге.
+    const displayPrice = item.price != null && item.price !== ''
+        ? String(Math.round(Number(item.price)))
+        : item.price;
+
     return (
         <>
             <div className={styles.productName}>{productName}</div>
@@ -250,7 +256,7 @@ const ProductItemContent = ({ item, lang }) => {
                     <div>{lang === 'ru' ? 'вес' : 'weight'}</div>
                     <div className={styles.productPrice}>{item.weight}</div>
                     <div>{lang === 'ru' ? 'цена' : 'cost'}</div>
-                    <div className={styles.productPrice}>{item.price}</div>
+                    <div className={styles.productPrice}>{displayPrice}</div>
                 </div>
             </div>
         </>

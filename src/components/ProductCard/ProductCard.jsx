@@ -33,6 +33,11 @@ export default function ProductCard({ item, variant = 1 }) {
 
     const displayName = item.name?.[lang] || '';
     const displayMaterial = item.material?.[lang] || '';
+    // С бэка price приходит строкой вида "260000.00" (сериализация DECIMAL из
+    // MySQL) — округляем и убираем копейки для показа в каталоге.
+    const displayPrice = item.price != null && item.price !== ''
+        ? String(Math.round(Number(item.price)))
+        : null;
 
     return (
         <div className={cardClass}>
@@ -46,7 +51,7 @@ export default function ProductCard({ item, variant = 1 }) {
                 quality={90}
             />
             {displayName && <div className={styles.title}>{displayName}</div>}
-            {item.price && <div className={styles.desc}>{lang === "ru" ? 'цена' : 'cost'} {item.price}</div>}
+            {displayPrice && <div className={styles.desc}>{lang === "ru" ? 'цена' : 'cost'} {displayPrice}</div>}
             {item.size && <div className={styles.desc}>{lang === "ru" ? 'размер' : 'size'} {item.size}</div>}
             {displayMaterial && <div className={styles.desc}>{lang === "ru" ? 'материал' : 'material'} {displayMaterial}</div>}
         </div>
