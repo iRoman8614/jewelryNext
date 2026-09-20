@@ -25,11 +25,11 @@ export const paralaxSet2 = [
 ];
 
 export const paralaxSet3 = [
-    {id: 19, type: 'image', src: '', alt: '', top: '10%', left: '56%', width: '32%', zIndex: 1, speed: -8},
+    {id: 19, type: 'image', src: '', alt: '', top: '10%', left: '56%', width: '27%', zIndex: 1, speed: -8},
     {id: 20, type: 'image', src: '', alt: '', top: '25%', left: '8%', width: '36%', zIndex: 3, speed: 5},
-    {id: 21, type: 'image', src: '', alt: '', top: '45%', left: '51%', width: '33%', zIndex: 2, speed: -4},
+    {id: 21, type: 'image', src: '', alt: '', top: '45%', left: '51%', width: '20%', zIndex: 2, speed: -4},
     {id: 22, type: 'image', src: '', alt: '', top: '60%', left: '11%', width: '31%', zIndex: 3, speed: 5},
-    {id: 23, type: 'image', src: '', alt: '', top: '80%', left: '55%', width: '37%', zIndex: 2, speed: -4},
+    {id: 23, type: 'image', src: '', alt: '', top: '80%', left: '55%', width: '30%', zIndex: 2, speed: -4},
 ];
 
 export const custom = [
@@ -56,7 +56,7 @@ export const custom = [
 
 export const footerData = {
     logo: '/images/logotipe.png',
-    text: `Мастерская: г. Москва, Звездный бульвар 21с3`,
+    text: `Мастерская: г. Москва, Малый Николопесковский 4 `,
     contacts: {
         email: 'service@27jwlr.store',
         social: '@27jwlr ',
