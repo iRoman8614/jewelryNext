@@ -1,6 +1,7 @@
 @use '../../app/styles/utils' as utils;
 
 .root {
+  position: relative;
   max-width: 980px;
   width: 100%;
   margin: 0 auto;
@@ -162,12 +163,16 @@
 }
 
 .buttonContainer {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 5;
   width: fit-content;
-  margin: 0 0 0 auto;
   cursor: pointer;
 
   @media screen and (max-width: 600px) {
-    margin: 0 0 10px auto;
+    top: 12px;
+    right: 12px;
   }
 }
 /* ===== Согласия (152-ФЗ / РКН) — новые классы, существующие не меняются ===== */

@@ -82,18 +82,16 @@
 
 .pointsSection {
   border-top: 1px solid #000;
-  padding-top: 50px;
-  margin-top: 20px;
+  padding-top: 60px;
+  margin-top: 30px;
 }
 
 .subtitle {
   text-transform: uppercase;
   font-size: utils.auto-clamp(22, 48);
-  margin: 0 0 40px 0;
-
-  @media screen and (max-width: 600px) {
-    text-align: center;
-  }
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin: 0 0 48px 0;
 }
 
 .empty {
@@ -105,58 +103,84 @@
 
 .points {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 36px;
+  max-width: 1080px;
+  margin: 0 auto;
 
   @media screen and (max-width: 600px) {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
   }
+}
+
+// Одна точка продаж — не растягиваем на всю ширину секции, показываем как
+// единственную акцентную карточку по центру.
+.pointsSingle {
+  grid-template-columns: minmax(0, 480px);
+  justify-content: center;
 }
 
 .card {
   border: 1px solid #000;
-  padding: 24px;
+  background: #fff;
+  padding: utils.auto-clamp(24, 32);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+  transition: box-shadow 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .cardHead {
   display: flex;
   align-items: center;
   gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .cardLogo {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .cardName {
   text-transform: uppercase;
-  font-size: utils.auto-clamp(16, 26);
+  letter-spacing: 0.02em;
+  font-size: utils.auto-clamp(16, 24);
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .cardAddr {
   margin: 0;
-  font-size: utils.auto-clamp(13, 20);
-  opacity: 0.85;
+  font-size: utils.auto-clamp(13, 19);
+  line-height: 1.55;
+  opacity: 0.65;
 }
 
 .cardLink {
   width: fit-content;
   color: #000;
   text-decoration: underline;
-  font-size: utils.auto-clamp(13, 18);
+  text-underline-offset: 3px;
+  font-size: utils.auto-clamp(13, 17);
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.55;
+  }
 }
 
 .map {
   margin-top: 4px;
+  // Сайт полностью монохромный — цветная карта выбивается из стиля.
+  filter: grayscale(1) contrast(1.05);
 
   iframe {
     width: 100%;

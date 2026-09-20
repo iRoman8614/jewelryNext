@@ -146,7 +146,7 @@ export default function ContactsClient({ salesPoints = [] }) {
                             : 'Points of sale will appear here soon.'}
                     </p>
                 ) : (
-                    <div className={styles.points}>
+                    <div className={`${styles.points} ${salesPoints.length === 1 ? styles.pointsSingle : ''}`}>
                         {salesPoints.map((point) => {
                             const name = pick(point.name, lang);
                             const address = pick(point.address, lang);
@@ -159,8 +159,16 @@ export default function ContactsClient({ salesPoints = [] }) {
                                         {point.logoUrl && (
                                             // обычный <img>: логотип может быть с внешнего домена,
                                             // next/image потребовал бы их whitelisting в конфиге.
+                                            // onError — если ссылка битая, тихо прячем картинку
+                                            // вместо иконки "не удалось загрузить".
                                             // eslint-disable-next-line @next/next/no-img-element
-                                            <img className={styles.cardLogo} src={point.logoUrl} alt={name} loading="lazy" />
+                                            <img
+                                                className={styles.cardLogo}
+                                                src={point.logoUrl}
+                                                alt={name}
+                                                loading="lazy"
+                                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                            />
                                         )}
                                         {name && <h3 className={styles.cardName}>{name}</h3>}
                                     </div>
