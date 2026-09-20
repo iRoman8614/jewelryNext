@@ -93,8 +93,8 @@ export default function ContactsClient({ salesPoints = [] }) {
     const ru = lang === 'ru';
 
     const workshop = ru
-        ? 'Мастерская: г. Москва, Звездный бульвар 21с3'
-        : 'Workshop: Moscow, Zvezdny Boulevard 21c3';
+        ? 'Мастерская: г. Москва, Малый Николопесковский 4'
+        : 'Workshop: Moscow,  Maliy Nicolopeskovskiy 4';
 
     return (
         <div className={styles.root}>
