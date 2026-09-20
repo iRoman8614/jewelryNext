@@ -39,6 +39,25 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
   font-weight: normal;
 }
 
+.description {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: utils.auto-clamp(30, 250);
+  padding-right: utils.auto-clamp(60, 400);
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.descriptionText {
+  max-width: 550px;
+  width: 100%;
+  text-align: right;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+}
+
 .productViewContainer {
   display: flex;
   width: 100%;

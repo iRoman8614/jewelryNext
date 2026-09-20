@@ -209,6 +209,11 @@ export const getProductById = async (id) => {
     if (product.images && Array.isArray(product.images)) {
         product.images = product.images.map(imgPath => `${BASE_URL}${imgPath}`);
     }
+    // description может прийти как нормализованный {ru, en} (как name/collection)
+    // либо как сырые колонки БД description_ru/description_en — поддерживаем оба.
+    if (!product.description && (product.description_ru || product.description_en)) {
+        product.description = { ru: product.description_ru || '', en: product.description_en || '' };
+    }
     return product;
 };
 

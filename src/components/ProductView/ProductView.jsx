@@ -27,6 +27,9 @@ export default function ProductView({ product }) {
 
     const images = product.images || [];
     const hasMultipleImages = images.length > 1;
+    const description = product.description?.[lang]
+        || product[`description_${lang}`]
+        || '';
 
     // Для бесшовной бесконечной прокрутки дублируем крайние картинки по краям:
     // [клон последней, ...все настоящие, клон первой]. Реальная картинка #0
@@ -113,6 +116,11 @@ export default function ProductView({ product }) {
                     <h2 className={styles.creature}>{product.collection?.[lang]}</h2>
                     <h1 className={styles.productName}>{product.name?.[lang]}</h1>
                 </div>
+                {description && (
+                    <div className={styles.description}>
+                        <div className={styles.descriptionText}>{formatMultilineText(description)}</div>
+                    </div>
+                )}
                 <div className={styles.productViewContainer}>
                     <div className={styles.productInfoOverlay}>
                         <div className={styles.productSpecs}>

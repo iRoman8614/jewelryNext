@@ -66,7 +66,7 @@ export default function ParallaxLayout({
                                     <div className={styles.title}>{titleText}</div>
                                 }
                                 <div className={styles.textContent}>
-                                    <p dangerouslySetInnerHTML={{ __html: contentText }} />
+                                    <p dangerouslySetInnerHTML={{ __html: contentText.replace(/\n/g, '<br />') }} />
                                 </div>
                             </>
                         )}
