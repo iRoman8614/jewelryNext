@@ -9,6 +9,11 @@ import { getNavigation, getSnakeGallery, getHomepageContent, getCustom } from '@
 import Custom from "@/components/custom/Custom";
 import {Loader} from "@/components/loader/Loader";
 
+// top/zIndex/speed по-прежнему берутся из локального layoutData (home-page.data.js,
+// подогнано под Figma) — их менять не просили. А вот width/left раньше тоже
+// были захардкожены там же; теперь их отдаёт бэкенд (админка), поэтому здесь
+// добавлено копирование width/left из contentItem поверх layoutItem — точно
+// так же, как уже было устроено для title/content и src/alt.
 function mergeLayoutWithContent(layoutData, contentData = []) {
     const apiTexts = contentData.filter(item => item.type === 'text');
     const apiImages = contentData.filter(item => item.type === 'image');
@@ -24,6 +29,8 @@ function mergeLayoutWithContent(layoutData, contentData = []) {
                 const contentItem = apiTexts[textIndex];
                 finalItem.title = contentItem.title;
                 finalItem.content = contentItem.content;
+                if (contentItem.width) finalItem.width = contentItem.width;
+                if (contentItem.left) finalItem.left = contentItem.left;
                 textIndex++;
             }
         } else if (layoutItem.type === 'image') {
@@ -31,6 +38,8 @@ function mergeLayoutWithContent(layoutData, contentData = []) {
                 const contentItem = apiImages[imageIndex];
                 finalItem.src = contentItem.src;
                 finalItem.alt = contentItem.alt;
+                if (contentItem.width) finalItem.width = contentItem.width;
+                if (contentItem.left) finalItem.left = contentItem.left;
                 imageIndex++;
             }
         }
