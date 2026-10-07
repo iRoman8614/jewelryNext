@@ -75,6 +75,10 @@
 .productImage {
   width: 100%;
   height: 200px;
+  // Фикс: раньше картинка растягивалась под 100%×200px и искажалась.
+  // object-fit: contain сохраняет пропорции и вписывает фото целиком в бокс.
+  object-fit: contain;
+  object-position: center;
 }
 
 .busket {

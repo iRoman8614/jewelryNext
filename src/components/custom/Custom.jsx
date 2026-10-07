@@ -5,6 +5,15 @@ import styles from './Custom.module.scss'
 import {useLanguage} from '@/components/LanguageProvider/LanguageProvider';
 import Link from "next/link";
 
+// Текст кастом-блока может прийти ДВУХ видов:
+//  1) HTML из rich-text-редактора админки (<p>, <br>, <strong>, списки…);
+//  2) обычный текст с переносами \n (статический фолбэк из home-page.data.js).
+// Приводим оба к HTML: если есть теги — отдаём как есть; иначе переносы \n → <br>.
+const toHtml = (value) => {
+    const v = value == null ? '' : String(value);
+    return /<[a-z!/][\s\S]*>/i.test(v) ? v : v.replace(/\n/g, '<br />');
+};
+
 export default function Custom({ customData }) {
     const { lang} = useLanguage()
     // Данные приходят из page.js (позиции из home-page.data + контент из админки).
@@ -41,12 +50,12 @@ export default function Custom({ customData }) {
                                     {element.title &&
                                         <div className={styles.title}>{lang === 'ru' ? element.title.ru : element.title.en}</div>
                                     }
-                                    <div className={styles.textContent}>
-                                        {typeof element.content === 'string'
-                                            ? <p dangerouslySetInnerHTML={{ __html: lang === 'ru' ? element.content.ru.replace(/\n/g, '<br />') : element.content.en.replace(/\n/g, '<br />') }} />
-                                            : lang === 'ru' ? element.content.ru : element.content.en
-                                        }
-                                    </div>
+                                    <div
+                                        className={styles.textContent}
+                                        dangerouslySetInnerHTML={{
+                                            __html: toHtml(lang === 'ru' ? element.content.ru : element.content.en),
+                                        }}
+                                    />
                                 </>
                             )}
                         </div>

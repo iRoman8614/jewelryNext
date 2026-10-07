@@ -80,13 +80,18 @@ export default function InfiniteImageFeed({
                         <button className={styles.closeButton} onClick={handleClosePopup}>
                             ×
                         </button>
+                        {/* Фикс: раньше была fill-картинка, а в CSS стоял
+                            position: static !important, что ломало fill — фото
+                            не отображалось при открытии. Теперь обычная картинка
+                            с собственными пропорциями, вписанная в бокс. */}
                         <Image
                             src={selectedImage}
                             alt="Selected feed image"
                             className={styles.popupImage}
-                            fill
-                            style={{ objectFit: 'contain' }}
+                            width={1200}
+                            height={1200}
                             sizes="90vw"
+                            style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                         />
                     </div>
                 </div>

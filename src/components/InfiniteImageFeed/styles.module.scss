@@ -74,7 +74,8 @@
 }
 
 .popupImage {
-  position: static !important;
+  // Картинка теперь обычная (не fill) и центрируется флексом .popupContent.
+  display: block;
 }
 
 .closeButton {
