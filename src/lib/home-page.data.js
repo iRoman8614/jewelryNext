@@ -21,12 +21,12 @@ export const paralaxSet2 = [
     {id: 9, type: 'image', src: '', alt: '', top: '19%', zIndex: 3, speed: 5},
     {id: 10, type: 'image', src: '', alt: '', top: '26%', zIndex: 3, speed: -12},
     {id: 11, type: 'image', src: '', alt: '', top: '38%', zIndex: 2, speed: -4},
-    {id: 12, type: 'image', src: '', alt: '', top: '50%', zIndex: 4, speed: -10},
+    {id: 12, type: 'image', src: '', alt: '', top: '46%', zIndex: 4, speed: -10},
     {id: 13, type: 'text', top: '55%', zIndex: 5, speed: 3},
     {id: 14, type: 'image', src: '', alt: '', top: '64%', zIndex: 6, speed: 10},
     {id: 15, type: 'image', src: '', alt: '', top: '72%', zIndex: 8, speed: -6},
     {id: 16, type: 'text', top: '83%', zIndex: 5, speed: 3},
-    {id: 17, type: 'image', src: '', alt: '', top: '86%', zIndex: 7, speed: 7},
+    {id: 17, type: 'image', src: '', alt: '', top: '80%', zIndex: 7, speed: 7},
 ];
 
 export const paralaxSet3 = [
