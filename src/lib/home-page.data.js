@@ -51,7 +51,7 @@ export const custom = [
                 "⁃ Sketch development\n" +
                 "⁃ Selection of materials: we will decide on the metal, help you find your unique stone among the already established base of collectors, cutters and gemologists from all over the world.\n" +
                 "⁃ Incarnation in metal."}, top: '5%', left: '10%', width: '60%', zIndex: 5, speed: 3},
-    {id: 2, type: 'image', src: '/images/parallax18.png', alt: '', top: '26%', left: '70%', width: '15%', zIndex: 100, speed: 10},
+    {id: 2, type: 'image', src: '/images/parallax18.png', alt: '', top: '28%', left: '70%', width: '15%', zIndex: 100, speed: 10},
     {id: 3, type: 'text', content: {en: 'WE ENVISION', ru: "ПРЕДСТАВЛЕНИЕ "}, top: '41%', left: '52%', width: '20%', zIndex: 100, speed: 2},
     {id: 4, type: 'image', src: '/images/parallax19.png', alt: '', top: '32%', left: '5%', width: '20%', zIndex: 100, speed: -6},
     {id: 5, type: 'text', content: {en: 'FORM', ru: "ФОРМА"}, top: '49%', left: '28%', width: '20%', zIndex: 10, speed: -6},
