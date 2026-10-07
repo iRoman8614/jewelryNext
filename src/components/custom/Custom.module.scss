@@ -24,6 +24,8 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+  // Декоративный фон не должен ловить клики — иначе перекрывает кнопки каталога.
+  pointer-events: none;
 }
 
 .imageContent {
@@ -74,6 +76,9 @@
   flex-direction: row-reverse;
   align-items: center;
   gap: 20px;
+  // Выше декоративных слоёв и абсолютных элементов (у них z-index до 100),
+  // чтобы кнопка-ссылка каталога была кликабельной.
+  z-index: 200;
 }
 
 .linkDesc, .linkMob {
@@ -103,6 +108,7 @@
     top: 80%;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 200; // над декоративным фоном — иначе клик по кнопке не проходит
   }
 }
 
