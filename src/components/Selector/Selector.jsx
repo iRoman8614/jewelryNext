@@ -69,7 +69,7 @@ const customStyles = {
 
 export const SortSelect = ({ lang, sortOption, handleSortChange }) => {
     const options = [
-        { value: 'default', label: lang === 'ru' ? 'По умолчанию' : 'Default' },
+        { value: 'default', label: lang === 'ru' ? 'Сначала хиты' : 'Hits first' },
         { value: 'price_asc', label: lang === 'ru' ? ' Дешевле' : 'Lower price' },
         { value: 'price_desc', label: lang === 'ru' ? 'Дороже' : 'Higher price' },
     ];
@@ -81,7 +81,7 @@ export const SortSelect = ({ lang, sortOption, handleSortChange }) => {
             case 'price_desc':
                 return lang === 'ru' ? 'ДОРОЖЕ' : 'HIGHER PRICE';
             default:
-                return lang === 'ru' ? 'СОРТИРОВКА' : 'SORT BY';
+                return lang === 'ru' ? 'СНАЧАЛА ХИТЫ' : 'HITS FIRST';
         }
     };
 

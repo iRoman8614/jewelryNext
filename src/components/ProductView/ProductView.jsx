@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import { useCart } from '@/components/CartProvider/CartProvider';
 import { useLanguage } from "@/components/LanguageProvider/LanguageProvider";
+import { hasSizes, definedSizes } from '@/lib/sizes';
 import styles from './styles.module.scss';
 
 // Длительность анимации свайпа. Раньше был Swiper (библиотека) — из-за
@@ -22,7 +23,15 @@ export default function ProductView({ product }) {
 
     const { cartItems, addToCart, removeFromCart } = useCart();
 
-    const itemInCart = cartItems.find(item => item.productId === product.id);
+    // Размерный товар: выбор размера обязателен, недоступные размеры заблокированы.
+    const sized = hasSizes(product.sizes);
+    const sizeList = definedSizes(product.sizes);
+    const [selectedSize, setSelectedSize] = useState(null);
+    const effectiveSize = sized ? selectedSize : null;
+
+    const itemInCart = cartItems.find(item =>
+        item.productId === product.id && (item.size ?? null) === (effectiveSize ?? null)
+    );
     const isInCart = !!itemInCart;
 
     const images = product.images || [];
@@ -103,8 +112,11 @@ export default function ProductView({ product }) {
     };
 
     const handleBackClick = () => router.back();
-    const handleAddToCartClick = () => addToCart(product.id);
-    const handleRemoveFromCartClick = () => removeFromCart(product.id);
+    const handleAddToCartClick = () => {
+        if (sized && !selectedSize) return;
+        addToCart(product.id, effectiveSize);
+    };
+    const handleRemoveFromCartClick = () => removeFromCart(product.id, effectiveSize);
 
     const formatMultilineText = (text) => {
         if (!text) return null;
@@ -131,14 +143,40 @@ export default function ProductView({ product }) {
                 <div className={styles.productViewContainer}>
                     <div className={styles.productInfoOverlay}>
                         <div className={styles.productSpecs}>
-                            {product.details.size.value !== '' && <>
+                            {sized ? (
+                                <>
+                                    <div className={styles.specItemSizeLabel}>
+                                        {lang === 'ru' ? 'РАЗМЕР' : 'SIZE'}
+                                    </div>
+                                    <div className={styles.specItemSizeValue}>
+                                        <div className={styles.sizeOptions}>
+                                            {sizeList.map((s) => {
+                                                const inStock = Number(product.sizes[s]) > 0;
+                                                const active = selectedSize === s;
+                                                return (
+                                                    <button
+                                                        key={s}
+                                                        type="button"
+                                                        disabled={!inStock}
+                                                        className={`${styles.sizeOption} ${active ? styles.sizeOptionActive : ''} ${!inStock ? styles.sizeOptionDisabled : ''}`}
+                                                        onClick={() => inStock && setSelectedSize(s)}
+                                                        title={!inStock ? (lang === 'ru' ? 'Нет в наличии' : 'Out of stock') : undefined}
+                                                    >
+                                                        {s}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (product.details.size.value !== '' && <>
                                 <div className={styles.specItemSizeLabel}>
                                     {product.details.size.label?.[lang]}
                                 </div>
                                 <div className={styles.specItemSizeValue}>
                                     {product.details.size.value}
                                 </div>
-                            </>}
+                            </>)}
                             {product.details.weight.value !== '' && <>
                                 <div className={styles.specItemWightLabel}>
                                     {product.details.weight.label?.[lang]}
@@ -164,7 +202,11 @@ export default function ProductView({ product }) {
                         </div>
                     </div>
                     {product.isVisible && <div className={styles.cartControl}>
-                        {!isInCart ? (
+                        {sized && !selectedSize ? (
+                            <button className={styles.addToCartButton} type="button" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                {lang === 'ru' ? "ВЫБЕРИТЕ РАЗМЕР" : "SELECT SIZE"}
+                            </button>
+                        ) : !isInCart ? (
                             <button className={styles.addToCartButton} onClick={handleAddToCartClick}>
                                 <Image
                                     className={styles.addToCartIcon}

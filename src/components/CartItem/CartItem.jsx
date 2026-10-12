@@ -17,6 +17,9 @@ export default function CartItem({ item, onRemove }) {
         <div className={styles.root} style={{ paddingLeft: `${randomPaddingLeft}px` }}>
             <div className={styles.itemType}>{item.type[lang]}</div>
             <div className={styles.itemName}>{item.name[lang]}</div>
+            {item.size && (
+                <div className={styles.itemSize}>{lang === 'ru' ? 'Размер' : 'Size'}: {item.size}</div>
+            )}
             <div
                 className={styles.buttonContainer}
                 onMouseEnter={() => setIsHovered(true)}

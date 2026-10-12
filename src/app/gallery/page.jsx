@@ -65,24 +65,30 @@ export default async function GalleryPage() {
                             <InfiniteVideoFeed
                                 videos={videoGalleryData}
                                 speed={40}
-                                imageWidth={260}
-                                imageHeight={260}
-                                verticalOffset={20}
-                                gap={15}
+                                imageWidth={320}
+                                imageHeight={420}
+                                verticalOffset={25}
+                                gap={18}
                             />
                         </div>
                     </>
                 )}
 
                 {archivedImages.length > 0 && <div className={styles.swiper}>
-                    <InfiniteImageSwiper images={archivedImages}/>
+                    <InfiniteImageSwiper
+                        images={archivedImages}
+                        numVisibleInitial={6}
+                        imageWidth={150}
+                        imageHeight={150}
+                        gap={20}
+                    />
                 </div>}
                 <SoldTitle />
                 <div className={styles.mobileSold}>
                     {archivedImages.map((item, index) => {
                         return(
                             <div className={styles.cell} key={index}>
-                                <Image src={item.image} alt={''} width={150} height={150} />
+                                <Image src={item.image} alt={''} width={300} height={300} />
                             </div>
                         )
                     })}

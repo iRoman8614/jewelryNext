@@ -6,6 +6,7 @@ import { useLanguage } from "@/components/LanguageProvider/LanguageProvider";
 import styles from './MobileItemCard.module.scss';
 import { getProductById } from "@/lib/api";
 import {useCart} from "@/components/CartProvider/CartProvider";
+import { hasSizes, definedSizes } from "@/lib/sizes";
 
 const arrow = '/images/arrow.svg';
 
@@ -25,17 +26,28 @@ export const MobileItemCard = ({ id, click }) => {
     const { lang } = useLanguage();
     const { cartItems, addToCart, removeFromCart } = useCart();
 
-    const itemInCart = cartItems.find(item => item.productId === Number(id));
-    const isInCart = !!itemInCart;
-
-    const handleAddToCartClick = () => addToCart(Number(id));
-    const handleRemoveFromCartClick = () => removeFromCart(Number(id));
-
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedSize, setSelectedSize] = useState(null);
 
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Размерный товар: выбор размера обязателен.
+    const sized = hasSizes(product?.sizes);
+    const sizeList = definedSizes(product?.sizes);
+    const effectiveSize = sized ? selectedSize : null;
+
+    const itemInCart = cartItems.find(item =>
+        item.productId === Number(id) && (item.size ?? null) === (effectiveSize ?? null)
+    );
+    const isInCart = !!itemInCart;
+
+    const handleAddToCartClick = () => {
+        if (sized && !selectedSize) return;
+        addToCart(Number(id), effectiveSize);
+    };
+    const handleRemoveFromCartClick = () => removeFromCart(Number(id), effectiveSize);
 
     useEffect(() => {
         if (!id) return;
@@ -128,19 +140,46 @@ export const MobileItemCard = ({ id, click }) => {
                         style={{ objectFit: 'cover' }}
                     />
                 </div>
-                <div className={styles.productImageBlock}>
-                    {!isInCart ? (
-                        <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
-                    ):(
-                        <Image src={'/images/BusketAdded.svg'} onClick={handleRemoveFromCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
-                    )}
-                    {/*<Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />*/}
-                </div>
-                <div className={styles.productSpecs}>
-                    <div className={styles.specItem}>
-                        <span>{product.details.size.label?.[lang]}</span>
-                        <span>{product.details.size.value}</span>
+                {/* Проданный товар (isVisible === false) — без кнопки покупки.
+                    Размерный товар — кнопка активна только после выбора размера. */}
+                {product.isVisible !== false && (!sized || selectedSize) && (
+                    <div className={styles.productImageBlock}>
+                        {!isInCart ? (
+                            <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
+                        ):(
+                            <Image src={'/images/BusketAdded.svg'} onClick={handleRemoveFromCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
+                        )}
+                        {/*<Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />*/}
                     </div>
+                )}
+                <div className={styles.productSpecs}>
+                    {sized ? (
+                        <div className={styles.sizeRow}>
+                            <span>{lang === 'ru' ? 'РАЗМЕР' : 'SIZE'}</span>
+                            <div className={styles.sizeOptions}>
+                                {sizeList.map((s) => {
+                                    const inStock = Number(product.sizes[s]) > 0;
+                                    const active = selectedSize === s;
+                                    return (
+                                        <button
+                                            key={s}
+                                            type="button"
+                                            disabled={!inStock}
+                                            className={`${styles.sizeOption} ${active ? styles.sizeOptionActive : ''} ${!inStock ? styles.sizeOptionDisabled : ''}`}
+                                            onClick={() => inStock && setSelectedSize(s)}
+                                        >
+                                            {s}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={styles.specItem}>
+                            <span>{product.details.size.label?.[lang]}</span>
+                            <span>{product.details.size.value}</span>
+                        </div>
+                    )}
                     <div className={styles.specItem}>
                         <span>{product.details.weight.label?.[lang]}</span>
                         <span>{product.details.weight.value}</span>
@@ -153,6 +192,11 @@ export const MobileItemCard = ({ id, click }) => {
                         <span className={styles.priceLable}>{product.details.price.label?.[lang]}</span>
                         <span className={styles.priceValue}>{product.details.price.value}</span>
                     </div>
+                    {product.description?.[lang] && (
+                        <div className={styles.description}>
+                            {formatMultilineText(product.description[lang])}
+                        </div>
+                    )}
                 </div>
             </div>
             <NextArrow onClick={goToNext} />

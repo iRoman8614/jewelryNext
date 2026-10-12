@@ -259,3 +259,44 @@ $content-left-edge: calc((100vw - min(#{$content-width-vw}, #{$content-max-width
 .customSwiperButtonNext {
   right: utils.auto-clamp(60, 380);
 }
+/* Селектор размеров (размерные товары) */
+.sizeOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sizeOption {
+  min-width: 44px;
+  padding: 8px 10px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  font-family: var(--font-text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+}
+
+.sizeOptionActive {
+  background: #000;
+  color: #fff;
+
+  &:hover {
+    background: #000;
+  }
+}
+
+.sizeOptionDisabled {
+  opacity: 0.35;
+  text-decoration: line-through;
+  cursor: not-allowed;
+
+  &:hover {
+    background: #fff;
+  }
+}

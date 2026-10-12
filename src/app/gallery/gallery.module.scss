@@ -14,7 +14,7 @@
   padding-left: utils.auto-clamp(20, 150);
   font-size: utils.auto-clamp(24, 64);
   margin-bottom: utils.auto-clamp(20, 60);
-  
+
   @media screen and (max-width: 768px) {
     padding-bottom: 20px;
     padding-left: 0;
@@ -69,17 +69,25 @@
 
   @media screen and (max-width: 768px) {
     margin-top: 50px;
+    padding: 0 15px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
     align-items: center;
     justify-content: center;
   }
 }
 
 .cell {
-  width: 150px;
-  height: 150px;
-  margin: 10px auto;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .mobileGalleryFooter {

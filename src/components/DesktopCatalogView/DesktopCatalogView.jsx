@@ -76,7 +76,8 @@ export default function DesktopCatalogView({ data, navigation }) {
         current.set('page', '1');
 
         const query = current.toString() ? `?${current.toString()}` : '';
-        router.push(`${pathname}${query}`);
+        // scroll:false — при смене сортировки не прыгать в начало страницы.
+        router.push(`${pathname}${query}`, { scroll: false });
     };
 
     const collectionData = getDataFromPath(navigation, pathname);

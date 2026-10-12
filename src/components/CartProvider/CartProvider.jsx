@@ -28,30 +28,40 @@ export function CartProvider({ children }) {
         }
     };
 
-    const addToCart = (productId) => {
-        const existingItem = cartItems.find(item => item.productId === productId);
+    // Позиция корзины идентифицируется парой (productId, size).
+    // size === null/undefined — безразмерный товар (старое поведение).
+    const sameLine = (item, productId, size) =>
+        item.productId === productId && (item.size ?? null) === (size ?? null);
+
+    const addToCart = (productId, size = null) => {
+        const existingItem = cartItems.find(item => sameLine(item, productId, size));
         let newCart;
         if (existingItem) {
             newCart = cartItems.map(item =>
-                item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
+                sameLine(item, productId, size) ? { ...item, quantity: item.quantity + 1 } : item
             );
         } else {
-            newCart = [...cartItems, { productId, quantity: 1 }];
+            newCart = [...cartItems, { productId, size: size ?? null, quantity: 1 }];
         }
         saveCart(newCart);
     };
 
-    const removeFromCart = (productId) => {
-        const newCart = cartItems.filter(item => item.productId !== productId);
+    const removeFromCart = (productId, size = null) => {
+        const newCart = cartItems.filter(item => !sameLine(item, productId, size));
         saveCart(newCart);
     };
 
-    const updateQuantity = (productId, quantity) => {
+    const updateQuantity = (productId, size, quantity) => {
+        // Поддержка старой сигнатуры updateQuantity(productId, quantity).
+        if (typeof quantity === 'undefined') {
+            quantity = size;
+            size = null;
+        }
         if (quantity <= 0) {
-            removeFromCart(productId);
+            removeFromCart(productId, size);
         } else {
             const newCart = cartItems.map(item =>
-                item.productId === productId ? { ...item, quantity } : item
+                sameLine(item, productId, size) ? { ...item, quantity } : item
             );
             saveCart(newCart);
         }

@@ -60,22 +60,31 @@
 }
 
 .popupContent {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  // Контейнер по размеру картинки (fit-content), без белых полей.
+  // Фон серый, лёгкий внутренний отступ-рамка.
+  background-color: #2b2b2b;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
   position: relative;
-  width: 90vw;
-  height: 90vh;
+  width: auto;
+  height: auto;
+  max-width: 94vw;
+  max-height: 94vh;
   cursor: default;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
 }
 
 .popupImage {
-  // Картинка теперь обычная (не fill) и центрируется флексом .popupContent.
+  // Обычная картинка с сохранением пропорций, вписана в экран.
   display: block;
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 86vh;
+  object-fit: contain;
 }
 
 .closeButton {
@@ -85,12 +94,12 @@
   background: none;
   border: none;
   font-size: 30px;
-  color: #333;
+  color: #fff;
   cursor: pointer;
   line-height: 1;
   padding: 5px;
   z-index: 1001;
   &:hover {
-    color: #000;
+    color: #ccc;
   }
 }

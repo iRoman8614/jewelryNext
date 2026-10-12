@@ -1,5 +1,5 @@
 'use client'
-import {custom, footerData} from '@/lib/home-page.data.js';
+import {custom} from '@/lib/home-page.data.js';
 import Image from 'next/image';
 import styles from './Custom.module.scss'
 import {useLanguage} from '@/components/LanguageProvider/LanguageProvider';
@@ -75,10 +75,11 @@ export default function Custom({ customData }) {
                     <Link href="/category/rings" className={styles.linkDesc}>
                         <button className={styles.footerBtn}>{lang === 'ru' ? "КАТАЛОГ" : "CATALOG"}</button>
                     </Link>
-                    <div
-                        className={styles.footerText}
-                        dangerouslySetInnerHTML={{ __html: footerData.text }}
-                    />
+                    <div className={styles.footerText}>
+                        {lang === 'ru'
+                            ? 'Мастерская: г. Москва, Малый Николопесковский 4'
+                            : 'Workshop: Moscow, Maly Nikolopeskovsky 4'}
+                    </div>
                 </div>
             </section>
         </div>

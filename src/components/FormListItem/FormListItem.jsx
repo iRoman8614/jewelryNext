@@ -35,6 +35,7 @@ export default function FormListItem({ item }) {
             </div>
             <div>{item.type[lang].toUpperCase()}</div>
             <div>{item.name[lang].toUpperCase()}</div>
+            {item.size && <div>{(lang === 'ru' ? 'РАЗМЕР' : 'SIZE')}: {item.size}</div>}
             <div className={styles.sumConteiner}>
                 <div>{formattedPrice}</div>
             </div>
@@ -42,7 +43,7 @@ export default function FormListItem({ item }) {
                 className={styles.buttonContainer}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                onClick={() => removeFromCart(item.id)}
+                onClick={() => removeFromCart(item.id, item.size)}
                 role="button"
                 tabIndex={0}
             >

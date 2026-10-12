@@ -40,9 +40,9 @@ export default function CartClient({ navigation, checkoutOptions }) {
             setError(null);
 
             try {
-                const requestBody = {
-                    items: itemsFromProvider.map(item => ({ productId: item.productId }))
-                };
+                // Уникальные productId (один товар может быть в корзине в разных размерах).
+                const uniqueIds = [...new Set(itemsFromProvider.map(item => item.productId))];
+                const requestBody = { items: uniqueIds.map(productId => ({ productId })) };
 
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/checkout/cart`, {
                     method: 'POST',
@@ -59,14 +59,18 @@ export default function CartClient({ navigation, checkoutOptions }) {
                 // про 400 от /_next/image на относительных "/uploads/..." путях).
                 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || window.location.origin;
 
-                const enrichedItems = productsFromApi.map(product => {
-                    const itemInCart = itemsFromProvider.find(p => p.productId === product.id);
+                // Строим по ПОЗИЦИЯМ корзины (productId + size), подтягивая товар по id.
+                const enrichedItems = itemsFromProvider.map(ci => {
+                    const product = productsFromApi.find(p => p.id === ci.productId);
+                    if (!product) return null;
                     return {
                         ...product,
-                        quantity: itemInCart ? itemInCart.quantity : 0,
-                        imageUrl: `${baseUrl}${product.image}`
+                        size: ci.size ?? null,
+                        quantity: ci.quantity,
+                        imageUrl: `${baseUrl}${product.image}`,
+                        lineKey: `${product.id}__${ci.size ?? ''}`,
                     };
-                }).filter(item => item.quantity > 0);
+                }).filter(Boolean).filter(item => item.quantity > 0);
 
                 setDetailedCartItems(enrichedItems);
 
@@ -169,10 +173,10 @@ export default function CartClient({ navigation, checkoutOptions }) {
                         {detailedCartItems.length > 0 ? (
                             detailedCartItems.map(item => (
                                 <CartItem
-                                    key={item.id}
+                                    key={item.lineKey}
                                     item={item}
-                                    onRemove={() => removeFromCart(item.id)}
-                                    onQuantityChange={updateQuantity}
+                                    onRemove={() => removeFromCart(item.id, item.size)}
+                                    onQuantityChange={(id, qty) => updateQuantity(id, item.size, qty)}
                                 />
                             ))
                         ) : (

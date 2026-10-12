@@ -141,7 +141,8 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
             policyConsent: Boolean(data.policyConsent),
             items: cartItems.map(item => ({
                 productId: item.id,
-                quantity: item.quantity
+                quantity: item.quantity,
+                size: item.size ?? null
             })),
         };
 

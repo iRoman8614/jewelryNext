@@ -219,17 +219,22 @@ import { MobileItemCard } from "@/components/MobileItemCard/MobileItemCard";
 import { getProducts } from '@/lib/api';
 import {useCart} from "@/components/CartProvider/CartProvider";
 import {SortSelect} from "@/components/Selector/Selector";
+import { hasSizes } from "@/lib/sizes";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 const ProductItemContent = ({ item, lang }) => {
     const productName = item.name?.[lang] || '';
     const { cartItems, addToCart, removeFromCart } = useCart();
 
-    const itemInCart = cartItems.find(product => product.productId === item.id);
+    // Размерный товар нельзя добавить быстрой кнопкой из каталога — размер
+    // выбирается в карточке (клик по товару её открывает).
+    const sized = hasSizes(item.sizes);
+
+    const itemInCart = cartItems.find(product => product.productId === item.id && (product.size ?? null) === null);
     const isInCart = !!itemInCart;
 
-    const handleAddToCartClick = () => addToCart(item.id);
-    const handleRemoveFromCartClick = () => removeFromCart(item.id);
+    const handleAddToCartClick = (e) => { e.stopPropagation(); addToCart(item.id, null); };
+    const handleRemoveFromCartClick = (e) => { e.stopPropagation(); removeFromCart(item.id, null); };
 
     // С бэка price приходит строкой вида "260000.00" — округляем и убираем
     // копейки для показа в каталоге.
@@ -243,11 +248,11 @@ const ProductItemContent = ({ item, lang }) => {
             <div className={styles.productItem}>
                 <div className={styles.productImageBlock}>
                     <Image className={styles.productImage} src={item.image} alt={productName} width={185} height={220} />
-                    {!isInCart ? (
+                    {!sized && (!isInCart ? (
                         <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
                     ):(
                         <Image src={'/images/BusketAdded.svg'} onClick={handleRemoveFromCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
-                    )}
+                    ))}
                     {/*<Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />*/}
                 </div>
                 <div className={styles.productInfo}>
@@ -308,7 +313,8 @@ export default function MobileCatalogView({
         current.set('page', '1');
 
         const query = current.toString() ? `?${current.toString()}` : '';
-        router.push(`${pathname}${query}`);
+        // scroll:false — при смене сортировки не прыгать в начало страницы.
+        router.push(`${pathname}${query}`, { scroll: false });
     };
 
     const observer = useRef();
@@ -405,11 +411,6 @@ export default function MobileCatalogView({
                         );
                     })}
                 </div>
-            </div>
-            <div className={styles.newItems}>
-                {localizedFeaturedItems.map((item, index) => (
-                    <Image key={index} className={styles.pictItem} src={item.url} alt={item.alt} width={185} height={300} />
-                ))}
             </div>
             <SortSelect
                 lang={lang}
