@@ -132,15 +132,16 @@
   position: absolute;
   bottom: 16px;
   right: 16px;
-  // Крупнее и акцентнее: белая плашка, чёрная рамка, тень.
+  // Крупнее и акцентнее. Иконка basket.svg БЕЛАЯ, поэтому фон тёмный,
+  // иначе кнопка «купить» невидима (белое на белом).
   width: 30px;
   height: 30px;
   padding: 12px;
   box-sizing: content-box;
-  background-color: #fff;
-  border: 2px solid #000;
+  background-color: #000;
+  border: 2px solid #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
   cursor: pointer;
   transition: transform 0.15s ease;
 
