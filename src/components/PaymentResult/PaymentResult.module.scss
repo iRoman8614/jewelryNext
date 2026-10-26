@@ -1,0 +1,127 @@
+@use '../../app/styles/utils' as utils;
+
+.root {
+  font-family: var(--font-text);
+  background-color: #fff;
+  color: #000;
+  padding: utils.auto-clamp(40, 100) utils.auto-clamp(16, 80);
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: utils.auto-clamp(26, 56);
+  font-weight: 400;
+  letter-spacing: 2px;
+  margin: 0 0 36px 0;
+  text-align: center;
+}
+
+.orderRow {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: utils.auto-clamp(13, 16);
+}
+
+.muted {
+  opacity: 0.55;
+  margin-right: 8px;
+}
+
+.body {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.text {
+  text-align: center;
+  font-size: utils.auto-clamp(15, 20);
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.success {
+  font-size: utils.auto-clamp(16, 22);
+}
+
+.note {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.7;
+  margin: 0 0 20px 0;
+}
+
+.error {
+  text-align: center;
+  color: #b00020;
+  font-size: 14px;
+  margin: 12px 0 0 0;
+}
+
+.button {
+  font-family: var(--font-text);
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 10px auto;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.link {
+  margin-top: 28px;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #ddd;
+  border-top-color: #000;
+  border-radius: 50%;
+  margin: 0 auto 20px auto;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,6 +30,26 @@ import { useCart } from "@/components/CartProvider/CartProvider";
 
 const PAY_ON_DELIVERY_VALUES = ['pickup', 'pick up'];
 
+// Ключ идемпотентности оформления. Живёт в sessionStorage, пока заказ не
+// создан: двойной клик, повторная отправка после перезагрузки или обрыва сети
+// приходят с тем же ключом, и бэк возвращает УЖЕ созданный заказ, а не новый.
+const CHECKOUT_KEY_STORAGE = 'checkoutKey';
+const newCheckoutKey = () => (typeof crypto !== 'undefined' && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+const getCheckoutKey = () => {
+    try {
+        let key = sessionStorage.getItem(CHECKOUT_KEY_STORAGE);
+        if (!key) { key = newCheckoutKey(); sessionStorage.setItem(CHECKOUT_KEY_STORAGE, key); }
+        return key;
+    } catch {
+        return newCheckoutKey();
+    }
+};
+const resetCheckoutKey = () => {
+    try { sessionStorage.removeItem(CHECKOUT_KEY_STORAGE); } catch { /* ignore */ }
+};
+
 export default function ConfirmForm({ checkoutOptions, action, cartItems = [] }) {
     const { lang } = useLanguage();
     const { clearCart } = useCart();
@@ -37,6 +57,8 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
     const [isHovered, setIsHovered] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
+    // Синхронная защита от двойного клика (state обновляется асинхронно).
+    const submittingRef = useRef(false);
     // Тост-уведомление (успех/ошибка) вместо alert. Рендерится порталом в body,
     // поэтому переживает закрытие формы. Автоскрытие через 4 сек.
     const [toast, setToast] = useState(null);
@@ -57,6 +79,7 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
         reqAddress: 'Адрес обязателен для заполнения',
         reqDelivery: 'Выберите способ доставки', reqPayment: 'Выберите способ оплаты',
         success: 'Заказ успешно оформлен!', serverError: 'Ошибка сервера',
+        redirecting: 'ПЕРЕХОД К ОПЛАТЕ...', toPayment: 'Переходим к оплате…',
         sendFail: 'Не удалось отправить заказ.',
         consentPD: 'Я даю согласие на обработку моих персональных данных',
         consentPolicyPre: 'Я ознакомлен(а) и согласен(на) с ',
@@ -73,6 +96,7 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
         reqAddress: 'Address is required',
         reqDelivery: 'Select a delivery method', reqPayment: 'Select a payment method',
         success: 'Order placed successfully!', serverError: 'Server error',
+        redirecting: 'REDIRECTING TO PAYMENT...', toPayment: 'Redirecting to payment…',
         sendFail: 'Failed to submit the order.',
         consentPD: 'I consent to the processing of my personal data',
         consentPolicyPre: 'I have read and agree to the ',
@@ -108,6 +132,9 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
         minimumFractionDigits: 0
     }).format(finalTotalAmount);
 
+    const selectedPaymentValue = watch('paymentMethod');
+    const selectedPaymentOnline = Boolean(allPaymentOptions.find((o) => o.value === selectedPaymentValue)?.online);
+
     const visiblePaymentOptions = selectedDeliveryOption?.allowsPaymentOnDelivery === false
         ? allPaymentOptions.filter(option => !PAY_ON_DELIVERY_VALUES.includes(option.value))
         : allPaymentOptions;
@@ -122,8 +149,12 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
     }, [selectedDeliveryValue, visiblePaymentOptions, watch, setValue]);
 
     const onSubmit = async (data) => {
+        if (submittingRef.current) return;
+        submittingRef.current = true;
         setIsSubmitting(true);
         setSubmitError(null);
+        const checkoutKey = getCheckoutKey();
+        let redirecting = false;
 
         const payload = {
             customerName: data.fullName,
@@ -149,25 +180,53 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/orders`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Idempotency-Key': checkoutKey },
                 body: JSON.stringify(payload)
             });
 
             if (!res.ok) {
+                // Сервер ответил ошибкой — заказ НЕ создан, ключ можно сбросить
+                // (корзину могут поменять, следующий заказ — с новым ключом).
+                resetCheckoutKey();
                 const errorData = await res.json().catch(() => ({ message: `${t.serverError}: ${res.statusText}` }));
                 throw new Error(errorData.message || t.sendFail);
             }
 
-            showToast('success', t.success);
+            const order = await res.json().catch(() => ({}));
+            // Заказ создан (или уже был создан этим ключом) — ключ больше не нужен.
+            resetCheckoutKey();
             clearCart();
+
+            // Онлайн-оплата (ЮKassa): уходим на страницу оплаты. Если ссылку получить
+            // не удалось — на страницу статуса, там есть кнопка «Оплатить».
+            if (order?.payment && order.status === 'awaiting_payment') {
+                redirecting = true;
+                showToast('success', t.toPayment);
+                const resultUrl = `/payment/result?order=${order.id}&token=${order.publicToken}`;
+                // replace: кнопка «назад» из ЮKassa не вернёт на отправку формы.
+                window.location.replace(order.payment.confirmationUrl || resultUrl);
+                return;
+            }
+            if (order?.paymentStatus === 'succeeded' && order?.publicToken) {
+                redirecting = true;
+                window.location.replace(`/payment/result?order=${order.id}&token=${order.publicToken}`);
+                return;
+            }
+
+            showToast('success', t.success);
             action();
 
         } catch (error) {
+            // Сетевая ошибка (ответа нет): ключ НЕ сбрасываем — заказ мог создаться,
+            // повторная отправка вернёт его, а не создаст второй.
             console.error("Order submit error:", error);
             setSubmitError(error.message);
             showToast('error', error.message || t.sendFail);
         } finally {
-            setIsSubmitting(false);
+            if (!redirecting) {
+                submittingRef.current = false;
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -319,7 +378,7 @@ export default function ConfirmForm({ checkoutOptions, action, cartItems = [] })
                         className={styles.submitButton}
                         disabled={isSubmitting || !consentsGiven}
                     >
-                        {isSubmitting ? t.submitting : t.pay}
+                        {isSubmitting ? (selectedPaymentOnline ? t.redirecting : t.submitting) : t.pay}
                     </button>
                 </form>
             </div>
