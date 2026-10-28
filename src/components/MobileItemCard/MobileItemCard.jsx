@@ -166,6 +166,15 @@ export const MobileItemCard = ({ id, click }) => {
             {/* Тап по затемнению вокруг карточки — закрыть. */}
             <div className={styles.clicker} onClick={click} />
             <div className={styles.container}>
+                {/* Явная кнопка закрытия (тап по затемнению вокруг тоже закрывает). */}
+                <button
+                    type="button"
+                    className={styles.closeButton}
+                    onClick={click}
+                    aria-label={lang === 'ru' ? 'Закрыть' : 'Close'}
+                >
+                    <span className={styles.closeIcon} aria-hidden="true" />
+                </button>
                 <div className={styles.slideWrapper} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                     <Image
                         key={currentIndex}
@@ -182,19 +191,20 @@ export const MobileItemCard = ({ id, click }) => {
                             <NextArrow onClick={goToNext} />
                         </>
                     )}
+                    {/* Кнопка корзины — в левом верхнем углу фото (справа — крестик). */}
+                    {/* Проданный товар (isVisible === false) — без кнопки покупки.
+                        Размерный товар — кнопка активна только после выбора размера. */}
+                    {product.isVisible !== false && (!sized || selectedSize) && (
+                        <div className={styles.productImageBlock}>
+                            {!isInCart ? (
+                                <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
+                            ):(
+                                <Image src={'/images/BusketAdded.svg'} onClick={handleRemoveFromCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
+                            )}
+                            {/*<Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />*/}
+                        </div>
+                    )}
                 </div>
-                {/* Проданный товар (isVisible === false) — без кнопки покупки.
-                    Размерный товар — кнопка активна только после выбора размера. */}
-                {product.isVisible !== false && (!sized || selectedSize) && (
-                    <div className={styles.productImageBlock}>
-                        {!isInCart ? (
-                            <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
-                        ):(
-                            <Image src={'/images/BusketAdded.svg'} onClick={handleRemoveFromCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
-                        )}
-                        {/*<Image src={'/images/Heart.svg'} className={styles.heart} alt="add to favorites" width={20} height={20} />*/}
-                    </div>
-                )}
                 <div className={styles.productSpecs}>
                     {sized ? (
                         <div className={styles.sizeRow}>
