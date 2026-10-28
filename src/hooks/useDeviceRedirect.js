@@ -32,11 +32,8 @@ export function useDeviceRedirect() {
             }
         }
 
-        // Если мы на мобилке и находимся на категории с подкатегорией
-        if (isMobile && currentPath.match(/^\/category\/[^/]+/)) {
-            router.replace('/category');
-            return;
-        }
+        // Мобильная версия теперь тоже открывает /category/{slug} (фильтр по
+        // категории, как на десктопе) — редиректа на общий /category больше нет.
 
     }, [router, searchParams]);
 }

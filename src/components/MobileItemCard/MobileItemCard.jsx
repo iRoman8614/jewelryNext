@@ -32,6 +32,14 @@ export const MobileItemCard = ({ id, click }) => {
     const [selectedSize, setSelectedSize] = useState(null);
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [descOpen, setDescOpen] = useState(false);
+
+    // Пока открыт попап — страница под ним не прокручивается.
+    useEffect(() => {
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = prev; };
+    }, []);
 
     // Размерный товар: выбор размера обязателен.
     const sized = hasSizes(product?.sizes);
@@ -93,6 +101,17 @@ export const MobileItemCard = ({ id, click }) => {
             return () => clearTimeout(timer);
         }
     }, [currentIndex, product]);
+
+    // Описание из админки приходит с HTML-тегами (<p>… от редактора) —
+    // убираем теги, абзацы превращаем в переносы (как в десктопной карточке).
+    const descriptionText = (product?.description?.[lang] || '')
+        .replace(/<\/p>\s*<p>/gi, '\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+    const descriptionLong = descriptionText.length > 140 || descriptionText.split('\n').length > 3;
 
     const formatMultilineText = (text) => {
         if (!text) return null;
@@ -192,9 +211,18 @@ export const MobileItemCard = ({ id, click }) => {
                         <span className={styles.priceLable}>{product.details.price.label?.[lang]}</span>
                         <span className={styles.priceValue}>{product.details.price.value}</span>
                     </div>
-                    {product.description?.[lang] && (
-                        <div className={styles.description}>
-                            {formatMultilineText(product.description[lang])}
+                    {descriptionText && (
+                        <div className={styles.descriptionBlock}>
+                            <div className={`${styles.description} ${descOpen ? styles.descriptionOpen : (descriptionLong ? styles.descriptionClamped : '')}`}>
+                                {formatMultilineText(descriptionText)}
+                            </div>
+                            {descriptionLong && (
+                                <button type="button" className={styles.descriptionToggle} onClick={() => setDescOpen((v) => !v)}>
+                                    {descOpen
+                                        ? (lang === 'ru' ? 'Свернуть' : 'Show less')
+                                        : (lang === 'ru' ? 'Подробнее' : 'Read more')}
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>

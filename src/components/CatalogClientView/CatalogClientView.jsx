@@ -98,7 +98,7 @@
 // src/components/CatalogClientView/CatalogClientView.jsx (для статической версии)
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getProducts } from '@/lib/api';
 import DesktopCatalogView from '@/components/DesktopCatalogView/DesktopCatalogView';
@@ -124,6 +124,9 @@ export default function CatalogClientView({
     const [pageData, setPageData] = useState(initialData);
     const [isLoading, setIsLoading] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    // Номер последнего запроса: ответ устаревшего (быстрая смена сортировки)
+    // не перетирает свежий.
+    const requestIdRef = useRef(0);
 
     const isClient = useIsClient();
     const searchParams = useSearchParams();
@@ -157,11 +160,8 @@ export default function CatalogClientView({
         const currentPath = window.location.pathname;
         const categorySlug = params.slug?.[0];
 
-        // Если мобилка на десктопном URL категории - редиректим на общий каталог
-        if (isMobile && categorySlug && !itemId) {
-            router.replace('/category');
-            return;
-        }
+        // Мобилка на /category/{slug} остаётся на нём (фильтр по категории,
+        // как на десктопе). Раньше здесь был редирект на общий /category.
 
         // Если десктоп на мобильном URL товара - редиректим на страницу товара
         if (!isMobile && !categorySlug && itemId) {
@@ -173,13 +173,18 @@ export default function CatalogClientView({
     useEffect(() => {
         if (!isClient) return;
 
-        const isFirstLoad = page === '1' && !sort && !itemId;
+        // item (открытый попап товара на мобиле) на список не влияет — по нему
+        // не перезапрашиваем товары (раньше открытие карточки перегружало страницу).
+        const isFirstLoad = page === '1' && !sort;
         if (isFirstLoad) {
+            requestIdRef.current++; // отменить ответ запроса, который ещё в пути
+            setIsLoading(false);
             setPageData(initialData);
             return;
         }
 
         const fetchData = async () => {
+            const requestId = ++requestIdRef.current;
             setIsLoading(true);
             try {
                 const newData = await getProducts({
@@ -188,29 +193,33 @@ export default function CatalogClientView({
                     page,
                     sort,
                 });
+                if (requestId !== requestIdRef.current) return;
 
-                setPageData(prevData => ({
-                    ...prevData,
+                // Мета категории/коллекции — от текущего маршрута (initialData),
+                // а не из предыдущего состояния.
+                setPageData({
+                    ...initialData,
                     products: newData.products || [],
                     pagination: {
                         totalPages: newData.totalPages || 1,
                         currentPage: newData.currentPage || 1,
                         totalProducts: newData.totalProducts || 0,
                     },
-                    selectedItemId: itemId,
-                }));
+                });
             } catch (error) {
                 console.error('Error fetching products:', error);
             } finally {
-                setIsLoading(false);
+                if (requestId === requestIdRef.current) setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [page, sort, itemId, params.slug, initialData, isClient]);
+    }, [page, sort, params.slug, initialData, isClient]);
 
-    // Показываем лоадер до полной загрузки клиента или во время загрузки
-    if (!isClient || isLoading) {
+    // Полноэкранный лоадер — только до гидратации и для десктопа (там смена
+    // страницы пагинации). На мобиле при сортировке страница остаётся на месте,
+    // обновляется только список товаров (MobileCatalogView получает isFetching).
+    if (!isClient || (isLoading && !isMobile)) {
         return <Loader />;
     }
 
@@ -230,6 +239,7 @@ export default function CatalogClientView({
                     mobileSliderImages={mobileSliderData}
                     featuredProducts={featuredProductsData}
                     selectedItemId={itemId}
+                    isFetching={isLoading}
                 />
             </div>
         </>

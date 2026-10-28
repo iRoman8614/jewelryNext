@@ -274,7 +274,8 @@ export default function MobileCatalogView({
                                               iconLinks,
                                               mobileSliderImages,
                                               featuredProducts,
-                                              selectedItemId // Новый пропс для выбранного товара
+                                              selectedItemId, // Новый пропс для выбранного товара
+                                              isFetching = false, // идёт перезагрузка списка (сортировка)
                                           }) {
     const { lang } = useLanguage()
     const { categoryInfo, collectionInfo, pagination } = data;
@@ -288,6 +289,14 @@ export default function MobileCatalogView({
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [sortOption, setSortOption] = useState(searchParams.get('sort') || 'default');
+    const sortParam = searchParams.get('sort');
+    // Активная категория — из маршрута /category/{slug} (как на десктопе).
+    const activeCategory = categoryInfo?.slug || null;
+
+    // Сортировка в URL поменялась (назад/вперёд) — синхронизируем селектор.
+    useEffect(() => {
+        setSortOption(sortParam || 'default');
+    }, [sortParam]);
 
     useEffect(() => {
         setDisplayedProducts(data.products || []);
@@ -328,6 +337,8 @@ export default function MobileCatalogView({
             category: categoryInfo?.slug,
             collection: collectionInfo?.slug,
             page: nextPage,
+            // следующая страница — с той же сортировкой, что и первая
+            ...(sortParam ? { sort: sortParam } : {}),
         });
 
         if (newData.products && newData.products.length > 0) {
@@ -339,7 +350,7 @@ export default function MobileCatalogView({
         }
 
         setIsLoading(false);
-    }, [isLoading, hasMore, currentPage, categoryInfo, collectionInfo]);
+    }, [isLoading, hasMore, currentPage, categoryInfo, collectionInfo, sortParam]);
 
     const lastProductElementRef = useCallback(node => {
         if (isLoading) return;
@@ -362,7 +373,7 @@ export default function MobileCatalogView({
         const current = new URLSearchParams(Array.from(searchParams.entries()));
         current.set('item', itemIdStr);
         const query = current.toString() ? `?${current.toString()}` : '';
-        router.push(`${pathname}${query}`, { shallow: true });
+        router.push(`${pathname}${query}`, { scroll: false });
     };
 
     const handleItemClose = () => {
@@ -372,7 +383,7 @@ export default function MobileCatalogView({
         const current = new URLSearchParams(Array.from(searchParams.entries()));
         current.delete('item');
         const query = current.toString() ? `?${current.toString()}` : '';
-        router.push(`${pathname}${query}`, { shallow: true });
+        router.push(`${pathname}${query}`, { scroll: false });
     };
 
     const localizedFeaturedItems = featuredProducts.map(item => ({
@@ -397,8 +408,17 @@ export default function MobileCatalogView({
                     {navigation.map((category, index) => {
                         const icon = iconLinks?.[index];
                         if (!icon) return null;
+                        const isActive = activeCategory === category.slug;
+                        // Как на десктопе: /category/{slug}. Повторный тап по
+                        // активной категории — назад ко всем товарам.
                         return (
-                            <Link key={category.slug} href={`/category/${category.slug}`} className={styles.categoryLink}>
+                            <Link
+                                key={category.slug}
+                                href={isActive ? '/category' : `/category/${category.slug}`}
+                                scroll={false}
+                                aria-current={isActive ? 'page' : undefined}
+                                className={`${styles.categoryLink} ${isActive ? styles.categoryLinkActive : ''}`}
+                            >
                                 <Image
                                     className={styles.categoryCircle}
                                     src={icon.image}
@@ -417,7 +437,7 @@ export default function MobileCatalogView({
                 sortOption={sortOption}
                 handleSortChange={handleSortChange}
             />
-            <div className={styles.categoryItems}>
+            <div className={`${styles.categoryItems} ${isFetching ? styles.categoryItemsFetching : ''}`} aria-busy={isFetching}>
                 {displayedProducts.map((item, index) => {
                     const itemId = item.id || index;
                     if (displayedProducts.length === index + 1) {
@@ -436,7 +456,10 @@ export default function MobileCatalogView({
                 })}
             </div>
 
-            {isLoading && <div className={styles.loader}>Загрузка...</div>}
+            {(isLoading || isFetching) && <div className={styles.loader}>{lang === 'ru' ? 'Загрузка...' : 'Loading...'}</div>}
+            {!isFetching && displayedProducts.length === 0 && (
+                <div className={styles.loader}>{lang === 'ru' ? 'Товаров пока нет' : 'No items yet'}</div>
+            )}
 
             {itemDetail !== null && <MobileItemCard id={itemDetail} click={handleItemClose} /> }
         </>

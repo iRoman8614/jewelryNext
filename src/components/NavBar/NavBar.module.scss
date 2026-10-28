@@ -4,8 +4,13 @@
   background-color: #000000;
   font-family: var(--font-text);
   display: flex;
-  position: relative;
-  z-index: 100;
+  // Шапка «прилипает» к верху при прокрутке на всех страницах. sticky (а не
+  // fixed) — шапка остаётся в потоке, поэтому контент под неё не заезжает и
+  // отдельный отступ сверху не нужен. z-index: выше контента страниц (≤200),
+  // ниже всплывающих окон (форма заказа 600, попапы ≥1000).
+  position: sticky;
+  top: 0;
+  z-index: 500;
   overflow: visible !important;
 
   @media screen and (max-width: 768px) {
@@ -19,8 +24,9 @@
   font-family: var(--font-text);
   filter: invert(1);
   display: flex;
-  position: relative;
-  z-index: 100;
+  position: sticky;
+  top: 0;
+  z-index: 500;
   overflow: visible !important;
 
   @media screen and (max-width: 768px) {

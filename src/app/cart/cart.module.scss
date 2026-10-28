@@ -64,7 +64,8 @@
   overflow-y: auto;
   padding: 60px 0;
   background-color: rgba(128, 128, 128, 0.7);
-  z-index: 200;
+  // Выше закреплённой шапки (z-index 500), чтобы затемнение её перекрывало.
+  z-index: 600;
 }
 
 .rootMobile {
