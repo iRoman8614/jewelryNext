@@ -1,0 +1,238 @@
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100000;
+  height: 100vh;
+  height: 100dvh; // учитывает панель браузера на телефоне
+  // Темнее фон-подложка для акцента на карточке.
+  background-color: rgba(0, 0, 0, 0.85);
+  // Карточка вписывается в экран (см. .container) — прокрутки в норме нет.
+  // auto оставлен только как страховка для совсем маленьких экранов.
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.clicker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+}
+
+.row {
+  display: flex;
+}
+
+.container {
+  position: relative;
+  z-index: 100001;
+  // Крупнее: почти вся ширина экрана, с разумным потолком.
+  width: 92vw;
+  max-width: 380px;
+  border: 1px solid black;
+  background-color: white;
+  // Высота не больше экрана, по 20px сверху и снизу — тап туда закрывает карточку.
+  margin: 20px auto;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.slideWrapper {
+  width: 100%;
+  // Фото занимает всё, что осталось от характеристик и описания: на длинных
+  // карточках оно ужимается, а не выталкивает контент за экран.
+  aspect-ratio: 288 / 400;
+  flex: 1 1 auto;
+  // Не ниже 230px: стрелки (по центру по высоте) и кнопка корзины (в правом
+  // нижнем углу) не должны пересекаться.
+  min-height: 230px;
+  border-bottom: 1px solid black;
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y; // вертикальный жест — браузеру, горизонтальный — свайп фото
+
+  img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+  }
+}
+
+.productSpecs {
+  padding: 18px 22px;
+  font-size: 14px;
+  flex: 0 0 auto;
+}
+
+.specItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.materialItem {
+  display: block;
+  // Выравнивание значения материала по правому краю.
+  text-align: right;
+  margin-left: 10px;
+}
+
+.descriptionBlock {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #ddd;
+}
+
+.description {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+  text-align: left;
+  overflow-wrap: anywhere; // длинные слова/ссылки не раздвигают карточку
+}
+
+// Свёрнуто: 3 строки.
+.descriptionClamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Развёрнуто: прокрутка внутри описания, карточка остаётся в экране.
+.descriptionOpen {
+  max-height: 26vh;
+  max-height: 26dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+}
+
+.descriptionToggle {
+  margin-top: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #000;
+  font-family: var(--font-text);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.arrow {
+  // Внутри фото, по центру по высоте — отдельно от кнопки корзины внизу.
+  position: absolute;
+  top: 50%;
+  margin-top: -22px;
+  // Обводка и фон, чтобы кнопки смены картинки были заметны.
+  background: rgba(0, 0, 0, 0.45);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 100002;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.65);
+  }
+}
+
+.prevArrow {
+  left: 10px;
+  rotate: 180deg;
+}
+
+.nextArrow {
+  right: 10px;
+}
+
+
+.productImageBlock {
+  position: relative;
+}
+
+.busket {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  // Крупнее и акцентнее. Иконка basket.svg БЕЛАЯ, поэтому фон тёмный,
+  // иначе кнопка «купить» невидима (белое на белом).
+  width: 30px;
+  height: 30px;
+  padding: 12px;
+  box-sizing: content-box;
+  background-color: #000;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+.heart {
+  position: absolute;
+  bottom: 15px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+/* Селектор размеров (размерные товары) */
+.sizeRow {
+  margin-bottom: 14px;
+
+  > span {
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+
+.sizeOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sizeOption {
+  min-width: 40px;
+  padding: 7px 8px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  font-family: var(--font-text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sizeOptionActive {
+  background: #000;
+  color: #fff;
+}
+
+.sizeOptionDisabled {
+  opacity: 0.35;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}

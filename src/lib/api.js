@@ -232,10 +232,18 @@ export const getProducts = async (params = {}) => {
         tags: [TAGS.products], revalidate: REVALIDATE.products, fallback,
     });
     const safe = data ?? fallback;
-    const formattedProducts = (safe.products || []).map(product => ({
-        ...product,
-        image: product.previewImage ? `${BASE_URL}${product.previewImage}` : undefined,
-    }));
+    const formattedProducts = (safe.products || []).map(product => {
+        // images — все фото товара (бэк отдаёт превью первым). Старый бэк без
+        // images: падаем обратно на одно превью.
+        const raw = Array.isArray(product.images) && product.images.length
+            ? product.images
+            : (product.previewImage ? [product.previewImage] : []);
+        return {
+            ...product,
+            image: product.previewImage ? `${BASE_URL}${product.previewImage}` : undefined,
+            images: raw.map((src) => `${BASE_URL}${src}`),
+        };
+    });
     return { ...safe, products: formattedProducts };
 };
 
