@@ -58,7 +58,8 @@
   transition: opacity 0.2s ease;
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(2, 1fr);
+  // minmax(0, 1fr): колонка не растягивается под ленту фото (свайп).
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-content: center;
   align-items: end;
 }
@@ -211,4 +212,47 @@
 .categoryItemsFetching {
   opacity: 0.4;
   pointer-events: none;
+}
+
+/* Свайп фото в карточке списка */
+.imageTrack {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.imageSlide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.imageDots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.imageDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.imageDotActive {
+  background-color: rgba(0, 0, 0, 0.8);
 }

@@ -35,10 +35,10 @@
   max-width: 380px;
   border: 1px solid black;
   background-color: white;
-  // Высота не больше экрана: 20px сверху + 85px под нижнюю плашку.
-  margin: 20px auto 85px auto;
-  max-height: calc(100vh - 105px);
-  max-height: calc(100dvh - 105px);
+  // Высота не больше экрана, по 20px сверху и снизу — тап туда закрывает карточку.
+  margin: 20px auto;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -50,9 +50,13 @@
   // карточках оно ужимается, а не выталкивает контент за экран.
   aspect-ratio: 288 / 400;
   flex: 1 1 auto;
-  min-height: 160px;
+  // Не ниже 230px: стрелки (по центру по высоте) и кнопка корзины (в правом
+  // нижнем углу) не должны пересекаться.
+  min-height: 230px;
   border-bottom: 1px solid black;
   overflow: hidden;
+  position: relative;
+  touch-action: pan-y; // вертикальный жест — браузеру, горизонтальный — свайп фото
 
   img {
     width: 100% !important;
@@ -127,8 +131,10 @@
 }
 
 .arrow {
+  // Внутри фото, по центру по высоте — отдельно от кнопки корзины внизу.
   position: absolute;
-  top: 38%;
+  top: 50%;
+  margin-top: -22px;
   // Обводка и фон, чтобы кнопки смены картинки были заметны.
   background: rgba(0, 0, 0, 0.45);
   color: white;
@@ -150,30 +156,14 @@
 }
 
 .prevArrow {
-  left: 12px;
+  left: 10px;
   rotate: 180deg;
 }
 
 .nextArrow {
-  right: 12px;
+  right: 10px;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-  height: 75px;
-  background-color: #282828;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000000;
-}
-
-.hideArrow {
-  rotate: 90deg;
-  margin: auto;
-}
 
 .productImageBlock {
   position: relative;

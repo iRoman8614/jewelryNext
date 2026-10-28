@@ -222,8 +222,50 @@ import {SortSelect} from "@/components/Selector/Selector";
 import { hasSizes } from "@/lib/sizes";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
+// Фото товара в списке: листаются пальцем (scroll-snap), тап — открывает
+// карточку (клик по родителю). Одно фото — обычная картинка, как раньше.
+const ProductImages = ({ images, alt }) => {
+    const [index, setIndex] = useState(0);
+    const trackRef = useRef(null);
+
+    const onScroll = () => {
+        const el = trackRef.current;
+        if (!el || !el.clientWidth) return;
+        const i = Math.round(el.scrollLeft / el.clientWidth);
+        if (i !== index) setIndex(i);
+    };
+
+    if (images.length <= 1) {
+        return <Image className={styles.productImage} src={images[0]} alt={alt} width={185} height={220} />;
+    }
+    return (
+        <>
+            <div className={styles.imageTrack} ref={trackRef} onScroll={onScroll}>
+                {images.map((src, i) => (
+                    <div className={styles.imageSlide} key={`${src}-${i}`}>
+                        <Image
+                            className={styles.productImage}
+                            src={src}
+                            alt={i === 0 ? alt : ''}
+                            width={185}
+                            height={220}
+                            draggable={false}
+                        />
+                    </div>
+                ))}
+            </div>
+            <div className={styles.imageDots} aria-hidden="true">
+                {images.map((_, i) => (
+                    <span key={i} className={`${styles.imageDot} ${i === index ? styles.imageDotActive : ''}`} />
+                ))}
+            </div>
+        </>
+    );
+};
+
 const ProductItemContent = ({ item, lang }) => {
     const productName = item.name?.[lang] || '';
+    const images = (item.images && item.images.length ? item.images : [item.image]).filter(Boolean);
     const { cartItems, addToCart, removeFromCart } = useCart();
 
     // Размерный товар нельзя добавить быстрой кнопкой из каталога — размер
@@ -247,7 +289,7 @@ const ProductItemContent = ({ item, lang }) => {
             <div className={styles.productName}>{productName}</div>
             <div className={styles.productItem}>
                 <div className={styles.productImageBlock}>
-                    <Image className={styles.productImage} src={item.image} alt={productName} width={185} height={220} />
+                    <ProductImages images={images} alt={productName} />
                     {!sized && (!isInCart ? (
                         <Image src={'/images/basket.svg'} onClick={handleAddToCartClick} className={styles.busket} alt="add to cart" width={20} height={20} />
                     ):(

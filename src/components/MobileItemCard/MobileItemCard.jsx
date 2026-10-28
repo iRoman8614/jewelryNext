@@ -113,6 +113,24 @@ export const MobileItemCard = ({ id, click }) => {
         .trim();
     const descriptionLong = descriptionText.length > 140 || descriptionText.split('\n').length > 3;
 
+    // Свайп по фото: влево — следующее, вправо — предыдущее.
+    const touchStart = React.useRef(null);
+    const onTouchStart = (e) => {
+        const t = e.touches[0];
+        touchStart.current = { x: t.clientX, y: t.clientY };
+    };
+    const onTouchEnd = (e) => {
+        const start = touchStart.current;
+        touchStart.current = null;
+        if (!start) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - start.x;
+        const dy = t.clientY - start.y;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0) goToNext(); else goToPrevious();
+        }
+    };
+
     const formatMultilineText = (text) => {
         if (!text) return null;
         return text.split('\n').map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>));
@@ -145,10 +163,10 @@ export const MobileItemCard = ({ id, click }) => {
 
     return (
         <div className={styles.root}>
+            {/* Тап по затемнению вокруг карточки — закрыть. */}
             <div className={styles.clicker} onClick={click} />
-            <PrevArrow onClick={goToPrevious} />
             <div className={styles.container}>
-                <div className={styles.slideWrapper}>
+                <div className={styles.slideWrapper} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                     <Image
                         key={currentIndex}
                         src={product.images[currentIndex]}
@@ -158,6 +176,12 @@ export const MobileItemCard = ({ id, click }) => {
                         priority
                         style={{ objectFit: 'cover' }}
                     />
+                    {product.images?.length > 1 && (
+                        <>
+                            <PrevArrow onClick={goToPrevious} />
+                            <NextArrow onClick={goToNext} />
+                        </>
+                    )}
                 </div>
                 {/* Проданный товар (isVisible === false) — без кнопки покупки.
                     Размерный товар — кнопка активна только после выбора размера. */}
@@ -226,10 +250,6 @@ export const MobileItemCard = ({ id, click }) => {
                         </div>
                     )}
                 </div>
-            </div>
-            <NextArrow onClick={goToNext} />
-            <div className={styles.footer}>
-                <Image className={styles.hideArrow} src={arrow} alt={''} width={20} height={40} />
             </div>
         </div>
     );
