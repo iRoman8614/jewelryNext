@@ -7,7 +7,6 @@ import Footer from "@/components/Footer/Footer";
 import InteractiveCategorySelector from '@/components/InteractiveCategorySelector/InteractiveCategorySelector';
 import { getNavigation, getSnakeGallery, getHomepageContent, getCustom } from '@/lib/api';
 import Custom from "@/components/custom/Custom";
-import {Loader} from "@/components/loader/Loader";
 
 // top/zIndex/speed по-прежнему берутся из локального layoutData (home-page.data.js,
 // подогнано под Figma) — их менять не просили. А вот width/left раньше тоже
@@ -102,7 +101,6 @@ export default async function HomePage() {
 
     return (
         <>
-            <Loader />
             <NavBar theme={'white'} navigation={navigationData} />
             <main className={styles.root}>
                 <ArtBlock />

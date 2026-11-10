@@ -1,9 +1,55 @@
 "use client";
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 // Переиспользуем СТИЛИ фото-ленты, чтобы видео-лента выглядела идентично и
 // не плодить дублирующий scss. Стили не меняются.
 import styles from '../InfiniteImageFeed/styles.module.scss';
+
+// Постер рядом с перекодированным роликом: x-web.mp4 → x-poster.jpg
+// (создаёт бэк при загрузке). Для старых файлов постера нет.
+const posterFor = (src) => (/-web\.mp4($|\?)/i.test(src || '') ? src.replace(/-web\.mp4/i, '-poster.jpg') : undefined);
+
+// Видео в ленте грузится и играет ТОЛЬКО когда попадает в экран, и встаёт на
+// паузу, когда уходит. Раньше все копии (×3 в ленте, ×2 ленты — десктопная и
+// мобильная, одна из них скрыта) сразу качали ролики целиком с preload="auto":
+// на телефоне это десятки параллельных загрузок, и видео не запускались.
+// Скрытая лента (display:none) в экран не попадает и ничего не качает.
+const LazyVideo = ({ src, className, style }) => {
+    const ref = useRef(null);
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return undefined;
+        el.muted = true; // свойством — иначе autoplay-гейт браузера может заблокировать
+        if (typeof IntersectionObserver === 'undefined') {
+            el.src = src;
+            el.play()?.catch?.(() => {});
+            return undefined;
+        }
+        const io = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                if (el.getAttribute('src') !== src) el.src = src;
+                el.play()?.catch?.(() => {});
+            } else if (!el.paused) {
+                el.pause();
+            }
+        }, { rootMargin: '150px' });
+        io.observe(el);
+        return () => io.disconnect();
+    }, [src]);
+
+    return (
+        <video
+            ref={ref}
+            poster={posterFor(src)}
+            className={className}
+            style={style}
+            muted
+            loop
+            playsInline
+            preload="none"
+        />
+    );
+};
 
 export default function InfiniteVideoFeed({
                                               videos = [],
@@ -73,16 +119,10 @@ export default function InfiniteVideoFeed({
                             }`}
                             onClick={() => handleVideoClick(src)}
                         >
-                            <video
-                                ref={primeAutoplay}
+                            <LazyVideo
                                 src={src}
                                 className={styles.imageElement}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                preload="auto"
                             />
                         </div>
                     ))}
@@ -98,6 +138,7 @@ export default function InfiniteVideoFeed({
                         <video
                             ref={primeAutoplay}
                             src={selectedVideo}
+                            poster={posterFor(selectedVideo)}
                             className={styles.popupImage}
                             style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                             autoPlay
