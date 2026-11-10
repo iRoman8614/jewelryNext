@@ -14,6 +14,14 @@
   height: utils.responsive-size(4000);
 }
 
+// Композиция: на ПК занимает весь блок (как раньше — элементы позиционируются
+// в процентах от него).
+.scene,
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
 .lightnings {
   display: block;
   margin: 60px auto;
@@ -41,11 +49,6 @@
   line-height: 1.5;
   padding-left: 15%;
   position: relative;
-  @media screen and (max-width: 768px) {
-    scale: 1.3;
-    margin-left: 15px;
-    margin-top: -55px;
-  }
 }
 
 .textContent {
@@ -57,11 +60,6 @@
   pointer-events: none;
   p {
     margin: 0;
-  }
-  @media screen and (max-width: 768px) {
-    scale: 1.4;
-    margin-left: 15px;
-    margin-top: 15px;
   }
 }
 
@@ -141,5 +139,90 @@
     flex-direction: column;
     font-size: 10px;
     padding: 10px 50px;
+  }
+}
+
+/* ─── Мобильная версия ────────────────────────────────────────────────────
+   Как на ПК: композиция (фото, подписи, линии) — точная уменьшенная копия
+   ПК-раскладки. Блок на ПК имеет высоту responsive-size(4000) при ширине во
+   весь экран, поэтому канва на мобиле той же пропорции, а показываем её
+   полосу 27%–77% (выше на ПК стоит вводный текст, ниже — пусто).
+   Вводный текст — обычным читаемым абзацем над композицией. */
+@media screen and (max-width: 768px) {
+  .custom {
+    height: auto;
+    padding: 36px 16px 40px;
+  }
+
+  .intro {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  .title {
+    font-size: 30px;
+    line-height: 1.1;
+    padding-left: 0;
+    margin: 0 0 14px;
+  }
+
+  .introText {
+    font-size: 14px;
+    line-height: 1.55;
+    padding: 0;
+  }
+
+  .scene {
+    position: relative;
+    inset: auto;
+    margin: 28px -16px 0; // во всю ширину экрана, как на ПК
+    height: calc(#{utils.responsive-size(4000)} * 0.5);
+    overflow: hidden;
+  }
+
+  .canvas {
+    inset: auto;
+    left: 0;
+    right: 0;
+    top: calc(#{utils.responsive-size(4000)} * -0.27);
+    height: utils.responsive-size(4000);
+  }
+
+  // Подписи: пропорционально ПК вышло бы ~7px — делаем читаемыми, но без
+  // scale (он сдвигал их с линий): текст растёт вправо от той же точки.
+  .label {
+    font-size: 8px;
+    line-height: 1.3;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  // Отступ линий на ПК — 60px при ширине ~1290px; на мобиле — та же доля
+  // ширины, иначе линии съезжают относительно подписей.
+  .lightnings {
+    margin: 4.66vw auto;
+  }
+
+  .linkMob {
+    position: static;
+    transform: none;
+    margin: 28px auto 0;
+  }
+
+  .footerCatalogDesctop {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+
+  .footerBtn {
+    font-size: 13px;
+    padding: 12px 28px 10px;
+  }
+
+  .footerText {
+    font-size: 12px;
+    padding: 14px 24px 0;
   }
 }

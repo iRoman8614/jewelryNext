@@ -19,55 +19,76 @@ export default function Custom({ customData }) {
     // Данные приходят из page.js (позиции из home-page.data + контент из админки).
     // Фолбэк на статический массив — если компонент отрендерен без пропа.
     const items = (customData && customData.length) ? customData : custom;
+    // Вводный текст (элемент с заголовком «Кастом») — отдельно от композиции:
+    // на ПК он стоит в общей раскладке как раньше, на мобиле — обычным
+    // читаемым абзацем НАД композицией (иначе крупный текст наезжает на фото).
+    const intro = items.find((el) => el.type === 'text' && el.title);
+    const sceneItems = items.filter((el) => el !== intro);
+
+    const positionStyle = (element) => {
+        const isImage = element.type === 'image' && element.src;
+        return {
+            position: 'absolute',
+            top: element.top || '0%',
+            left: element.left || '0%',
+            width: element.width || 'auto',
+            height: isImage ? element.width : 'auto',
+            zIndex: element.zIndex || 1,
+        };
+    };
+
     return(
         <div className={styles.root}>
             <section className={styles.custom} id="custom">
-                {items.map((element) => {
-                    const isImage = element.type === 'image' && element.src;
-                    return (
-                        <div style={{
-                            position: 'absolute',
-                            top: element.top || '0%',
-                            left: element.left || '0%',
-                            width: element.width || 'auto',
-                            height: isImage ? element.width : 'auto',
-                            zIndex: element.zIndex || 1,
-                        }}
-                        >
-                            {element.type === 'image' && element.src && (
-                                <Image
-                                    src={element.src}
-                                    alt={element.alt || `Parallax Element ${element.id}`}
-                                    className={styles.imageContent}
-                                    width={800}
-                                    height={400}
-                                    style={{ objectFit: 'contain' }}
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                />
-                            )}
-                            {element.type === 'text' && element.content && (
-                                <>
-                                    {element.title &&
-                                        <div className={styles.title}>{lang === 'ru' ? element.title.ru : element.title.en}</div>
-                                    }
+                {intro && intro.content && (
+                    <div className={styles.intro} style={positionStyle(intro)}>
+                        <div className={styles.title}>{lang === 'ru' ? intro.title.ru : intro.title.en}</div>
+                        <div
+                            className={`${styles.textContent} ${styles.introText}`}
+                            dangerouslySetInnerHTML={{
+                                __html: toHtml(lang === 'ru' ? intro.content.ru : intro.content.en),
+                            }}
+                        />
+                    </div>
+                )}
+
+                {/* Композиция (фото, подписи, линии). На ПК растянута на весь блок
+                    как раньше; на мобиле — точная уменьшенная копия ПК-раскладки,
+                    с обрезанным пустым верхом (там на ПК стоит вводный текст). */}
+                <div className={styles.scene}>
+                    <div className={styles.canvas}>
+                        {sceneItems.map((element) => (
+                            <div key={element.id} className={styles.sceneItem} style={positionStyle(element)}>
+                                {element.type === 'image' && element.src && (
+                                    <Image
+                                        src={element.src}
+                                        alt={element.alt || `Parallax Element ${element.id}`}
+                                        className={styles.imageContent}
+                                        width={800}
+                                        height={400}
+                                        style={{ objectFit: 'contain' }}
+                                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                )}
+                                {element.type === 'text' && element.content && (
                                     <div
-                                        className={styles.textContent}
+                                        className={`${styles.textContent} ${styles.label}`}
                                         dangerouslySetInnerHTML={{
                                             __html: toHtml(lang === 'ru' ? element.content.ru : element.content.en),
                                         }}
                                     />
-                                </>
-                            )}
-                        </div>
-                    )
-                })}
-                <Image
-                    src="/images/customBack.svg"
-                    alt=""
-                    className={styles.lightnings}
-                    width={1200}
-                    height={500}
-                />
+                                )}
+                            </div>
+                        ))}
+                        <Image
+                            src="/images/customBack.svg"
+                            alt=""
+                            className={styles.lightnings}
+                            width={1200}
+                            height={500}
+                        />
+                    </div>
+                </div>
                 <Link href="/category" className={styles.linkMob}>
                     <button className={styles.footerBtn}>{lang === 'ru' ? "КАТАЛОГ" : "CATALOG"}</button>
                 </Link>
