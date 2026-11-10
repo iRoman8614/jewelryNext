@@ -48,6 +48,14 @@ const BASE_URL = ASSET_BASE;
 const isAbsoluteUrl = (u) => typeof u === 'string' && /^(https?:)?\/\//i.test(u);
 const withAssetBase = (u) => (!u ? '' : isAbsoluteUrl(u) ? u : `${BASE_URL}${u}`);
 
+// Для медиа, которые браузер грузит НАПРЯМУЮ (<video>, обычный <img>), а не
+// через next/image: нужен ПУБЛИЧНЫЙ адрес. Внутренний http://backend:5050 из
+// SSR попадал в HTML и в браузере не открывался (ERR_NAME_NOT_RESOLVED) —
+// из-за этого не работали видео в галерее. В проде NEXT_PUBLIC_API_BASE_URL
+// пустой → относительный /uploads/..., nginx проксирует его на бэк.
+const PUBLIC_MEDIA_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+const withPublicBase = (u) => (!u ? '' : isAbsoluteUrl(u) ? u : `${PUBLIC_MEDIA_BASE}${u}`);
+
 // Стратегия кэша ISR:
 //  - revalidate: фоновое обновление по таймеру (сек);
 //  - tags: позволяют точечно сбрасывать кэш по событию из админки
@@ -123,7 +131,7 @@ export const getVideoGallery = cache(async () => {
         tags: [TAGS.content], revalidate: REVALIDATE.content, fallback: [],
     });
     if (!Array.isArray(data)) return [];
-    return data.map(videoUrl => `${BASE_URL}${videoUrl}`);
+    return data.map(withPublicBase);
 });
 
 // Точки продаж для страницы /contacts. Бэк отдаёт массив магазинов-партнёров,
@@ -137,7 +145,7 @@ export const getSalesPoints = cache(async () => {
     if (!Array.isArray(data)) return [];
     return data.map(p => ({
         ...p,
-        logoUrl: withAssetBase(p.logoUrl || p.logo || ''),
+        logoUrl: withPublicBase(p.logoUrl || p.logo || ''), // обычный <img>, не next/image
     }));
 });
 
