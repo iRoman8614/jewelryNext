@@ -113,8 +113,6 @@
   }
 }
 
-// Одна точка продаж — не растягиваем на всю ширину секции, показываем как
-// единственную акцентную карточку по центру.
 .pointsSingle {
   grid-template-columns: minmax(0, 480px);
   justify-content: center;
@@ -143,10 +141,16 @@
 }
 
 .cardLogo {
-  width: 48px;
-  height: 48px;
+  height: 72px;
+  width: auto;
+  max-width: 220px;
   object-fit: contain;
   flex-shrink: 0;
+
+  @media screen and (max-width: 600px) {
+    height: 56px;
+    max-width: 160px;
+  }
 }
 
 .cardName {
@@ -179,7 +183,6 @@
 
 .map {
   margin-top: 4px;
-  // Сайт полностью монохромный — цветная карта выбивается из стиля.
   filter: grayscale(1) contrast(1.05);
 
   iframe {
